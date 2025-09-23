@@ -33,7 +33,7 @@ export default function NotFoundPage() {
         <div className="space-y-4">
           <button
             onClick={() => navigate("/dashboard")}
-            className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center justify-center space-x-2"
+            className="w-full bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg flex items-center justify-center space-x-2"
           >
             <Home className="w-5 h-5" />
             <span>Go to Dashboard</span>
@@ -48,12 +48,7 @@ export default function NotFoundPage() {
           </button>
         </div>
 
-        {/* Additional Help */}
-        <div className="mt-8 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-          <p className="text-sm text-blue-700 dark:text-blue-300">
-            <strong>Need help?</strong> If you believe this is an error, please contact support.
-          </p>
-        </div>
+  
       </div>
     </div>
   );

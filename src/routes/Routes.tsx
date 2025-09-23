@@ -1,22 +1,23 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
 // Import page components
-import LoginPage from "../pages/LoginPage";
-import DashboardPage from "../pages/DashboardPage";
-import AnalyticsPage from "../pages/AnalyticsPage";
-import CompaniesPage from "../pages/CompaniesPage";
-import OrganizationsPage from "../pages/OrganizationsPage";
-import EventsPage from "../pages/EventsPage";
-import EmailTemplatesPage from "../pages/EmailTemplatesPage";
-import PaymentPlansPage from "../pages/PaymentPlansPage";
-import TeamPage from "../pages/TeamPage";
-import ProfilePage from "../pages/ProfilePage";
-import SettingsPage from "../pages/SettingsPage";
-import ChangePasswordPage from "../pages/ChangePasswordPage";
-import ConfigurationPage from "../pages/ConfigurationPage";
-import EmailConfigurationPage from "../pages/EmailConfigurationPage";
-import StripeConfigurationPage from "../pages/StripeConfigurationPage";
+
 import NotFoundPage from "../pages/NotFoundPage";
+import LoginPage from "@/pages/Login/LoginPage";
+import DashboardPage from "@/pages/Dashboard/DashboardPage";
+import AnalyticsPage from "@/pages/Analytics/AnalyticsPage";
+import CompaniesPage from "@/pages/Companies/CompaniesPage";
+import OrganizationsPage from "@/pages/Organizations/OrganizationsPage";
+import EventsPage from "@/pages/Events/EventsPage";
+import EmailTemplatesPage from "@/pages/EmailTemplates/EmailTemplatesPage";
+import PaymentPlansPage from "@/pages/PaymentPlans/PaymentPlansPage";
+import TeamPage from "@/pages/Team/TeamPage";
+import ProfilePage from "@/pages/Profile/ProfilePage";
+import SettingsPage from "@/pages/Settings/SettingsPage";
+import ChangePasswordPage from "@/pages/ChangePassword/ChangePasswordPage";
+import ConfigurationPage from "@/pages/Configuration/ConfigurationPage";
+import EmailConfigurationPage from "@/pages/Configuration/EmailConfigurationPage";
+import StripeConfigurationPage from "@/pages/Configuration/StripeConfigurationPage";
 
 // Route configuration
 export const routeConfig = [
