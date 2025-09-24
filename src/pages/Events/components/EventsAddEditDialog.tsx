@@ -17,7 +17,8 @@ import {
 } from "@/components/ui/select";
 import { Save, X, Calendar } from "lucide-react";
 import { _organizations_list_api } from "@/DAL/organizationAPI";
-import { enqueueSnackbar, useSnackbar } from "notistack";
+import { useSnackbar } from "notistack";
+import Spinner from "@/components/ui/spinner";
 const QuillEditor = lazy(
   () => import("@/components/ui/quillEditor/quillEditor")
 );
@@ -30,7 +31,7 @@ interface EventsAddEditDialogProps {
   event?: any | null;
 }
 
-const venueTypes = ["physical", "virtual"];
+const venueTypes = ["physical", "virtual", "hybrid"];
 const statuses = ["published", "cancelled"];
 const currencies = ["USD"];
 const platforms = ["Zoom", "Google Meet", "Microsoft Teams", "WebEx", "Other"];
@@ -70,6 +71,66 @@ const EventsAddEditDialog: React.FC<EventsAddEditDialogProps> = ({
     is_public: true,
     organization_id: "", // set when adding new event
   });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (isEdit) {
+      // Edit mode payload
+      const reqData = {
+        title: formData.title,
+        description: formData.description,
+        startAt: formData.startAt ? formData.startAt + ":00.000Z" : "",
+        endAt: formData.endAt ? formData.endAt + ":00.000Z" : "",
+        registration_deadline: formData.registration_deadline
+          ? formData.registration_deadline + ":00.000Z"
+          : "",
+        venue: formData.venue,
+        status: formData.status,
+        ticketPrice:
+          formData.ticketPrice === "" ? 0 : Number(formData.ticketPrice),
+        currency: formData.currency,
+        isPaidEvent: formData.isPaidEvent,
+        max_attendees:
+          formData.max_attendees === "" ? 0 : Number(formData.max_attendees),
+        is_public: formData.is_public,
+        organization_id: formData.organization_id,
+      };
+      console.log("Update Event Payload:", reqData);
+      onSave(reqData);
+    } else {
+      // Create mode payload
+      const reqData = {
+        title: formData.title,
+        description: formData.description,
+        startAt: formData.startAt ? formData.startAt + ":00.000Z" : "",
+        endAt: formData.endAt ? formData.endAt + ":00.000Z" : "",
+        registration_deadline: formData.registration_deadline
+          ? formData.registration_deadline + ":00.000Z"
+          : "",
+        venue: formData.venue,
+        status: formData.status,
+        ticketPrice:
+          formData.ticketPrice === "" ? 0 : Number(formData.ticketPrice),
+        currency: formData.currency,
+        isPaidEvent: formData.isPaidEvent,
+        max_attendees:
+          formData.max_attendees === "" ? 0 : Number(formData.max_attendees),
+        is_public: formData.is_public,
+        organization_id: formData.organization_id,
+      };
+      console.log("Create Event Payload:", reqData);
+      onSave(reqData);
+    }
+  };
+
+  const getOrgList = async () => {
+    const result = await _organizations_list_api();
+    if (result?.code === 200) {
+      setOrganizations(result.data.organizations || []);
+    } else {
+      console.log(result?.message || "Failed to load organizations");
+    }
+  };
 
   // Prefill in edit mode
   useEffect(() => {
@@ -126,70 +187,15 @@ const EventsAddEditDialog: React.FC<EventsAddEditDialogProps> = ({
         is_public: true,
         organization_id: "", // set when adding
       });
-
-      getOrgList();
     }
   }, [event, open]);
 
-  const getOrgList = async () => {
-    const result = await _organizations_list_api();
-    if (result?.code === 200) {
-      setOrganizations(result.data.organizations || []);
-    } else {
-      console.log(result?.message || "Failed to load organizations");
+  useEffect(() => {
+    if(open && !event) {
+      getOrgList();
     }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (isEdit) {
-      // Edit mode payload
-      const reqData = {
-        title: formData.title,
-        description: formData.description,
-        startAt: formData.startAt ? formData.startAt + ":00.000Z" : "",
-        endAt: formData.endAt ? formData.endAt + ":00.000Z" : "",
-        registration_deadline: formData.registration_deadline
-          ? formData.registration_deadline + ":00.000Z"
-          : "",
-        venue: formData.venue,
-        status: formData.status,
-        ticketPrice:
-          formData.ticketPrice === "" ? 0 : Number(formData.ticketPrice),
-        currency: formData.currency,
-        isPaidEvent: formData.isPaidEvent,
-        max_attendees:
-          formData.max_attendees === "" ? 0 : Number(formData.max_attendees),
-        is_public: formData.is_public,
-        organization_id: formData.organization_id,
-      };
-      console.log("Update Event Payload:", reqData);
-      onSave(reqData);
-    } else {
-      // Create mode payload
-      const reqData = {
-        title: formData.title,
-        description: formData.description,
-        startAt: formData.startAt ? formData.startAt + ":00.000Z" : "",
-        endAt: formData.endAt ? formData.endAt + ":00.000Z" : "",
-        registration_deadline: formData.registration_deadline
-          ? formData.registration_deadline + ":00.000Z"
-          : "",
-        venue: formData.venue,
-        status: formData.status,
-        ticketPrice:
-          formData.ticketPrice === "" ? 0 : Number(formData.ticketPrice),
-        currency: formData.currency,
-        isPaidEvent: formData.isPaidEvent,
-        max_attendees:
-          formData.max_attendees === "" ? 0 : Number(formData.max_attendees),
-        is_public: formData.is_public,
-        organization_id: formData.organization_id,
-      };
-      console.log("Create Event Payload:", reqData);
-      onSave(reqData);
-    }
-  };
+  }, [open])
+  
 
   const updateVenue = (field: string, value: string) => {
     setFormData({
@@ -259,41 +265,51 @@ const EventsAddEditDialog: React.FC<EventsAddEditDialogProps> = ({
 
           {/* Organization Select */}
           {!isEdit && (
-            <div>
-              <label className="block text-sm font-medium mb-2">
-                Organization *
-              </label>
-              <Select
-                value={formData.organization_id}
-                onValueChange={(value) =>
-                  setFormData({ ...formData, organization_id: value })
-                }
-                required
-              >
-                <SelectTrigger
-                  style={{
-                    backgroundColor: darkMode ? "#374151" : "#ffffff",
-                    color: darkMode ? "#ffffff" : "#000000",
-                    borderColor: darkMode ? "#4b5563" : "#d1d5db",
-                  }}
-                >
-                  <SelectValue placeholder="Select organization" />
-                </SelectTrigger>
-                <SelectContent
-                  style={{
-                    backgroundColor: darkMode ? "#374151" : "#ffffff",
-                    color: darkMode ? "#ffffff" : "#000000",
-                    borderColor: darkMode ? "#4b5563" : "#d1d5db",
-                  }}
-                >
-                  {organizations.map((org: any) => (
-                    <SelectItem key={org._id} value={org._id}>
-                      {org.orgn_user?.name || "Unnamed Org"}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+           <div>
+           <label className="block text-sm font-medium mb-2">
+             Organization *
+           </label>
+           <Select
+             value={formData.organization_id}
+             onValueChange={(value) =>
+               setFormData({ ...formData, organization_id: value })
+             }
+             required
+             disabled={!organizations.length} // disable until data comes
+           >
+             <SelectTrigger
+               style={{
+                 backgroundColor: darkMode ? "#374151" : "#ffffff",
+                 color: darkMode ? "#ffffff" : "#000000",
+                 borderColor: darkMode ? "#4b5563" : "#d1d5db",
+               }}
+             >
+               {organizations.length === 0 ? (
+                 <div className="flex items-center gap-2 text-gray-400">
+                   <Spinner size="sm" />
+                   Loading organizations list...
+                 </div>
+               ) : (
+                 <SelectValue placeholder="Select organization" />
+               )}
+             </SelectTrigger>
+         
+             <SelectContent
+               style={{
+                 backgroundColor: darkMode ? "#374151" : "#ffffff",
+                 color: darkMode ? "#ffffff" : "#000000",
+                 borderColor: darkMode ? "#4b5563" : "#d1d5db",
+               }}
+             >
+               {organizations.map((org: any) => (
+                 <SelectItem key={org._id} value={org._id}>
+                   {org.orgn_user?.name || "Unnamed Org"}
+                 </SelectItem>
+               ))}
+             </SelectContent>
+           </Select>
+         </div>
+         
           )}
 
           {/* Schedule */}
