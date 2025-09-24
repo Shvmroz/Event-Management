@@ -471,11 +471,11 @@ const EventsPage: React.FC = () => {
     },
     {
       key: "schedule",
-      label: "Registration",
+      label: "Registration Deadline",
       renderData: (event) => (
         <div className="space-y-1">
-          <div className="text-sm text-gray-900 dark:text-white font-medium">
-            Deadline: {formatDate(event.registration_deadline)}
+          <div className="text-sm text-red-600 dark:text-red-400 font-medium">
+           {formatDate(event.registration_deadline)}
           </div>
         </div>
       ),
@@ -490,7 +490,7 @@ const EventsPage: React.FC = () => {
       label: "Created",
       renderData: (event) => (
         <span className="text-gray-600 dark:text-gray-400">
-          {formatDate(event.createdAt)}
+          {formatDateTime(event.createdAt)}
         </span>
       ),
     },

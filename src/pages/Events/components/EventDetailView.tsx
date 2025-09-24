@@ -12,6 +12,7 @@ import {
   X,
   Activity,
   Info,
+  AlertTriangle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -130,7 +131,7 @@ const EventDetailView: React.FC<EventDetailViewProps> = ({
       day: "numeric",
       hour: "2-digit",
       minute: "2-digit",
-      timeZoneName: "short",
+      // timeZoneName: "short",
     });
   };
 
@@ -162,13 +163,9 @@ const EventDetailView: React.FC<EventDetailViewProps> = ({
               <Calendar className="w-5 h-5 text-white" />
             </div>
             <div>
-              <h1 className="text-lg font-semibold text-gray-900 dark:text-white">
+              <h1 className="text-lg font-semibold text-gray-900 dark:text-white capitalize">
                 {event?.title}
               </h1>
-              <div className="flex items-center space-x-1 mt-1 text-xs">
-                {event?.status && getStatusBadge(event.status)}
-                {event?.venue?.type && getVenueTypeBadge(event.venue.type)}
-              </div>
             </div>
           </div>
           <IconButton onClick={onClose}>
@@ -187,12 +184,7 @@ const EventDetailView: React.FC<EventDetailViewProps> = ({
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2 text-sm">
-            <div>
-              <label className="block font-medium mb-1">Description</label>
-              <div>{event?.description || "-"}</div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="flex items-center justify-between">
               <div>
                 <label className="block font-medium mb-1">Visibility</label>
                 {event?.is_public ? (
@@ -206,65 +198,101 @@ const EventDetailView: React.FC<EventDetailViewProps> = ({
                   </Badge>
                 )}
               </div>
-
               <div>
-                <label className="block font-medium mb-1">Max Attendees</label>
-                <div className="flex items-center space-x-1">
-                  <Users className="w-4 h-4 text-blue-500" />
-                  <span>{event?.max_attendees || "-"}</span>
+                <label className="block font-medium mb-1">
+                  Status & Venue Type
+                </label>
+                <div className="flex items-center space-x-1 mt-1 text-xs">
+                  {event?.status && getStatusBadge(event.status)}
+                  {event?.venue?.type && getVenueTypeBadge(event.venue.type)}
                 </div>
               </div>
             </div>
 
-            {/* Pricing */}
-            <div className="mt-2">
-              <label className="block font-medium mb-1">Pricing</label>
-              {event?.isPaidEvent ? (
-                <div className="text-sm font-semibold text-green-600">
-                  {formatCurrency(event.ticketPrice, event.currency)}
+            {/* Statistics */}
+            <div className="mt-2 bg-gray-100 dark:bg-gray-800 rounded-lg p-3">
+              <div className="grid grid-cols-3 gap-3 text-sm">
+                <div className="text-center">
+                  <Users className="w-5 h-5 text-blue-600 mx-auto mb-1" />
+                  <div className="font-semibold text-sm">
+                    {event?.max_attendees || "-"}
+                  </div>
+                  <div className="text-xs text-gray-500">Max Attendees</div>
                 </div>
-              ) : (
-                <Badge className="bg-green-100 text-green-800 text-xs px-2 py-1">
-                  Free
-                </Badge>
+                <div className="text-center">
+                  <DollarSign className="w-5 h-5 text-green-600 mx-auto mb-1" />
+                  <div className="font-semibold text-sm">
+                    {event?.isPaidEvent
+                      ? formatCurrency(event.ticketPrice, event.currency)
+                      : "Free"}
+                  </div>
+                  <div className="text-xs text-gray-500">Ticket Price</div>
+                </div>
+                <div className="text-center">
+                  <Calendar className="w-5 h-5 text-purple-600 mx-auto mb-1" />
+                  <div className="font-semibold text-sm">
+                    {event?.startAt && event?.endAt
+                      ? Math.ceil(
+                          (new Date(event.endAt).getTime() -
+                            new Date(event.startAt).getTime()) /
+                            (1000 * 60 * 60)
+                        ) + "h"
+                      : "-"}
+                  </div>
+                  <div className="text-xs text-gray-500">Duration</div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <label className="block font-medium mb-1">Description</label>
+              <div className="text-sm text-gray-600 dark:text-gray-400 truncate">
+                {(() => {
+                  const plainText = event?.description
+                    ?.replace(/<[^>]+>/g, "")
+                    .trim();
+                  if (!plainText) return "No description";
+                  return plainText.length > 50
+                    ? `${plainText.substring(0, 50)}...`
+                    : plainText;
+                })()}
+              </div>
+            </div>
+            <div className="border-t border-gray-200 dark:border-gray-700" />
+
+            <div className="space-y-2 text-sm">
+              <div className="flex items-center font-medium">
+                Venue Address
+              </div>
+
+              {(event?.venue?.type === "physical" ||
+                event?.venue?.type === "hybrid") && (
+                <div>
+                  <div className=" text-gray-600">{event?.venue?.address}</div>
+                  <div className=" text-gray-600">
+                    {event?.venue?.city}, {event?.venue?.state},{" "}
+                    {event?.venue?.country} {event?.venue?.postal_code}
+                  </div>
+                </div>
+              )}
+
+              {(event?.venue?.type === "virtual" ||
+                event?.venue?.type === "hybrid") && (
+                <div>
+                  <div >{event?.venue?.platform}</div>
+                  {event?.venue?.virtual_link && (
+                    <a
+                      href={event.venue.virtual_link}
+                      target="_blank"
+                      className="inline-flex items-center text-blue-600 text-sm"
+                    >
+                      <Globe className="w-3 h-3 mr-1" />
+                      {event.venue.virtual_link}
+                      <ExternalLink className="w-3 h-3 ml-1" />
+                    </a>
+                  )}
+                </div>
               )}
             </div>
-
-            {/* Statistics */}
-<div className="mt-2 bg-gray-100 dark:bg-gray-800 rounded-lg p-3">
-  <div className="grid grid-cols-3 gap-3 text-sm">
-    <div className="text-center">
-      <Users className="w-5 h-5 text-blue-600 mx-auto mb-1" />
-      <div className="font-semibold text-sm">
-        {event?.max_attendees || "-"}
-      </div>
-      <div className="text-xs text-gray-500">Max Attendees</div>
-    </div>
-    <div className="text-center">
-      <DollarSign className="w-5 h-5 text-green-600 mx-auto mb-1" />
-      <div className="font-semibold text-sm">
-        {event?.isPaidEvent
-          ? formatCurrency(event.ticketPrice, event.currency)
-          : "Free"}
-      </div>
-      <div className="text-xs text-gray-500">Ticket Price</div>
-    </div>
-    <div className="text-center">
-      <Calendar className="w-5 h-5 text-purple-600 mx-auto mb-1" />
-      <div className="font-semibold text-sm">
-        {event?.startAt && event?.endAt
-          ? Math.ceil(
-              (new Date(event.endAt).getTime() -
-                new Date(event.startAt).getTime()) /
-                (1000 * 60 * 60)
-            ) + "h"
-          : "-"}
-      </div>
-      <div className="text-xs text-gray-500">Duration</div>
-    </div>
-  </div>
-</div>
-
           </CardContent>
         </Card>
 
@@ -276,71 +304,48 @@ const EventDetailView: React.FC<EventDetailViewProps> = ({
               Schedule
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-2 text-sm">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              <div>
-                <label className="block font-medium mb-1">Start</label>
-                <div>
-                  {event?.startAt ? formatDateTime(event.startAt) : "-"}
+          <CardContent className="text-sm">
+            <div className="relative flex flex-col items-start pl-6">
+              <div className="absolute top-0 bottom-0 left-3 w-0.5 bg-blue-300 dark:bg-gray-600"></div>
+
+              <div className="flex items-center mb-6">
+                <div className="pe-3 ps-2 py-1 rounded-md bg-blue-100 flex items-center gap-2">
+                  <Clock className="w-4 h-4 text-sky-600" />
+                  <span className="text-xs font-medium text-sky-800">
+                    Start:
+                  </span>
+                  <span>
+                    {event?.startAt ? formatDateTime(event.startAt) : "-"}
+                  </span>
                 </div>
               </div>
-              <div>
-                <label className="block font-medium mb-1">End</label>
-                <div>{event?.endAt ? formatDateTime(event.endAt) : "-"}</div>
-              </div>
-            </div>
-            <div>
-              <label className="block font-medium mb-1">
-                Registration Deadline
-              </label>
-              <div>
-                {event?.registration_deadline
-                  ? formatDateTime(event.registration_deadline)
-                  : "-"}
-              </div>
-            </div>
-          </CardContent>
-        </Card>
 
-        {/* Venue */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center text-base font-medium">
-              <MapPin className="w-4 h-4 mr-2 text-[#0077ED]" />
-              Venue Information
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-2 text-sm">
-            {event?.venue?.type && getVenueTypeBadge(event.venue.type)}
-
-            {(event?.venue?.type === "physical" ||
-              event?.venue?.type === "hybrid") && (
-              <div>
-                <div>{event?.venue?.address}</div>
-                <div>
-                  {event?.venue?.city}, {event?.venue?.state},{" "}
-                  {event?.venue?.country} {event?.venue?.postal_code}
+              <div className="flex items-center mb-6">
+                <div className="pe-3 ps-2 py-1 rounded-md bg-orange-100 flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4 text-orange-600" />
+                  <span className="text-xs font-medium text-orange-800">
+                    End:
+                  </span>
+                  <span>
+                    {event?.endAt ? formatDateTime(event.endAt) : "-"}
+                  </span>
                 </div>
               </div>
-            )}
 
-            {(event?.venue?.type === "virtual" ||
-              event?.venue?.type === "hybrid") && (
-              <div>
-                <div>{event?.venue?.platform}</div>
-                {event?.venue?.virtual_link && (
-                  <a
-                    href={event.venue.virtual_link}
-                    target="_blank"
-                    className="inline-flex items-center text-[#0077ED] text-sm"
-                  >
-                    <Globe className="w-3 h-3 mr-1" />
-                    {event.venue.virtual_link}
-                    <ExternalLink className="w-3 h-3 ml-1" />
-                  </a>
-                )}
+              <div className="flex items-center">
+                <div className="pe-3 ps-2 py-1 rounded-md bg-red-100 flex items-center gap-2">
+                  <Calendar className="w-4 h-4 text-red-600" />
+                  <span className="text-xs font-medium text-red-800">
+                    Deadline:
+                  </span>
+                  <span>
+                    {event?.registration_deadline
+                      ? formatDateTime(event.registration_deadline)
+                      : "-"}
+                  </span>
+                </div>
               </div>
-            )}
+            </div>
           </CardContent>
         </Card>
       </DialogContent>
