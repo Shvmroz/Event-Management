@@ -15,8 +15,6 @@ import { CheckCircle, XCircle, Calendar, DollarSign, Globe, MapPin, AlertTriangl
 interface EventFiltersProps {
   statusFilter: string;
   setStatusFilter: (value: string) => void;
-  venueTypeFilter: string;
-  setVenueTypeFilter: (value: string) => void;
   paidOnlyFilter: boolean;
   setPaidOnlyFilter: (value: boolean) => void;
   publicOnlyFilter: boolean;
@@ -31,8 +29,6 @@ interface EventFiltersProps {
 const EventFilters: React.FC<EventFiltersProps> = ({
   statusFilter,
   setStatusFilter,
-  venueTypeFilter,
-  setVenueTypeFilter,
   paidOnlyFilter,
   setPaidOnlyFilter,
   publicOnlyFilter,
@@ -112,38 +108,6 @@ const EventFilters: React.FC<EventFiltersProps> = ({
         </Select>
       </div>
 
-      {/* Venue Type Filter */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Venue Type
-        </label>
-        <Select value={venueTypeFilter} onValueChange={setVenueTypeFilter}>
-          <SelectTrigger>
-            <SelectValue placeholder="Filter by venue type" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Venue Types</SelectItem>
-            <SelectItem value="physical">
-              <div className="flex items-center">
-                <MapPin className="w-4 h-4 mr-2 text-blue-500" />
-                Physical
-              </div>
-            </SelectItem>
-            <SelectItem value="virtual">
-              <div className="flex items-center">
-                <Globe className="w-4 h-4 mr-2 text-purple-500" />
-                Virtual
-              </div>
-            </SelectItem>
-            <SelectItem value="hybrid">
-              <div className="flex items-center">
-                <Calendar className="w-4 h-4 mr-2 text-indigo-500" />
-                Hybrid
-              </div>
-            </SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
 
       {/* Date Range Filter */}
       {setCreatedFrom && setCreatedTo && (

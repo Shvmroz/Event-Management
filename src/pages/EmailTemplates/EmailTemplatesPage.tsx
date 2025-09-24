@@ -75,7 +75,6 @@ const EmailTemplatesPage: React.FC = () => {
   const [createdFrom, setCreatedFrom] = useState("");
   const [createdTo, setCreatedTo] = useState("");
 
-
   // Local pagination
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(20);
@@ -122,13 +121,15 @@ const EmailTemplatesPage: React.FC = () => {
             <div className="font-semibold text-gray-900 dark:text-white">
               {template.name}
             </div>
+
             <div className="text-sm text-gray-600 dark:text-gray-400">
-              {template.variables.length} variables
+              {template.variables.length || "No"} variables
             </div>
           </div>
         </div>
       ),
     },
+
     {
       key: "subject",
       label: "Subject",
@@ -140,24 +141,21 @@ const EmailTemplatesPage: React.FC = () => {
         </div>
       ),
     },
-    {
-      key: "template_type",
-      label: "Type",
-      renderData: (template) => (
-        <Badge className={template.template_type}>
-          {template.template_type
-            .replace("_", " ")
-            .replace(/\b\w/g, (x: string) => x.toUpperCase())}
-        </Badge>
-      ),
-    },
+  
     {
       key: "template_for",
       label: "Template For",
       renderData: (template) => (
-        <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
-          {template.template_for || "admin"}
+        <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400 capitalize">
+          {template.template_for || "N/A"}
         </Badge>
+      ),
+    },
+    {
+      key: "template_type",
+      label: "Type",
+      renderData: (template) => (
+        <Badge className="capitalize">{template.template_type} </Badge>
       ),
     },
     {
@@ -429,8 +427,6 @@ const EmailTemplatesPage: React.FC = () => {
         emptyMessage="No email templates found"
       />
 
-   
-
       {/* Edit Email Template Dialog */}
       <EmailTemplateEditDialog
         open={editDialog.open}
@@ -449,8 +445,6 @@ const EmailTemplatesPage: React.FC = () => {
         onOpenChange={(open) => setViewDetailDialog({ open, template: null })}
         templateId={viewDetailDialog.template?._id}
       />
-
-
 
       {/* Filter Drawer */}
       <CustomDrawer

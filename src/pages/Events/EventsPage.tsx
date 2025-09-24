@@ -33,7 +33,11 @@ import { useSnackbar } from "notistack";
 import EventsAddEditDialog from "./components/EventsAddEditDialog";
 import EventDetailView from "./components/EventDetailView";
 import EventFilters from "./components/EventFilters";
-import { _add_event_api, _edit_event_api, _events_list_api } from "@/DAL/eventAPI";
+import {
+  _add_event_api,
+  _edit_event_api,
+  _events_list_api,
+} from "@/DAL/eventAPI";
 
 export interface Event {
   _id: string;
@@ -81,7 +85,6 @@ const EventsPage: React.FC = () => {
 
   // Filter states
   const [statusFilter, setStatusFilter] = useState("all");
-  const [venueTypeFilter, setVenueTypeFilter] = useState("all");
   const [paidOnlyFilter, setPaidOnlyFilter] = useState(false);
   const [publicOnlyFilter, setPublicOnlyFilter] = useState(false);
   const [createdFrom, setCreatedFrom] = useState("");
@@ -133,8 +136,8 @@ const EventsPage: React.FC = () => {
       setFiltersApplied(result.data.filters_applied || {});
       setLoading(false);
     } else {
-      enqueueSnackbar(result?.message || 'Failed to load events', {
-        variant: 'error',
+      enqueueSnackbar(result?.message || "Failed to load events", {
+        variant: "error",
       });
       setEvents([]);
       setLoading(false);
@@ -196,7 +199,7 @@ const EventsPage: React.FC = () => {
 
     setEditLoading(true);
     try {
-      const result = await _edit_event_api(rowData._id, data)
+      const result = await _edit_event_api(rowData._id, data);
       if (result?.code === 200) {
         setEditDialog({ open: false, event: null });
         setRowData(null);
@@ -226,7 +229,7 @@ const EventsPage: React.FC = () => {
     try {
       const result = await _add_event_api(data);
       if (result?.code === 200) {
-        setEvents(prev => [result.data, ...prev]);
+        setEvents((prev) => [result.data, ...prev]);
         setCreateDialog(false);
         enqueueSnackbar("Event created successfully", {
           variant: "success",
@@ -261,7 +264,6 @@ const EventsPage: React.FC = () => {
   const getAppliedFiltersCount = () => {
     let count = 0;
     if (statusFilter !== "all") count++;
-    if (venueTypeFilter !== "all") count++;
     if (paidOnlyFilter) count++;
     if (publicOnlyFilter) count++;
     if (createdFrom || createdTo) count += 1;
@@ -271,7 +273,6 @@ const EventsPage: React.FC = () => {
 
   const handleClearFilters = () => {
     setStatusFilter("all");
-    setVenueTypeFilter("all");
     setPaidOnlyFilter(false);
     setPublicOnlyFilter(false);
     setCreatedFrom("");
@@ -284,7 +285,6 @@ const EventsPage: React.FC = () => {
     const filters: { [key: string]: string } = {};
 
     if (statusFilter !== "all") filters.status = statusFilter;
-    if (venueTypeFilter !== "all") filters.venue_type = venueTypeFilter;
     if (paidOnlyFilter) filters.paid_only = "true";
     if (publicOnlyFilter) filters.public_only = "true";
     if (createdFrom) filters.created_from = createdFrom;
@@ -423,24 +423,37 @@ const EventsPage: React.FC = () => {
       label: "Event",
       renderData: (event) => (
         <div className="flex items-start space-x-3">
-          <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-lg flex items-center justify-center flex-shrink-0">
+          <div className="w-10 h-10 bg-gradient-to-r from-yellow-500 to-yellow-600 rounded-lg flex items-center justify-center flex-shrink-0">
             <Calendar className="w-5 h-5 text-white" />
           </div>
           <div className="min-w-0 flex-1">
             <div className="font-semibold text-gray-900 dark:text-white">
               {event.title}
             </div>
+
             <div className="text-sm text-gray-600 dark:text-gray-400 truncate">
-              {event.description.length > 60
-                ? `${event.description.substring(0, 60)}...`
-                : event.description}
-            </div>
-            <div className="flex items-center space-x-2 mt-1">
-              <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400 text-xs">
-                {event.orgn_user?.name || "Unknown Org"}
-              </Badge>
+              {(() => {
+                const plainText = event?.description
+                  ?.replace(/<[^>]+>/g, "")
+                  .trim();
+                if (!plainText) return "No description";
+                return plainText.length > 50
+                  ? `${plainText.substring(0, 50)}...`
+                  : plainText;
+              })()}
             </div>
           </div>
+        </div>
+      ),
+    },
+    {
+      key: "orgn_user",
+      label: "Organization",
+      renderData: (event) => (
+        <div className="flex items-center space-x-2 mt-1">
+          <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400 text-xs">
+            {event.orgn_user?.name || "Unknown Org"}
+          </Badge>
         </div>
       ),
     },
@@ -654,8 +667,6 @@ const EventsPage: React.FC = () => {
         <EventFilters
           statusFilter={statusFilter}
           setStatusFilter={setStatusFilter}
-          venueTypeFilter={venueTypeFilter}
-          setVenueTypeFilter={setVenueTypeFilter}
           paidOnlyFilter={paidOnlyFilter}
           setPaidOnlyFilter={setPaidOnlyFilter}
           publicOnlyFilter={publicOnlyFilter}

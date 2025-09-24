@@ -197,7 +197,7 @@ const EmailTemplateViewDetailDialog: React.FC<
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center text-base font-medium">
-                  <Code className="w-4 h-4 mr-2 text-[#0077ED]" />
+                  <Code className="w-4 h-4 mr-2 text-blue-600" />
                   Variables Used ({templateDetail?.variables?.length || 0})
                 </CardTitle>
               </CardHeader>
@@ -208,7 +208,7 @@ const EmailTemplateViewDetailDialog: React.FC<
                       (variable: string, index: number) => (
                         <span
                           key={index}
-                          className="px-3 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400 rounded-full text-sm font-mono"
+                          className="px-3 py-1 bg-orange-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400 rounded-md text-sm font-mono"
                         >
                           {variable}
                         </span>
@@ -225,13 +225,13 @@ const EmailTemplateViewDetailDialog: React.FC<
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center text-base font-medium">
-                  <Mail className="w-4 h-4 mr-2 text-[#0077ED]" />
+                  <Mail className="w-4 h-4 mr-2 text-blue-600" />
                   Email Content
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div
-                  className={`border rounded-lg p-4 ${
+                  className={`border rounded-lg p-4 font-mono text-sm ${
                     darkMode
                       ? "border-gray-600 bg-gray-800 text-gray-100"
                       : "border-gray-200 bg-white text-gray-900"
