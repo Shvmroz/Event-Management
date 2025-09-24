@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import { useAppContext } from "@/contexts/AppContext";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -8,7 +8,11 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import QuillEditor from "@/components/ui/quillEditor/quillEditor";
+// import QuillEditor from "@/components/ui/quillEditor/quillEditor";
+const QuillEditor = lazy(
+  () => import("@/components/ui/quillEditor/quillEditor")
+);
+
 import {
   Select,
   SelectContent,
@@ -348,14 +352,16 @@ const PaymentPlansAddEditDialog: React.FC<PaymentPlansAddEditDialogProps> = ({
             <label className="block text-sm font-medium mb-2">
               Description
             </label>
-            <QuillEditor
-              value={formData.description}
-              onChange={(value) =>
-                setFormData({ ...formData, description: value })
-              }
-              placeholder="Enter plan description"
-              rows={4}
-            />
+            <Suspense fallback={<div>Loading editor...</div>}>
+              <QuillEditor
+                value={formData.description}
+                onChange={(value) =>
+                  setFormData({ ...formData, description: value })
+                }
+                placeholder="Enter plan description"
+                rows={4}
+              />
+            </Suspense>
           </div>
         </form>
       </DialogContent>

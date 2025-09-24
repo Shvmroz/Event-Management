@@ -28,7 +28,7 @@ interface EmailTemplate {
   content: string;
   variables: string[];
   is_active: boolean;
-  created_at: string;
+  createdAt: string;
 }
 
 interface EmailTemplateEditDialogProps {

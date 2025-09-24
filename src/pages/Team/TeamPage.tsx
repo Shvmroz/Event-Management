@@ -119,32 +119,34 @@ const TeamPage: React.FC = () => {
     {
       key: "user",
       label: "User",
-      renderData: (row) => (
-        <div className="flex items-start space-x-3">
-          <div className="w-10 h-10 rounded-lg flex-shrink-0 overflow-hidden">
-            <div className="w-10 h-10 rounded-lg flex-shrink-0 overflow-hidden bg-gray-200 flex items-center justify-center">
-              {row.profile_image ? (
-                <img
-                  src={s3baseUrl + row.profile_image}
-                  alt={`${row.first_name} ${row.last_name}`}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <User className="w-5 h-5 text-white" />
-              )}
+      renderData: (row) => {
+        return (
+          <div className="flex items-start space-x-3">
+            <div className="w-10 h-10 rounded-lg flex-shrink-0 overflow-hidden">
+              <div className="w-10 h-10 rounded-lg flex-shrink-0 overflow-hidden bg-gray-200 flex items-center justify-center">
+                {row.profile_image ? (
+                  <img
+                    src={s3baseUrl + row.profile_image}
+                    alt={`${row.first_name} ${row.last_name}`}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <User className="w-5 h-5 text-white" />
+                )}
+              </div>
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="font-semibold text-gray-900 dark:text-white">
+                {row.first_name} {row.last_name}
+              </div>
+              <div className="text-sm text-gray-600 dark:text-gray-400 flex items-center">
+                <Mail className="w-3 h-3 mr-1" />
+                {row.email}
+              </div>
             </div>
           </div>
-          <div className="min-w-0 flex-1">
-            <div className="font-semibold text-gray-900 dark:text-white">
-              {row.first_name} {row.last_name}
-            </div>
-            <div className="text-sm text-gray-600 dark:text-gray-400 flex items-center">
-              <Mail className="w-3 h-3 mr-1" />
-              {row.email}
-            </div>
-          </div>
-        </div>
-      ),
+        );
+      },
     },
     {
       key: "access",
@@ -214,15 +216,14 @@ const TeamPage: React.FC = () => {
     setEditLoading(true);
     const result = await _edit_team_member_api(rowData._id, data);
     if (result?.code === 200) {
-      setEditDialog({ open: false, member: null });
       setEditLoading(false);
       setTeamMembers((prev) =>
-        prev.map((x) =>
-          x._id === rowData._id ? { ...x, ...result?.admin } : x
+        prev.map((member) =>
+          member._id === result.admin._id ? result.admin : member
         )
       );
       setRowData(null);
-
+      setEditDialog({ open: false, member: null });
       enqueueSnackbar("Team member updated successfully", {
         variant: "success",
       });

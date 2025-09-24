@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, lazy, Suspense } from "react";
 import { useAppContext } from "@/contexts/AppContext";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -8,7 +8,10 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import QuillEditor from "@/components/ui/quillEditor/quillEditor";
+// import QuillEditor from "@/components/ui/quillEditor/quillEditor";
+const QuillEditor = lazy(
+  () => import("@/components/ui/quillEditor/quillEditor")
+);
 import { Save, X, Building2, EyeOff, Eye } from "lucide-react";
 import YearDropdown from "./YearDropdown";
 
@@ -44,6 +47,7 @@ const OrganizationAddEditDialog: React.FC<OrganizationAddEditDialogProps> = ({
     industry: "",
     founded_year: "",
     description: "",
+    status: true,
   });
 
   // Prefill in edit
@@ -62,6 +66,7 @@ const OrganizationAddEditDialog: React.FC<OrganizationAddEditDialogProps> = ({
         industry: organization.bio?.industry || "",
         founded_year: organization.bio?.founded_year || "",
         description: organization.bio?.description || "",
+        status: organization?.status,
       });
     } else {
       setFormData({
@@ -76,6 +81,7 @@ const OrganizationAddEditDialog: React.FC<OrganizationAddEditDialogProps> = ({
         industry: "",
         founded_year: "",
         description: "",
+        status: true,
       });
     }
   }, [organization, open]);
@@ -271,18 +277,48 @@ const OrganizationAddEditDialog: React.FC<OrganizationAddEditDialogProps> = ({
             </div>
           </div>
 
+          {/* Checkboxes */}
+          <div>
+            <label htmlFor="status" className="block text-sm font-medium mb-2">
+              Organization Status
+            </label>
+
+            <div className="flex items-center space-x-3">
+              <input
+                type="checkbox"
+                id="status"
+                checked={formData.status}
+                onChange={(e) =>
+                  setFormData({ ...formData, status: e.target.checked })
+                }
+                className="w-4 h-4 rounded border border-gray-300 cursor-pointer"
+              />
+
+              <label
+                htmlFor="status"
+                className={`cursor-pointer text-sm font-semibold ${
+                  formData.status ? "text-green-600" : "text-red-600"
+                }`}
+              >
+                {formData.status ? "Active" : "Inactive"}
+              </label>
+            </div>
+          </div>
+
           <div>
             <label className="block text-sm font-medium mb-2">
               Description
             </label>
-            <QuillEditor
-              value={formData.description}
-              onChange={(value) =>
-                setFormData({ ...formData, description: value })
-              }
-              placeholder="Enter organization description"
-              rows={4}
-            />
+            <Suspense fallback={<div>Loading editor...</div>}>
+              <QuillEditor
+                value={formData.description}
+                onChange={(value) =>
+                  setFormData({ ...formData, description: value })
+                }
+                placeholder="Enter organization description"
+                rows={4}
+              />
+            </Suspense>
           </div>
         </form>
       </DialogContent>

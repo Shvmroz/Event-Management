@@ -1,11 +1,11 @@
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
-import { AppProvider } from "./contexts/AppContext";
+import { AppProvider, useAppContext } from "./contexts/AppContext";
 import { SnackbarProvider } from "notistack";
 import AppRoutes from "./routes/Routes";
 import MainLayout from "./layout/MainLayout";
-import { useAppContext } from "./contexts/AppContext";
-import { useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
+import Spinner from "./components/ui/spinner";
 
 const theme = createTheme({
   palette: {
@@ -45,50 +45,43 @@ const theme = createTheme({
   },
 });
 
-
-// Component to handle layout logic
-const AppContent: React.FC = () => {
+// 🔑 Put the logic inline here
+const AppInner: React.FC = () => {
   const { isAuthenticated, loading } = useAppContext();
   const location = useLocation();
-  
-  // Define which routes need authentication
-  const publicRoutes = ['/login'];
-  const isPublicRoute = publicRoutes.includes(location.pathname);
-  
-  // Define skeleton types for different routes
-  const getSkeletonType = (pathname: string) => {
-    if (pathname === '/dashboard') return 'dashboard';
-    if (pathname.includes('/analytics')) return 'analytics';
-    if (pathname.includes('/settings')) return 'settings';
-    if (pathname.includes('/profile')) return 'profile';
-    return 'table';
-  };
 
-  // Show loading spinner while checking auth
+  const publicRoutes = ["/login"];
+  const isPublicRoute = publicRoutes.includes(location.pathname);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <Spinner />
       </div>
     );
   }
 
-  // For public routes, render without layout
+  //  If authenticated and tries to go to /login → redirect
+  if (isAuthenticated && location.pathname === "/login") {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  //  Public route
   if (isPublicRoute) {
     return <AppRoutes />;
   }
 
-  // For authenticated routes, wrap with MainLayout
+  //  Protected routes (with layout)
   if (isAuthenticated) {
     return (
-      <MainLayout requireAuth={true} skeletonType={getSkeletonType(location.pathname)}>
+      <MainLayout>
         <AppRoutes />
       </MainLayout>
     );
   }
 
-  // If not authenticated and not on public route, redirect to login
-  return <AppRoutes />;
+  // If not authenticated, redirect to login
+  return <Navigate to="/login" replace />;
 };
 
 export default function App() {
@@ -104,7 +97,7 @@ export default function App() {
       >
         <CssBaseline />
         <AppProvider>
-          <AppContent />
+          <AppInner />
         </AppProvider>
       </SnackbarProvider>
     </ThemeProvider>

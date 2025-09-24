@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState, useEffect } from "react";
 import {
   Mail,
@@ -14,23 +12,22 @@ import {
   User,
   FileText,
   Tag,
+  EyeIcon,
 } from "lucide-react";
 import CustomTable, {
   TableHeader,
   MenuOption,
 } from "@/components/ui/custom-table";
-import ConfirmDeleteDialog from "@/components/ui/confirm-delete-dialog";
 import CustomDrawer from "@/components/ui/custom-drawer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import CsvExportDialog from "@/components/ui/csv-export-dialog";
 import { Badge } from "@/components/ui/badge";
 import TableSkeleton from "@/components/ui/skeleton/table-skeleton";
 import { useSnackbar } from "notistack";
 import EmailTemplateEditDialog from "./components/EmailTemplateEditDialog";
-import EmailTemplateCreateDialog from "./components/EmailTemplateCreateDialog";
-import EmailTemplatePreviewDialog from "./components/EmailTemplatePreviewDialog";
+import EmailTemplateViewDetailDialog from "./components/EmailTemplateViewDetailDialog";
 import EmailTemplateFilters from "./components/EmailTemplateFilters";
+import { _email_templates_list_api } from "@/DAL/emailTemplatesAPI";
 
 interface EmailTemplate {
   _id: string;
@@ -40,49 +37,44 @@ interface EmailTemplate {
   content: string;
   variables: string[];
   is_active: boolean;
-  created_at: string;
-  deleted_at?: string;
-  is_deleted?: boolean;
+  template_for: string;
+  status: boolean;
+  user_info: {
+    type: string;
+    _id: string;
+  };
+  createdAt: string;
+  updatedAt: string;
 }
 
-const EmailTemplatesPageClient: React.FC = () => {
+const EmailTemplatesPage: React.FC = () => {
   const { enqueueSnackbar } = useSnackbar();
 
   // State
   const [emailTemplates, setEmailTemplates] = useState<EmailTemplate[]>([]);
   const [loading, setLoading] = useState(false);
-  const [addLoading, setAddLoading] = useState(false);
   const [rowData, setRowData] = useState<EmailTemplate | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const [deleteDialog, setDeleteDialog] = useState<{
-    open: boolean;
-    template: EmailTemplate | null;
-  }>({ open: false, template: null });
   const [editDialog, setEditDialog] = useState<{
     open: boolean;
     template: EmailTemplate | null;
   }>({ open: false, template: null });
-  const [createDialog, setCreateDialog] = useState(false);
-  const [previewDialog, setPreviewDialog] = useState<{
+
+  const [viewDetailDialog, setViewDetailDialog] = useState<{
     open: boolean;
     template: EmailTemplate | null;
   }>({ open: false, template: null });
 
-  const [deleteLoading, setDeleteLoading] = useState(false);
   const [editLoading, setEditLoading] = useState(false);
 
   // Filter states
   const [statusFilter, setStatusFilter] = useState("all");
-  const [typeFilter, setTypeFilter] = useState("all");
-  const [activeOnly, setActiveOnly] = useState(false);
-  const [createdFrom, setCreatedFrom] = useState("");
-  const [createdTo, setCreatedTo] = useState("");
   const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
   const [filterLoading, setFilterLoading] = useState(false);
+  const [createdFrom, setCreatedFrom] = useState("");
+  const [createdTo, setCreatedTo] = useState("");
 
-  // CSV Export state
-  const [exportDialog, setExportDialog] = useState(false);
 
   // Local pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -92,7 +84,7 @@ const EmailTemplatesPageClient: React.FC = () => {
 
   const [filtersApplied, setFiltersApplied] = useState({
     search: "",
-    sort_by: "created_at",
+    sort_by: "createdAt",
     sort_order: "desc",
     page: 1,
     limit: 50,
@@ -108,260 +100,6 @@ const EmailTemplatesPageClient: React.FC = () => {
     setCurrentPage(1);
   };
 
-  // Load email templates
-  const getListEmailTemplates = async (searchQuery = "", filters = {}) => {
-    setLoading(true);
-
-    try {
-      // TODO: Replace with actual API call
-      // const result = await _email_templates_list_api(currentPage, rowsPerPage, searchQuery, filters);
-      
-      // Simulate API response structure
-      const result = {
-        code: 200,
-        data: {
-          email_templates: [],
-          total_count: 0,
-          total_pages: 1,
-          filters_applied: filters,
-        }
-      };
-
-      if (result?.code === 200) {
-        setEmailTemplates(result.data.email_templates || []);
-        setTotalCount(result.data.total_count || 0);
-        setTotalPages(result.data.total_pages || 1);
-        // setFiltersApplied(result.data.filters_applied || {});
-      } else {
-        // enqueueSnackbar(result?.message || "Failed to load email templates", {
-        //   variant: "error",
-        // });
-        setEmailTemplates([]);
-      }
-    } catch (err) {
-      console.error(err);
-      enqueueSnackbar("Something went wrong", { variant: "error" });
-      setEmailTemplates([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getListEmailTemplates();
-  }, [currentPage, rowsPerPage]);
-
-  if (loading && emailTemplates.length === 0) {
-    return <TableSkeleton rows={8} columns={6} showFilters={true} />;
-  }
-
-  const handlePreview = (template: EmailTemplate) => {
-    setPreviewDialog({ open: true, template });
-  };
-
-  const handleEdit = (template: EmailTemplate) => {
-    setEditDialog({ open: true, template });
-    setRowData(template);
-  };
-
-  const handleDelete = (template: EmailTemplate) => {
-    setDeleteDialog({ open: true, template });
-    setRowData(template);
-  };
-
-  const handleConfirmDelete = async () => {
-    if (!rowData?._id) return;
-
-    setDeleteLoading(true);
-    try {
-      // TODO: Replace with actual API call
-      // const result = await _delete_email_template_api(rowData._id);
-      
-      // Simulate API response
-      const result = { code: 200, message: 'Email template deleted successfully' };
-
-      if (result?.code === 200) {
-        setEmailTemplates(prev =>
-          prev.filter(template => template._id !== rowData._id)
-        );
-        setDeleteDialog({ open: false, template: null });
-        setRowData(null);
-        enqueueSnackbar("Email template deleted successfully", {
-          variant: "success",
-        });
-      } else {
-        enqueueSnackbar(result?.message || "Failed to delete email template", {
-          variant: "error",
-        });
-      }
-    } catch (error) {
-      console.error("Error deleting email template:", error);
-      enqueueSnackbar("Something went wrong", { variant: "error" });
-    } finally {
-      setDeleteLoading(false);
-    }
-  };
-
-  const handleSaveEdit = async (data: Partial<EmailTemplate>) => {
-    if (!rowData?._id) return;
-    
-    setEditLoading(true);
-    try {
-      // TODO: Replace with actual API call
-      // const result = await _edit_email_template_api(rowData._id, data);
-      
-      // Simulate API response
-      const result = { 
-        code: 200, 
-        message: 'Email template updated successfully',
-        data: { ...rowData, ...data }
-      };
-
-      if (result?.code === 200) {
-        setEditDialog({ open: false, template: null });
-        setRowData(null);
-        setEmailTemplates(prev =>
-          prev.map(template => template._id === rowData._id ? { ...template, ...data } : template)
-        );
-        enqueueSnackbar("Email template updated successfully", {
-          variant: "success",
-        });
-      } else {
-        enqueueSnackbar(result?.message || "Failed to update email template", {
-          variant: "error",
-        });
-      }
-    } catch (error) {
-      console.error("Error updating email template:", error);
-      enqueueSnackbar("Something went wrong", { variant: "error" });
-    } finally {
-      setEditLoading(false);
-    }
-  };
-
-  const handleAddNewTemplate = async (data: Partial<EmailTemplate>) => {
-    setAddLoading(true);
-    try {
-      // TODO: Replace with actual API call
-      // const result = await _add_email_template_api(data);
-      
-      // Simulate API response
-      const result = {
-        code: 200,
-        message: 'Email template created successfully',
-        data: { _id: `template_${Date.now()}`, ...data }
-      };
-
-      if (result?.code === 200) {
-        // setEmailTemplates(prev => [result.data, ...prev]);
-        setCreateDialog(false);
-        enqueueSnackbar("Email template created successfully", {
-          variant: "success",
-        });
-      } else {
-        enqueueSnackbar(result?.message || "Failed to create email template", {
-          variant: "error",
-        });
-      }
-    } catch (error) {
-      console.error("Error creating email template:", error);
-      enqueueSnackbar("Something went wrong", { variant: "error" });
-    } finally {
-      setAddLoading(false);
-    }
-  };
-
-  const handleSearch = () => {
-    setCurrentPage(1);
-    getListEmailTemplates(searchQuery);
-  };
-
-  // Filter functions
-  const isDateRangeInvalid = Boolean(
-    createdFrom && createdTo && new Date(createdTo) < new Date(createdFrom)
-  );
-
-  const getAppliedFiltersCount = () => {
-    let count = 0;
-    if (statusFilter !== "all") count++;
-    if (typeFilter !== "all") count++;
-    if (activeOnly) count++;
-    if (createdFrom || createdTo) count += 1;
-
-    return count;
-  };
-
-  const handleClearFilters = () => {
-    setStatusFilter("all");
-    setTypeFilter("all");
-    setActiveOnly(false);
-    setCreatedFrom("");
-    setCreatedTo("");
-    setFilterDrawerOpen(false);
-    getListEmailTemplates();
-  };
-
-  const handleApplyFilters = () => {
-    const filters: { [key: string]: string } = {};
-
-    if (statusFilter === "active") filters.status = "true";
-    else if (statusFilter === "inactive") filters.status = "false";
-
-    if (typeFilter !== "all") filters.template_type = typeFilter;
-    if (activeOnly) filters.active_only = "true";
-    if (createdFrom) filters.created_from = createdFrom;
-    if (createdTo) filters.created_to = createdTo;
-
-       //  Check if there are any applied filters
-       const hasFilters =
-       Object.keys(filters).length > 0 &&
-       Object.values(filters).some((val) => val && val !== "");
- 
-     if (!hasFilters) {
-       enqueueSnackbar("Please select at least one filter", {
-         variant: "warning",
-       });
-       return;
-     }
-
-    getListEmailTemplates(searchQuery, filters);
-    setFilterDrawerOpen(false);
-  };
-
-  const MENU_OPTIONS: MenuOption[] = [
-    {
-      label: "Edit",
-      action: handleEdit,
-      icon: <Edit className="w-4 h-4" />,
-    },
-    {
-      label: "Delete",
-      action: handleDelete,
-      icon: <Trash2 className="w-4 h-4" />,
-      variant: "destructive",
-    },
-  ];
-
-  const getStatusBadge = (isActive: boolean) => {
-    return isActive ? (
-      <Badge className="bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400">
-        Active
-      </Badge>
-    ) : (
-      <Badge className="bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400">
-        Inactive
-      </Badge>
-    );
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
-
   const TABLE_HEAD: TableHeader[] = [
     {
       key: "index",
@@ -373,8 +111,8 @@ const EmailTemplatesPageClient: React.FC = () => {
       ),
     },
     {
-      key: "template",
-      label: "Template",
+      key: "name",
+      label: "Template Name",
       renderData: (template) => (
         <div className="flex items-start space-x-3">
           <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -414,16 +152,25 @@ const EmailTemplatesPageClient: React.FC = () => {
       ),
     },
     {
+      key: "template_for",
+      label: "Template For",
+      renderData: (template) => (
+        <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
+          {template.template_for || "admin"}
+        </Badge>
+      ),
+    },
+    {
       key: "status",
       label: "Status",
       renderData: (template) => getStatusBadge(template.is_active),
     },
     {
-      key: "created_at",
+      key: "createdAt",
       label: "Created",
       renderData: (template) => (
         <span className="text-gray-600 dark:text-gray-400">
-          {formatDate(template.created_at)}
+          {formatDate(template.createdAt)}
         </span>
       ),
     },
@@ -434,6 +181,165 @@ const EmailTemplatesPageClient: React.FC = () => {
       width: "w-12",
     },
   ];
+
+  const handleEdit = (template: EmailTemplate) => {
+    setEditDialog({ open: true, template });
+    setRowData(template);
+  };
+
+  const handleViewDetail = (template: EmailTemplate) => {
+    setViewDetailDialog({ open: true, template });
+  };
+
+  const handleSaveEdit = async (data: Partial<EmailTemplate>) => {
+    if (!rowData?._id) return;
+
+    setEditLoading(true);
+    try {
+      // TODO: Replace with actual API call
+      // const result = await _edit_email_template_api(rowData._id, data);
+
+      // Simulate API response
+      const result = {
+        code: 200,
+        message: "Email template updated successfully",
+        data: { ...rowData, ...data },
+      };
+
+      if (result?.code === 200) {
+        setEditDialog({ open: false, template: null });
+        setRowData(null);
+        setEmailTemplates((prev) =>
+          prev.map((template) =>
+            template._id === rowData._id ? { ...template, ...data } : template
+          )
+        );
+        enqueueSnackbar("Email template updated successfully", {
+          variant: "success",
+        });
+      } else {
+        enqueueSnackbar(result?.message || "Failed to update email template", {
+          variant: "error",
+        });
+      }
+    } catch (error) {
+      console.error("Error updating email template:", error);
+      enqueueSnackbar("Something went wrong", { variant: "error" });
+    } finally {
+      setEditLoading(false);
+    }
+  };
+
+  const getListEmailTemplates = async (
+    searchQuery?: string,
+    filters?: { [key: string]: string }
+  ) => {
+    setLoading(true);
+    const result = await _email_templates_list_api(
+      currentPage,
+      rowsPerPage,
+      searchQuery || "",
+      filters || {}
+    );
+
+    if (result?.code === 200) {
+      setEmailTemplates(result.data.email_templates || []);
+      setTotalCount(result.data.total_count);
+      setTotalPages(result.data.total_pages);
+      setFiltersApplied(result.data.filters_applied || filtersApplied);
+    } else {
+      enqueueSnackbar(result?.message || "Failed to load email templates", {
+        variant: "error",
+      });
+      setEmailTemplates([]);
+    }
+    setLoading(false);
+  };
+
+  const handleSearch = () => {
+    setCurrentPage(1);
+    getListEmailTemplates(searchQuery);
+  };
+
+  const isDateRangeInvalid = Boolean(
+    createdFrom && createdTo && new Date(createdTo) < new Date(createdFrom)
+  );
+
+  const getAppliedFiltersCount = () => {
+    let count = 0;
+    if (statusFilter !== "all") count++;
+    if (createdFrom || createdTo) count++;
+    return count;
+  };
+
+  const handleApplyFilters = () => {
+    const filters: { [key: string]: string } = {};
+
+    if (statusFilter === "active") filters.status = "true";
+    else if (statusFilter === "inactive") filters.status = "false";
+
+    if (createdFrom) filters.created_from = createdFrom;
+    if (createdTo) filters.created_to = createdTo;
+
+    //  Check if there are any applied filters
+    const hasFilters =
+      Object.keys(filters).length > 0 &&
+      Object.values(filters).some((val) => val && val !== "");
+
+    if (!hasFilters) {
+      enqueueSnackbar("Please select at least one filter", {
+        variant: "warning",
+      });
+      return;
+    }
+
+    getListEmailTemplates(searchQuery, filters);
+    setFilterDrawerOpen(false);
+  };
+
+  const handleClearFilters = () => {
+    setStatusFilter("all");
+    setCreatedFrom("");
+    setCreatedTo("");
+    getListEmailTemplates();
+    setFilterDrawerOpen(false);
+  };
+
+  const MENU_OPTIONS: MenuOption[] = [
+    {
+      label: "Edit",
+      action: handleEdit,
+      icon: <Edit className="w-4 h-4" />,
+    },
+  ];
+
+  const formatDate = (dateString: string) =>
+    new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+  const getStatusBadge = (isActive: boolean) =>
+    isActive ? (
+      <Badge className="bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400">
+        Active
+      </Badge>
+    ) : (
+      <Badge className="bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400">
+        Inactive
+      </Badge>
+    );
+
+  useEffect(() => {
+    getListEmailTemplates();
+  }, [currentPage, rowsPerPage]);
+
+  if (loading && emailTemplates.length === 0) {
+    return <TableSkeleton rows={8} columns={6} showFilters={true} />;
+  }
 
   return (
     <div className="space-y-6">
@@ -446,23 +352,6 @@ const EmailTemplatesPageClient: React.FC = () => {
           <p className="text-gray-600 dark:text-gray-400 mt-2">
             Manage and customize email templates for your platform
           </p>
-        </div>
-        <div className="flex items-center space-x-3">
-          <Button
-            onClick={() => setExportDialog(true)}
-            variant="outline"
-            className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-          >
-            <Download className="w-4 h-4 mr-2" />
-            Export CSV
-          </Button>
-          <Button
-            onClick={() => setCreateDialog(true)}
-            className="bg-[#0077ED] hover:bg-[#0066CC] text-white"
-          >
-            <Plus className="w-4 h-4 mr-2" />
-            Add Template
-          </Button>
         </div>
       </div>
 
@@ -535,23 +424,12 @@ const EmailTemplatesPageClient: React.FC = () => {
           onRowsPerPageChange,
         }}
         totalPages={totalPages}
-        onRowClick={(template) =>
-          setPreviewDialog({ open: true, template })
-        }
+        onRowClick={(template) => setViewDetailDialog({ open: true, template })}
         loading={loading}
         emptyMessage="No email templates found"
       />
 
-      {/* Delete Confirmation Dialog */}
-      <ConfirmDeleteDialog
-        open={deleteDialog.open}
-        onOpenChange={(open) => setDeleteDialog({ open, template: null })}
-        title="Delete Email Template"
-        content={`Are you sure you want to delete "${deleteDialog.template?.name}"? This action cannot be undone.`}
-        confirmButtonText="Delete"
-        onConfirm={handleConfirmDelete}
-        loading={deleteLoading}
-      />
+   
 
       {/* Edit Email Template Dialog */}
       <EmailTemplateEditDialog
@@ -565,28 +443,14 @@ const EmailTemplatesPageClient: React.FC = () => {
         loading={editLoading}
       />
 
-      {/* Create Email Template Dialog */}
-      <EmailTemplateCreateDialog
-        open={createDialog}
-        onOpenChange={setCreateDialog}
-        onSave={handleAddNewTemplate}
-        loading={addLoading}
+      {/* View Detail Email Template Dialog */}
+      <EmailTemplateViewDetailDialog
+        open={viewDetailDialog.open}
+        onOpenChange={(open) => setViewDetailDialog({ open, template: null })}
+        templateId={viewDetailDialog.template?._id}
       />
 
-      {/* Preview Email Template Dialog */}
-      <EmailTemplatePreviewDialog
-        open={previewDialog.open}
-        onOpenChange={(open) => setPreviewDialog({ open, template: null })}
-        template={previewDialog.template}
-      />
 
-      {/* CSV Export Dialog */}
-      <CsvExportDialog
-        open={exportDialog}
-        onOpenChange={setExportDialog}
-        exportType="email_templates"
-        title="Email Templates"
-      />
 
       {/* Filter Drawer */}
       <CustomDrawer
@@ -596,19 +460,20 @@ const EmailTemplatesPageClient: React.FC = () => {
         onClear={handleClearFilters}
         onFilter={handleApplyFilters}
         loading={filterLoading}
-        applyButtonDisabled={isDateRangeInvalid}
+        applyButtonDisabled={false}
       >
         <EmailTemplateFilters
           statusFilter={statusFilter}
           setStatusFilter={setStatusFilter}
-          typeFilter={typeFilter}
-          setTypeFilter={setTypeFilter}
-          activeOnly={activeOnly}
-          setActiveOnly={setActiveOnly}
+          createdFrom={createdFrom}
+          setCreatedFrom={setCreatedFrom}
+          createdTo={createdTo}
+          setCreatedTo={setCreatedTo}
+          isDateRangeInvalid={isDateRangeInvalid}
         />
       </CustomDrawer>
     </div>
   );
 };
 
-export default EmailTemplatesPageClient;
+export default EmailTemplatesPage;

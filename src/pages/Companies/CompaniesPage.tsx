@@ -111,8 +111,7 @@ const CompaniesPage: React.FC = () => {
 
   // Filter states
   const [statusFilter, setStatusFilter] = useState("all");
-  const [industryFilter, setIndustryFilter] = useState("all");
-  const [activeOnly, setActiveOnly] = useState(false);
+ 
   const [createdFrom, setCreatedFrom] = useState("");
   const [createdTo, setCreatedTo] = useState("");
   const [filterDrawerOpen, setFilterDrawerOpen] = useState(false);
@@ -429,8 +428,6 @@ const CompaniesPage: React.FC = () => {
   const getAppliedFiltersCount = () => {
     let count = 0;
     if (statusFilter !== "all") count++;
-    if (industryFilter !== "all") count++;
-    if (activeOnly) count++;
     if (createdFrom || createdTo) count += 1;
 
     return count;
@@ -438,8 +435,7 @@ const CompaniesPage: React.FC = () => {
 
   const handleClearFilters = () => {
     setStatusFilter("all");
-    setIndustryFilter("all");
-    setActiveOnly(false);
+
     setCreatedFrom("");
     setCreatedTo("");
     setFilterDrawerOpen(false);
@@ -451,9 +447,6 @@ const CompaniesPage: React.FC = () => {
 
     if (statusFilter === "active") filters.status = "true";
     else if (statusFilter === "inactive") filters.status = "false";
-
-    if (industryFilter !== "all") filters.industry = industryFilter;
-    if (activeOnly) filters.active_only = "true";
     if (createdFrom) filters.created_from = createdFrom;
     if (createdTo) filters.created_to = createdTo;
 
@@ -846,10 +839,12 @@ const CompaniesPage: React.FC = () => {
         <CompanyFilters
           statusFilter={statusFilter}
           setStatusFilter={setStatusFilter}
-          industryFilter={industryFilter}
-          setIndustryFilter={setIndustryFilter}
-          activeOnly={activeOnly}
-          setActiveOnly={setActiveOnly}
+          createdFrom={createdFrom}
+          setCreatedFrom={setCreatedFrom}
+          createdTo={createdTo}
+          setCreatedTo={setCreatedTo}
+          isDateRangeInvalid={isDateRangeInvalid}
+        
         />
       </CustomDrawer>
     </div>

@@ -1,7 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
 // Import page components
-
 import NotFoundPage from "../pages/NotFoundPage";
 import LoginPage from "@/pages/Login/LoginPage";
 import DashboardPage from "@/pages/Dashboard/DashboardPage";
@@ -19,110 +18,33 @@ import ConfigurationPage from "@/pages/Configuration/ConfigurationPage";
 import EmailConfigurationPage from "@/pages/Configuration/EmailConfigurationPage";
 import StripeConfigurationPage from "@/pages/Configuration/StripeConfigurationPage";
 
-// Route configuration
-export const routeConfig = [
-  // Public Routes
-  {
-    path: "/login",
-    element: <LoginPage />,
-    isPublic: true,
-  },
-  
-  // Protected Routes
-  {
-    path: "/dashboard",
-    element: <DashboardPage />,
-    isPublic: false,
-  },
-  {
-    path: "/analytics",
-    element: <AnalyticsPage />,
-    isPublic: false,
-  },
-  {
-    path: "/companies",
-    element: <CompaniesPage />,
-    isPublic: false,
-  },
-  {
-    path: "/organizations",
-    element: <OrganizationsPage />,
-    isPublic: false,
-  },
-  {
-    path: "/events",
-    element: <EventsPage />,
-    isPublic: false,
-  },
-  {
-    path: "/email-templates",
-    element: <EmailTemplatesPage />,
-    isPublic: false,
-  },
-  {
-    path: "/payment-plans",
-    element: <PaymentPlansPage />,
-    isPublic: false,
-  },
-  {
-    path: "/team",
-    element: <TeamPage />,
-    isPublic: false,
-  },
-  {
-    path: "/profile",
-    element: <ProfilePage />,
-    isPublic: false,
-  },
-  {
-    path: "/settings",
-    element: <SettingsPage />,
-    isPublic: false,
-  },
-  {
-    path: "/change-password",
-    element: <ChangePasswordPage />,
-    isPublic: false,
-  },
-  {
-    path: "/configuration",
-    element: <ConfigurationPage />,
-    isPublic: false,
-  },
-  {
-    path: "/configuration/email",
-    element: <EmailConfigurationPage />,
-    isPublic: false,
-  },
-    {
-      path: "/configuration/stripe",
-      element: <StripeConfigurationPage />,
-      isPublic: false,
-    },
-    {
-      path: "*", // Catch-all route for 404
-      element: <NotFoundPage />,
-      isPublic: true,
-    },
-  ];
-
-// Main App Routes Component
 export default function AppRoutes() {
   return (
     <Routes>
-      {routeConfig.map((route, index) => (
-        <Route key={index} path={route.path} element={route.element} />
-      ))}
-      <Route 
-        path="/" 
-        element={<Navigate to="/dashboard" replace />} 
-      />
-      
-      {/* Catch all route - 404 Page */}
-      <Route 
-        path="*" 
-        element={<NotFoundPage />} 
-      />
+      {/* Public Routes */}
+      <Route path="/login" element={<LoginPage />} />
+
+      {/* Protected Routes */}
+      <Route path="/dashboard" element={<DashboardPage />} />
+      <Route path="/analytics" element={<AnalyticsPage />} />
+      <Route path="/companies" element={<CompaniesPage />} />
+      <Route path="/organizations" element={<OrganizationsPage />} />
+      <Route path="/events" element={<EventsPage />} />
+      <Route path="/email-templates" element={<EmailTemplatesPage />} />
+      <Route path="/payment-plans" element={<PaymentPlansPage />} />
+      <Route path="/team" element={<TeamPage />} />
+      <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/settings" element={<SettingsPage />} />
+      <Route path="/change-password" element={<ChangePasswordPage />} />
+      <Route path="/configuration" element={<ConfigurationPage />} />
+      <Route path="/configuration/email" element={<EmailConfigurationPage />} />
+      <Route path="/configuration/stripe" element={<StripeConfigurationPage />} />
+
+      {/* Redirect root → dashboard */}
+      <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
+      {/* Catch-all route */}
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 }

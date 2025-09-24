@@ -4,15 +4,9 @@ import Topbar from "./Topbar";
 
 interface MainLayoutProps {
   children: React.ReactNode;
-  requireAuth?: boolean;
-  skeletonType?: "dashboard" | "table" | "form" | "analytics" | "profile" | "settings";
 }
 
-const MainLayout: React.FC<MainLayoutProps> = ({
-  children,
-  requireAuth = false,
-  skeletonType = "table",
-}) => {
+const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
@@ -54,6 +48,6 @@ const MainLayout: React.FC<MainLayoutProps> = ({
       </div>
     </div>
   );
-}
+};
 
 export default MainLayout;

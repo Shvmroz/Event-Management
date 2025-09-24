@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { lazy, Suspense, useState } from "react";
 import SettingsSkeleton from "@/components/ui/skeleton/settings-skeleton";
 import { Shield, Save, Edit, FileText, Scale, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import QuillEditor from "@/components/ui/quillEditor/quillEditor";
+const QuillEditor = lazy(
+  () => import("@/components/ui/quillEditor/quillEditor")
+);
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
@@ -223,15 +225,17 @@ const SettingsPage: React.FC = () => {
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
                   Privacy Policy Content
                 </label>
-                <QuillEditor
-                  value={formData.privacy_policy}
-                  onChange={(value) =>
-                    setFormData({ ...formData, privacy_policy: value })
-                  }
-                  placeholder="Enter your privacy policy content..."
-                  disabled={!isEditing}
-                  rows={16}
-                />
+                <Suspense fallback={<div>Loading editor...</div>}>
+                  <QuillEditor
+                    value={formData.privacy_policy}
+                    onChange={(value) =>
+                      setFormData({ ...formData, privacy_policy: value })
+                    }
+                    placeholder="Enter your privacy policy content..."
+                    disabled={!isEditing}
+                    rows={16}
+                  />
+                </Suspense>
               </div>
             </TabsContent>
 
@@ -240,15 +244,17 @@ const SettingsPage: React.FC = () => {
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
                   Terms & Conditions Content
                 </label>
-                <QuillEditor
-                  value={formData.terms_conditions}
-                  onChange={(value) =>
-                    setFormData({ ...formData, terms_conditions: value })
-                  }
-                  placeholder="Enter your terms & conditions content..."
-                  disabled={!isEditing}
-                  rows={16}
-                />
+                <Suspense fallback={<div>Loading editor...</div>}>
+                  <QuillEditor
+                    value={formData.terms_conditions}
+                    onChange={(value) =>
+                      setFormData({ ...formData, terms_conditions: value })
+                    }
+                    placeholder="Enter your terms & conditions content..."
+                    disabled={!isEditing}
+                    rows={16}
+                  />
+                </Suspense>
               </div>
             </TabsContent>
           </Tabs>

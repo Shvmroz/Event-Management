@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useAppContext } from "@/contexts/AppContext";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -416,14 +416,16 @@ const CompanyAddEditDialog: React.FC<CompanyAddEditDialogProps> = ({
             <label className="block text-sm font-medium mb-2">
               Description
             </label>
-            <QuillEditor
-              value={formData.description}
-              onChange={(value) =>
-                setFormData({ ...formData, description: value })
-              }
-              placeholder="Enter company description"
-              rows={4}
-            />
+            <Suspense fallback={<div>Loading editor...</div>}>
+              <QuillEditor
+                value={formData.description}
+                onChange={(value) =>
+                  setFormData({ ...formData, description: value })
+                }
+                placeholder="Enter company description"
+                rows={4}
+              />
+            </Suspense>
           </div>
         </form>
       </DialogContent>

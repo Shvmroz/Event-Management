@@ -30,35 +30,26 @@ import CsvExportDialog from "@/components/ui/csv-export-dialog";
 import { Badge } from "@/components/ui/badge";
 import TableSkeleton from "@/components/ui/skeleton/table-skeleton";
 import { useSnackbar } from "notistack";
-import EventEditDialog from "./components/EventEditDialog";
-import EventCreateDialog from "./components/EventCreateDialog";
+import EventsAddEditDialog from "./components/EventsAddEditDialog";
 import EventDetailView from "./components/EventDetailView";
 import EventFilters from "./components/EventFilters";
+import { _add_event_api, _edit_event_api, _events_list_api } from "@/DAL/eventAPI";
 
-interface Event {
+export interface Event {
   _id: string;
   title: string;
   description: string;
-  startAt: string;
-  endAt: string;
-  venue: {
-    type: string;
-    address: string;
-    city: string;
-    state: string;
-    country: string;
-    postal_code: string;
-    virtual_link: string;
-    platform: string;
-  };
-  status: string;
-  ticketPrice: number;
-  currency: string;
-  isPaidEvent: boolean;
+  slug: string;
+  status: "draft" | "published" | "archived"; // adjust as needed
+  current_attendees: number;
   max_attendees: number;
   registration_deadline: string;
-  is_public: boolean;
-  created_at: string;
+  createdAt: string;
+  updatedAt: string;
+  orgn_user: {
+    _id: string;
+    name: string;
+  };
 }
 
 const EventsPage: React.FC = () => {
@@ -109,7 +100,7 @@ const EventsPage: React.FC = () => {
 
   const [filtersApplied, setFiltersApplied] = useState({
     search: "",
-    sort_by: "created_at",
+    sort_by: "updatedAt",
     sort_order: "desc",
     page: 1,
     limit: 50,
@@ -129,39 +120,26 @@ const EventsPage: React.FC = () => {
   const getListEvents = async (searchQuery = "", filters = {}) => {
     setLoading(true);
 
-    try {
-      // TODO: Replace with actual API call
-      // const result = await _events_list_api(currentPage, rowsPerPage, searchQuery, filters);
-
-      // Simulate API response structure
-      const result = {
-        code: 200,
-        data: {
-          events: [],
-          total_count: 0,
-          total_pages: 1,
-          filters_applied: filters,
-        },
-      };
-
-      if (result?.code === 200) {
-        setEvents(result.data.events || []);
-        setTotalCount(result.data.total_count || 0);
-        setTotalPages(result.data.total_pages || 1);
-        // setFiltersApplied(result.data.filters_applied || {});
-      } else {
-        // enqueueSnackbar(result?.message || 'Failed to load events', {
-        //   variant: 'error',
-        // });
-        setEvents([]);
-      }
-    } catch (err) {
-      console.error(err);
-      enqueueSnackbar("Something went wrong", { variant: "error" });
+    const result = await _events_list_api(
+      currentPage,
+      rowsPerPage,
+      searchQuery,
+      filters
+    );
+    if (result?.code === 200) {
+      setEvents(result.data?.events);
+      setTotalCount(result.data.total_count || 0);
+      setTotalPages(result.data.total_pages || 1);
+      setFiltersApplied(result.data.filters_applied || {});
+      setLoading(false);
+    } else {
+      enqueueSnackbar(result?.message || 'Failed to load events', {
+        variant: 'error',
+      });
       setEvents([]);
-    } finally {
       setLoading(false);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -218,16 +196,7 @@ const EventsPage: React.FC = () => {
 
     setEditLoading(true);
     try {
-      // TODO: Replace with actual API call
-      // const result = await _edit_event_api(rowData._id, data);
-
-      // Simulate API response
-      const result = {
-        code: 200,
-        message: "Event updated successfully",
-        data: { ...rowData, ...data },
-      };
-
+      const result = await _edit_event_api(rowData._id, data)
       if (result?.code === 200) {
         setEditDialog({ open: false, event: null });
         setRowData(null);
@@ -255,18 +224,9 @@ const EventsPage: React.FC = () => {
   const handleAddNewEvent = async (data: Partial<Event>) => {
     setAddLoading(true);
     try {
-      // TODO: Replace with actual API call
-      // const result = await _add_event_api(data);
-
-      // Simulate API response
-      const result = {
-        code: 200,
-        message: "Event created successfully",
-        data: { _id: `event_${Date.now()}`, ...data },
-      };
-
+      const result = await _add_event_api(data);
       if (result?.code === 200) {
-        // setEvents(prev => [result.data, ...prev]);
+        setEvents(prev => [result.data, ...prev]);
         setCreateDialog(false);
         enqueueSnackbar("Event created successfully", {
           variant: "success",
@@ -476,72 +436,11 @@ const EventsPage: React.FC = () => {
                 : event.description}
             </div>
             <div className="flex items-center space-x-2 mt-1">
-              {event.is_public ? (
-                <Badge className="bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400 text-xs">
-                  <Globe className="w-2 h-2 mr-1" />
-                  Public
-                </Badge>
-              ) : (
-                <Badge className="bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400 text-xs">
-                  Private
-                </Badge>
-              )}
+              <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400 text-xs">
+                {event.orgn_user?.name || "Unknown Org"}
+              </Badge>
             </div>
           </div>
-        </div>
-      ),
-    },
-    {
-      key: "venue",
-      label: "Venue",
-      renderData: (event) => (
-        <div className="space-y-1">
-          {getVenueTypeBadge(event.venue.type)}
-          <div className="text-sm text-gray-600 dark:text-gray-400">
-            {event.venue.type === "virtual"
-              ? event.venue.platform
-              : `${event.venue.city}, ${event.venue.state}`}
-          </div>
-        </div>
-      ),
-    },
-    {
-      key: "schedule",
-      label: "Schedule",
-      renderData: (event) => (
-        <div className="space-y-1">
-          <div className="flex items-center space-x-1 text-sm">
-            <Clock className="w-3 h-3 text-gray-400" />
-            <span className="text-gray-900 dark:text-white font-medium">
-              {formatDateTime(event.startAt)}
-            </span>
-          </div>
-          <div className="text-xs text-gray-600 dark:text-gray-400">
-            to {formatDateTime(event.endAt)}
-          </div>
-          <div className="text-xs text-gray-500 dark:text-gray-500">
-            Reg. deadline: {formatDate(event.registration_deadline)}
-          </div>
-        </div>
-      ),
-    },
-    {
-      key: "pricing",
-      label: "Pricing",
-      renderData: (event) => (
-        <div className="space-y-1">
-          {event.isPaidEvent ? (
-            <div className="flex items-center space-x-1">
-              <DollarSign className="w-4 h-4 text-green-500" />
-              <span className="font-semibold text-green-600 dark:text-green-400">
-                {formatCurrency(event.ticketPrice, event.currency)}
-              </span>
-            </div>
-          ) : (
-            <Badge className="bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400">
-              Free
-            </Badge>
-          )}
         </div>
       ),
     },
@@ -552,8 +451,19 @@ const EventsPage: React.FC = () => {
         <div className="flex items-center space-x-2">
           <Users className="w-4 h-4 text-blue-500" />
           <span className="font-medium text-gray-900 dark:text-white">
-            {event.max_attendees}
+            {event.current_attendees}/{event.max_attendees}
           </span>
+        </div>
+      ),
+    },
+    {
+      key: "schedule",
+      label: "Registration",
+      renderData: (event) => (
+        <div className="space-y-1">
+          <div className="text-sm text-gray-900 dark:text-white font-medium">
+            Deadline: {formatDate(event.registration_deadline)}
+          </div>
         </div>
       ),
     },
@@ -563,11 +473,11 @@ const EventsPage: React.FC = () => {
       renderData: (event) => getStatusBadge(event.status),
     },
     {
-      key: "created_at",
+      key: "createdAt",
       label: "Created",
       renderData: (event) => (
         <span className="text-gray-600 dark:text-gray-400">
-          {formatDate(event.created_at)}
+          {formatDate(event.createdAt)}
         </span>
       ),
     },
@@ -695,31 +605,31 @@ const EventsPage: React.FC = () => {
         loading={deleteLoading}
       />
 
-      {/* Edit Event Dialog */}
-      <EventEditDialog
-        open={editDialog.open}
+      {/* Event Dialog (Create / Edit) */}
+      <EventsAddEditDialog
+        open={editDialog.open || createDialog}
         onOpenChange={(open) => {
-          setEditDialog({ open, event: null });
-          if (!open) setRowData(null);
+          if (editDialog.open) {
+            // closing edit dialog
+            setEditDialog({ open, event: null });
+            if (!open) setRowData(null);
+          } else {
+            // closing create dialog
+            setCreateDialog(open);
+          }
         }}
-        event={rowData}
-        onSave={handleSaveEdit}
-        loading={editLoading}
-      />
-
-      {/* Create Event Dialog */}
-      <EventCreateDialog
-        open={createDialog}
-        onOpenChange={setCreateDialog}
-        onSave={handleAddNewEvent}
-        loading={addLoading}
+        event={editDialog.open ? rowData : null} // pass event only in edit mode
+        onSave={editDialog.open ? handleSaveEdit : handleAddNewEvent}
+        loading={editDialog.open ? editLoading : addLoading}
       />
 
       {/* Event Detail View */}
+
       {detailView.open && detailView.event && (
         <EventDetailView
-          event={detailView.event}
+          open={detailView.open}
           onClose={() => setDetailView({ open: false, event: null })}
+          eventId={detailView.event._id}
         />
       )}
 

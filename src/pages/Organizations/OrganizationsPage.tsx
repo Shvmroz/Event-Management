@@ -543,7 +543,6 @@ const OrganizationsPage: React.FC = () => {
     if (subscriptionStatusFilter !== "all") count++;
     if (activeOnly) count++;
     if (createdFrom || createdTo) count += 1;
-
     return count;
   };
 

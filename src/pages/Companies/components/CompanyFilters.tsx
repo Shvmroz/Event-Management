@@ -15,10 +15,6 @@ import { CheckCircle, XCircle, Building, AlertTriangle } from "lucide-react";
 interface CompanyFiltersProps {
   statusFilter: string;
   setStatusFilter: (value: string) => void;
-  industryFilter: string;
-  setIndustryFilter: (value: string) => void;
-  activeOnly: boolean;
-  setActiveOnly: (value: boolean) => void;
   createdFrom?: string;
   setCreatedFrom?: (value: string) => void;
   createdTo?: string;
@@ -29,44 +25,28 @@ interface CompanyFiltersProps {
 const CompanyFilters: React.FC<CompanyFiltersProps> = ({
   statusFilter,
   setStatusFilter,
-  industryFilter,
-  setIndustryFilter,
-  activeOnly,
-  setActiveOnly,
   createdFrom,
   setCreatedFrom,
   createdTo,
   setCreatedTo,
   isDateRangeInvalid,
 }) => {
-  const industries = [
-    'Technology',
-    'Healthcare',
-    'Finance',
-    'Education',
-    'Entertainment',
-    'Automotive',
-    'Retail',
-    'Manufacturing',
-    'Consulting',
-    'Other'
-  ];
+  // const industries = [
+  //   'Technology',
+  //   'Healthcare',
+  //   'Finance',
+  //   'Education',
+  //   'Entertainment',
+  //   'Automotive',
+  //   'Retail',
+  //   'Manufacturing',
+  //   'Consulting',
+  //   'Other'
+  // ];
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
-        <div className="flex items-center space-x-2">
-          <Building className="w-4 h-4 text-blue-500" />
-          <span className="text-sm font-medium text-gray-900 dark:text-white">
-            Active Companies Only
-          </span>
-        </div>
-        <Switch
-          checked={activeOnly}
-          onCheckedChange={setActiveOnly}
-          className="data-[state=checked]:bg-[#0077ED]"
-        />
-      </div>
+     
 
       {/* Status Filter */}
       <div>
@@ -96,7 +76,7 @@ const CompanyFilters: React.FC<CompanyFiltersProps> = ({
       </div>
 
       {/* Industry Filter */}
-      <div>
+      {/* <div>
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           Industry
         </label>
@@ -113,7 +93,7 @@ const CompanyFilters: React.FC<CompanyFiltersProps> = ({
             ))}
           </SelectContent>
         </Select>
-      </div>
+      </div> */}
 
       {/* Date Range Filter */}
       {setCreatedFrom && setCreatedTo && (
