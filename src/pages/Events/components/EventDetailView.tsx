@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useEffect, useState } from "react";
 import {
   Calendar,
@@ -17,14 +15,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import IconButton from "@mui/material/IconButton";
+import {
+  CustomDialog,
+  CustomDialogTitle,
+  CustomDialogContent,
+  CustomDialogActions,
+} from "@/components/ui/custom-dialog";
 import { useAppContext } from "@/contexts/AppContext";
 import { useSnackbar } from "notistack";
 import { _event_detail_view_api } from "@/DAL/eventAPI";
+import { formatDateTime } from "@/utils/dateUtils.js";
 
 interface EventDetailViewProps {
   open: boolean;
@@ -124,16 +124,6 @@ const EventDetailView: React.FC<EventDetailViewProps> = ({
     );
   };
 
-  const formatDateTime = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      // timeZoneName: "short",
-    });
-  };
 
   const formatCurrency = (amount: number, currency: string) => {
     return new Intl.NumberFormat("en-US", {
@@ -143,20 +133,13 @@ const EventDetailView: React.FC<EventDetailViewProps> = ({
   };
 
   return (
-    <Dialog
+    <CustomDialog
       open={open}
       onClose={onClose}
       maxWidth="md"
       fullWidth
-      PaperProps={{
-        sx: {
-          backgroundColor: darkMode ? "#1f2937" : "#ffffff",
-          color: darkMode ? "#ffffff" : "#000000",
-          overflowY: "hidden",
-        },
-      }}
     >
-      <DialogTitle>
+      <CustomDialogTitle onClose={onClose}>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-lg flex items-center justify-center">
@@ -168,13 +151,11 @@ const EventDetailView: React.FC<EventDetailViewProps> = ({
               </h1>
             </div>
           </div>
-          <IconButton onClick={onClose}>
-            <X className="w-5 h-5 text-foreground" />
-          </IconButton>
+    
         </div>
-      </DialogTitle>
+      </CustomDialogTitle>
 
-      <DialogContent dividers className="space-y-4">
+      <CustomDialogContent dividers className="space-y-4">
         {/* Event Information + Pricing + Statistics */}
         <Card>
           <CardHeader>
@@ -348,14 +329,14 @@ const EventDetailView: React.FC<EventDetailViewProps> = ({
             </div>
           </CardContent>
         </Card>
-      </DialogContent>
+      </CustomDialogContent>
 
-      <DialogActions>
+      <CustomDialogActions>
         <Button onClick={onClose} className="text-sm">
           Close
         </Button>
-      </DialogActions>
-    </Dialog>
+      </CustomDialogActions>
+    </CustomDialog>
   );
 };
 

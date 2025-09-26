@@ -1,11 +1,11 @@
-"use client";
-
 import React, { useState } from "react";
 import { useAppContext } from "@/contexts/AppContext";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
+import {
+  CustomDialog,
+  CustomDialogTitle,
+  CustomDialogContent,
+  CustomDialogActions,
+} from "@/components/ui/custom-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { _add_admin_team_api } from "@/DAL/adminTeamAPI";
@@ -25,20 +25,19 @@ import {
 import { useSnackbar } from "notistack";
 import Spinner from "../../../components/ui/spinner";
 
-interface TeamMemberCreateDialogProps {
+interface TeamMemberAddDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSave: (member: any) => void;
   loading?: boolean;
 }
 
-const TeamMemberCreateDialog: React.FC<TeamMemberCreateDialogProps> = ({
+const TeamMemberAddDialog: React.FC<TeamMemberAddDialogProps> = ({
   open,
   onOpenChange,
   onSave,
   loading = false,
 }) => {
-
   const { darkMode } = useAppContext();
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -100,9 +99,8 @@ const TeamMemberCreateDialog: React.FC<TeamMemberCreateDialogProps> = ({
       access: formData.access,
       status: formData.status,
     };
-    
-    onSave(reqData);
 
+    onSave(reqData);
   };
 
   const handleClose = () => {
@@ -118,37 +116,15 @@ const TeamMemberCreateDialog: React.FC<TeamMemberCreateDialogProps> = ({
   };
 
   return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      maxWidth="md"
-      fullWidth
-      PaperProps={{
-        sx: {
-          backgroundColor: darkMode ? "#1f2937" : "#ffffff",
-          color: darkMode ? "#ffffff" : "#000000",
-          borderRadius: "12px",
-          overflow: "hidden",
-        },
-      }}
-    >
-      <DialogTitle>
-        <div
-          className="flex items-center"
-          style={{ color: darkMode ? "#ffffff" : "#000000" }}
-        >
+    <CustomDialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+      <CustomDialogTitle onClose={handleClose}>
+        <div className="flex items-center">
           <Users className="w-5 h-5 mr-2 text-[#0077ED]" />
           Add Team Member
         </div>
-      </DialogTitle>
+      </CustomDialogTitle>
 
-      <DialogContent
-        sx={{ paddingTop: 2, paddingBottom: 2 }}
-        style={{
-          backgroundColor: darkMode ? "#1f2937" : "#ffffff",
-          color: darkMode ? "#ffffff" : "#000000",
-        }}
-      >
+      <CustomDialogContent>
         <form
           onSubmit={handleSubmit}
           className="space-y-6"
@@ -172,11 +148,6 @@ const TeamMemberCreateDialog: React.FC<TeamMemberCreateDialogProps> = ({
                     setFormData({ ...formData, first_name: e.target.value })
                   }
                   placeholder="Enter first name"
-                  style={{
-                    backgroundColor: darkMode ? "#374151" : "#ffffff",
-                    color: darkMode ? "#ffffff" : "#000000",
-                    borderColor: darkMode ? "#4b5563" : "#d1d5db",
-                  }}
                   required
                 />
               </div>
@@ -191,88 +162,56 @@ const TeamMemberCreateDialog: React.FC<TeamMemberCreateDialogProps> = ({
                     setFormData({ ...formData, last_name: e.target.value })
                   }
                   placeholder="Enter last name"
-                  style={{
-                    backgroundColor: darkMode ? "#374151" : "#ffffff",
-                    color: darkMode ? "#ffffff" : "#000000",
-                    borderColor: darkMode ? "#4b5563" : "#d1d5db",
-                  }}
                   required
                 />
               </div>
             </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Email Address *
-              </label>
-              <Input
-                type="email"
-                value={formData.email}
-                onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
-                }
-                placeholder="user@exiby.com"
-                style={{
-                  backgroundColor: darkMode ? "#374151" : "#ffffff",
-                  color: darkMode ? "#ffffff" : "#000000",
-                  borderColor: darkMode ? "#4b5563" : "#d1d5db",
-                }}
-                required
-                autoComplete="off"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Password *
-              </label>
-              <div className="relative">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Email Address *
+                </label>
                 <Input
-                  type={showPassword ? "text" : "password"}
-                  value={formData.password}
+                  type="email"
+                  value={formData.email}
                   onChange={(e) =>
-                    setFormData({ ...formData, password: e.target.value })
+                    setFormData({ ...formData, email: e.target.value })
                   }
-                  placeholder="Enter password"
-                  style={{
-                    backgroundColor: darkMode ? "#374151" : "#ffffff",
-                    color: darkMode ? "#ffffff" : "#000000",
-                    borderColor: darkMode ? "#4b5563" : "#d1d5db",
-                  }}
-                  className="pr-12"
+                  placeholder="user@exiby.com"
                   required
                   autoComplete="off"
                 />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                >
-                  {showPassword ? (
-                    <EyeOff className="w-4 h-4" />
-                  ) : (
-                    <Eye className="w-4 h-4" />
-                  )}
-                </button>
               </div>
-            </div>
 
-            <div className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                id="status"
-                checked={formData.status}
-                onChange={(e) =>
-                  setFormData({ ...formData, status: e.target.checked })
-                }
-                className="w-4 h-4 rounded border border-gray-300 bg-gray-100 dark:bg-gray-700 dark:border-gray-600"
-              />
-              <label
-                htmlFor="status"
-                className="text-sm font-medium text-gray-700 dark:text-gray-300"
-              >
-                {formData.status ? "Active User" : "Inactive User"}
-              </label>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Password *
+                </label>
+                <div className="relative">
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    value={formData.password}
+                    onChange={(e) =>
+                      setFormData({ ...formData, password: e.target.value })
+                    }
+                    placeholder="Enter password"
+                    className="pr-12"
+                    required
+                    autoComplete="off"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -306,11 +245,9 @@ const TeamMemberCreateDialog: React.FC<TeamMemberCreateDialogProps> = ({
             </div>
           </div>
         </form>
-      </DialogContent>
+      </CustomDialogContent>
 
-      <DialogActions
-        sx={{ borderTop: `1px solid ${darkMode ? "#374151" : "#e5e7eb"}` }}
-      >
+      <CustomDialogActions>
         <Button
           type="button"
           variant="outline"
@@ -339,9 +276,9 @@ const TeamMemberCreateDialog: React.FC<TeamMemberCreateDialogProps> = ({
           {loading && <Spinner size="sm" className="text-white" />}
           <span>{loading ? "Creating..." : "Create Member"}</span>
         </Button>
-      </DialogActions>
-    </Dialog>
+      </CustomDialogActions>
+    </CustomDialog>
   );
 };
 
-export default TeamMemberCreateDialog;
+export default TeamMemberAddDialog;

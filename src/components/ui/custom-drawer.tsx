@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import * as SheetPrimitive from "@radix-ui/react-dialog";
 import { X, RotateCcw, Filter } from "lucide-react";

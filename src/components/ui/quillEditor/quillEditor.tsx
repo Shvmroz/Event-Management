@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useMemo } from 'react';
 import { lazy } from 'react';
 import 'react-quill/dist/quill.snow.css';

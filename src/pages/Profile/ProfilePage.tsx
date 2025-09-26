@@ -4,6 +4,7 @@ import { User, Mail, Save, Pencil, Image as ImageIcon, Trash } from "lucide-reac
 import { _update_admin_profile_api } from "@/DAL/authAPI";
 import { useSnackbar } from "notistack";
 import Spinner from "../../components/ui/spinner";
+import { Input } from "@/components/ui/input";
 import { s3baseUrl } from "@/config/config";
 import { deleteFileFunction, uploadFileFunction } from "@/utils/fileUploadRemoveFunctions";
 import { useAppContext } from "@/contexts/AppContext";
@@ -185,13 +186,13 @@ const ProfilePage: React.FC = () => {
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">First Name</label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-600 dark:text-gray-300" />
-                  <input
+                  <Input
                     type="text"
                     value={profile.first_name}
                     onChange={(e) => setProfile({ ...profile, first_name: e.target.value })}
                     disabled={!isEditing}
-                    className={` text-gray-900 dark:text-gray-200 w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none ${
-                      isEditing ? "focus:ring-2 focus:ring-blue-500 focus:border-transparent" : "opacity-70 cursor-not-allowed"
+                    className={`w-full pl-10 pr-4 py-3 ${
+                      isEditing ? "" : "opacity-70 cursor-not-allowed"
                     }`}
                   />
                 </div>
@@ -202,13 +203,13 @@ const ProfilePage: React.FC = () => {
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Last Name</label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4  text-gray-600 dark:text-gray-300" />
-                  <input
+                  <Input
                     type="text"
                     value={profile.last_name}
                     onChange={(e) => setProfile({ ...profile, last_name: e.target.value })}
                     disabled={!isEditing}
-                    className={` text-gray-900 dark:text-gray-200 w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none ${
-                      isEditing ? "focus:ring-2 focus:ring-blue-500 focus:border-transparent" : "opacity-70 cursor-not-allowed"
+                    className={`w-full pl-10 pr-4 py-3 ${
+                      isEditing ? "" : "opacity-70 cursor-not-allowed"
                     }`}
                   />
                 </div>
@@ -219,7 +220,7 @@ const ProfilePage: React.FC = () => {
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Email Address</label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4  text-gray-600 dark:text-gray-300" />
-                  <input type="email" value={profile.email} disabled className=" text-gray-900 dark:text-gray-200 w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none opacity-70 cursor-not-allowed" />
+                  <Input type="email" value={profile.email} disabled className="w-full pl-10 pr-4 py-3 opacity-70 cursor-not-allowed" />
                 </div>
               </div>
             </div>

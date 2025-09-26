@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useState } from 'react';
 import ConfigurationSkeleton from '@/components/ui/skeleton/configuration-skeleton';
 import {
@@ -19,6 +17,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { formatDate } from '@/utils/dateUtils.js';
 
 interface EmailConfig {
   mailcub_key: string;
@@ -103,16 +102,6 @@ const EmailConfigurationPage: React.FC = () => {
     return key.substring(0, 8) + '•'.repeat(key.length - 8);
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      timeZoneName: 'short'
-    });
-  };
 
   const updateSocialLink = (platform: string, url: string) => {
     setFormData({

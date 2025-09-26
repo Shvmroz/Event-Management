@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useState } from 'react';
 import ConfigurationSkeleton from '@/components/ui/skeleton/configuration-skeleton';
 import {
@@ -17,14 +15,9 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import SearchableSelect from '@/components/ui/searchable-select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { formatDate } from '@/utils/dateUtils.js';
 
 interface GeneralSettings {
   site_name: string;
@@ -71,6 +64,12 @@ const ConfigurationPage: React.FC = () => {
     'UTC'
   ];
 
+  // Convert to SearchableSelect format
+  const timeZoneOptions = timeZones.map(tz => ({
+    value: tz,
+    label: tz
+  }));
+
   const handleEdit = () => {
     setIsEditing(true);
   };
@@ -101,16 +100,6 @@ const ConfigurationPage: React.FC = () => {
     }
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-      timeZoneName: 'short'
-    });
-  };
 
   return (
     <div className="space-y-6">
@@ -246,22 +235,15 @@ const ConfigurationPage: React.FC = () => {
               </label>
               <div className="relative">
                 <Clock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 z-10" />
-                <Select
+                <SearchableSelect
+                  options={timeZoneOptions}
                   value={formData.time_zone}
-                  onValueChange={(value) => setFormData({ ...formData, time_zone: value })}
+                  onChange={(value) => setFormData({ ...formData, time_zone: value })}
                   disabled={!isEditing}
-                >
-                  <SelectTrigger className="pl-10">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {timeZones.map(tz => (
-                      <SelectItem key={tz} value={tz}>
-                        {tz}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  placeholder="Select time zone"
+                  className="pl-10"
+                  search={true}
+                />
               </div>
             </div>
           </div>

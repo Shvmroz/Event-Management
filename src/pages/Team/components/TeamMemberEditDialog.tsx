@@ -1,11 +1,11 @@
-"use client";
-
 import React, { useState, useEffect, useRef } from "react";
 import { useAppContext } from "@/contexts/AppContext";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
+import {
+  CustomDialog,
+  CustomDialogTitle,
+  CustomDialogContent,
+  CustomDialogActions,
+} from "@/components/ui/custom-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
@@ -15,9 +15,8 @@ import {
   Shield,
   ImageIcon,
   Trash,
-  CheckCircle,
-  XCircle,
 } from "lucide-react";
+import StatusSwitch from "@/components/ui/status-switch";
 import {
   deleteFileFunction,
   uploadFileFunction,
@@ -177,53 +176,22 @@ const TeamMemberEditDialog: React.FC<TeamMemberEditDialogProps> = ({
   }, [open]);
 
   return (
-    <Dialog
+    <CustomDialog
       open={open}
       onClose={() => onOpenChange(false)}
       maxWidth="md"
       fullWidth
-      PaperProps={{
-        sx: {
-          backgroundColor: darkMode ? "#1f2937" : "#ffffff",
-          color: darkMode ? "#ffffff" : "#000000",
-          borderRadius: "12px",
-          overflow: "hidden",
-        },
-      }}
     >
-      <DialogTitle className="flex items-center justify-between">
+      <CustomDialogTitle
+        onClose={() => onOpenChange(false)}
+        className="flex items-center justify-between"
+      >
         <span style={{ color: darkMode ? "#ffffff" : "#000000" }}>
           Edit Team Member
         </span>
+      </CustomDialogTitle>
 
-        {/* Status badge at the end */}
-        <div
-          className="inline-flex cursor-pointer"
-          onClick={() =>
-            setFormData((prev) => ({ ...prev, status: !prev.status }))
-          }
-        >
-          {formData.status ? (
-            <Badge className="flex items-center justify-center text-sm rounded-sm font-semibold px-2 py-1 bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400">
-              <CheckCircle className="w-4 h-4 mr-1" />
-              Active
-            </Badge>
-          ) : (
-            <Badge className="flex items-center justify-center text-sm rounded-sm font-semibold px-2 py-1 bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400">
-              <XCircle className="w-4 h-4 mr-1" />
-              Inactive
-            </Badge>
-          )}
-        </div>
-      </DialogTitle>
-
-      <DialogContent
-        sx={{ paddingTop: 2, paddingBottom: 2, overflow: "auto" }}
-        style={{
-          backgroundColor: darkMode ? "#1f2937" : "#ffffff",
-          color: darkMode ? "#ffffff" : "#000000",
-        }}
-      >
+      <CustomDialogContent sx={{ overflow: "auto" }}>
         <form
           onSubmit={handleSubmit}
           className="space-y-6"
@@ -279,7 +247,7 @@ const TeamMemberEditDialog: React.FC<TeamMemberEditDialogProps> = ({
               )}
 
               <p className="text-[10px] text-gray-400 text-center mt-0.5">
-                Max Size 1 MB & 1:1 Ratio
+                Max image Size 1 MB
               </p>
             </div>
 
@@ -326,29 +294,43 @@ const TeamMemberEditDialog: React.FC<TeamMemberEditDialogProps> = ({
                     />
                   </div>
                 </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Email Address *
-                  </label>
-                  <Input
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) =>
-                      setFormData({ ...formData, email: e.target.value })
-                    }
-                    placeholder="user@exiby.com"
-                    style={{
-                      backgroundColor: darkMode ? "#374151" : "#ffffff",
-                      color: darkMode ? "#ffffff" : "#000000",
-                      borderColor: darkMode ? "#4b5563" : "#d1d5db",
-                    }}
-                    required
-                    autoComplete="off"
-                  />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Email Address *
+                    </label>
+                    <Input
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) =>
+                        setFormData({ ...formData, email: e.target.value })
+                      }
+                      placeholder="user@exiby.com"
+                      style={{
+                        backgroundColor: darkMode ? "#374151" : "#ffffff",
+                        color: darkMode ? "#ffffff" : "#000000",
+                        borderColor: darkMode ? "#4b5563" : "#d1d5db",
+                      }}
+                      required
+                      autoComplete="off"
+                    />
+                  </div>
+                  {/* Status switch */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Status
+                    </label>
+                    <StatusSwitch
+                      value={formData.status}
+                      onChange={(status) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          status,
+                        }))
+                      }
+                    />
+                  </div>
                 </div>
-
-             
               </div>
             </div>
           </div>
@@ -383,11 +365,9 @@ const TeamMemberEditDialog: React.FC<TeamMemberEditDialogProps> = ({
             </div>
           </div>
         </form>
-      </DialogContent>
+      </CustomDialogContent>
 
-      <DialogActions
-        sx={{ borderTop: `1px solid ${darkMode ? "#374151" : "#e5e7eb"}` }}
-      >
+      <CustomDialogActions>
         <Button
           type="button"
           variant="outline"
@@ -419,8 +399,8 @@ const TeamMemberEditDialog: React.FC<TeamMemberEditDialogProps> = ({
             </>
           )}
         </Button>
-      </DialogActions>
-    </Dialog>
+      </CustomDialogActions>
+    </CustomDialog>
   );
 };
 

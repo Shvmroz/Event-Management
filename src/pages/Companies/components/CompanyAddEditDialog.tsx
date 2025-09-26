@@ -1,17 +1,20 @@
-"use client";
 
 import React, { useState, useEffect, Suspense } from "react";
 import { useAppContext } from "@/contexts/AppContext";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
+import {
+  CustomDialog,
+  CustomDialogTitle,
+  CustomDialogContent,
+  CustomDialogActions,
+} from "@/components/ui/custom-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import QuillEditor from "@/components/ui/quillEditor/quillEditor";
 import { Save, X, Building2, Eye, EyeOff } from "lucide-react";
 import { Badge } from "../../../components/ui/badge";
-import YearDropdown from "../../Organizations/components/YearDropdown";
+import SearchableSelect from "@/components/ui/searchable-select";
+import { years, industries } from "@/utils/lists";
+import StatusSwitch from "@/components/ui/status-switch";
 
 interface CompanyAddEditDialogProps {
   open: boolean;
@@ -51,6 +54,7 @@ const CompanyAddEditDialog: React.FC<CompanyAddEditDialogProps> = ({
     address: "",
     // website: "",
     contactEmail: "",
+    status: true,
   });
 
   // Prefill in edit mode
@@ -75,6 +79,7 @@ const CompanyAddEditDialog: React.FC<CompanyAddEditDialogProps> = ({
         phone: company.contact?.phone || "",
         address: company.contact?.address || "",
         contactEmail: company.contact?.email || "",
+        status: company?.status ?? true,
       });
     } else {
       setFormData({
@@ -95,6 +100,7 @@ const CompanyAddEditDialog: React.FC<CompanyAddEditDialogProps> = ({
         phone: "",
         address: "",
         contactEmail: "",
+        status: true,
       });
     }
   }, [company, open]);
@@ -124,6 +130,7 @@ const CompanyAddEditDialog: React.FC<CompanyAddEditDialogProps> = ({
           phone: formData.phone,
           address: formData.address,
         },
+        // status: formData.status,
       };
       console.log("Update Payload:", reqData);
       onSave(reqData);
@@ -151,6 +158,7 @@ const CompanyAddEditDialog: React.FC<CompanyAddEditDialogProps> = ({
           phone: formData.phone,
           address: formData.address,
         },
+        // status: formData.status,
       };
       console.log("Add Payload:", reqData);
       onSave(reqData);
@@ -179,36 +187,20 @@ const CompanyAddEditDialog: React.FC<CompanyAddEditDialogProps> = ({
   };
 
   return (
-    <Dialog
+    <CustomDialog
       open={open}
       onClose={() => onOpenChange(false)}
       maxWidth="md"
       fullWidth
-      PaperProps={{
-        sx: {
-          backgroundColor: darkMode ? "#1f2937" : "#ffffff",
-          color: darkMode ? "#ffffff" : "#000000",
-          borderRadius: "12px",
-        },
-      }}
     >
-      <DialogTitle>
-        <div
-          className="flex items-center"
-          style={{ color: darkMode ? "#ffffff" : "#000000" }}
-        >
+      <CustomDialogTitle onClose={() => onOpenChange(false)}>
+        <div className="flex items-center">
           <Building2 className="w-5 h-5 mr-2 text-[#0077ED]" />
           {isEdit ? "Edit Company" : "Create Company"}
         </div>
-      </DialogTitle>
+      </CustomDialogTitle>
 
-      <DialogContent
-        sx={{ paddingTop: 2, paddingBottom: 2 }}
-        style={{
-          backgroundColor: darkMode ? "#1f2937" : "#ffffff",
-          color: darkMode ? "#ffffff" : "#000000",
-        }}
-      >
+      <CustomDialogContent>
         <form onSubmit={handleSubmit} className="space-y-6" id="company-form">
           {/* Company Name */}
           <div>
@@ -227,10 +219,10 @@ const CompanyAddEditDialog: React.FC<CompanyAddEditDialogProps> = ({
 
           {/* Email + Password (only in add) */}
           {!isEdit && (
-            <>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium mb-2">
-                  Login Email *
+                  Email *
                 </label>
                 <Input
                   type="email"
@@ -265,7 +257,7 @@ const CompanyAddEditDialog: React.FC<CompanyAddEditDialogProps> = ({
                   </button>
                 </div>
               </div>
-            </>
+            </div>
           )}
 
           {/* Website */}
@@ -287,12 +279,14 @@ const CompanyAddEditDialog: React.FC<CompanyAddEditDialogProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium mb-2">Industry</label>
-              <Input
+              <SearchableSelect
+                options={industries}
                 value={formData.industry}
-                onChange={(e) =>
-                  setFormData({ ...formData, industry: e.target.value })
+                onChange={(value) =>
+                  setFormData({ ...formData, industry: value })
                 }
-                placeholder="e.g. Technology"
+                placeholder="Select industry"
+                search={true}
               />
             </div>
             <div>
@@ -315,11 +309,14 @@ const CompanyAddEditDialog: React.FC<CompanyAddEditDialogProps> = ({
               <label className="block text-sm font-medium mb-2">
                 Founded Year
               </label>
-              <YearDropdown
+              <SearchableSelect
+                options={years}
                 value={formData.founded_year}
                 onChange={(year) =>
                   setFormData({ ...formData, founded_year: year })
                 }
+                placeholder="Select year"
+                search={true}
               />
             </div>
             <div>
@@ -350,7 +347,7 @@ const CompanyAddEditDialog: React.FC<CompanyAddEditDialogProps> = ({
                 >
                   {service}
                   <X
-                    className="w-3 h-3 cursor-pointer"
+                    className="w-3 h-3 cursor-pointer text-red-500"
                     onClick={() => removeService(service)}
                   />
                 </Badge>
@@ -359,20 +356,22 @@ const CompanyAddEditDialog: React.FC<CompanyAddEditDialogProps> = ({
           </div>
 
           {/* Social Links */}
-          {["linkedin", "twitter", "facebook", "instagram"].map((field) => (
-            <div key={field}>
-              <label className="block text-sm font-medium mb-2 capitalize">
-                {field}
-              </label>
-              <Input
-                value={(formData as any)[field]}
-                onChange={(e) =>
-                  setFormData({ ...formData, [field]: e.target.value })
-                }
-                placeholder={`https://${field}.com/example`}
-              />
-            </div>
-          ))}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {["linkedin", "twitter", "facebook", "instagram"].map((field) => (
+              <div key={field}>
+                <label className="block text-sm font-medium mb-2 capitalize">
+                  {field}
+                </label>
+                <Input
+                  value={(formData as any)[field]}
+                  onChange={(e) =>
+                    setFormData({ ...formData, [field]: e.target.value })
+                  }
+                  placeholder={`https://${field}.com/example`}
+                />
+              </div>
+            ))}
+          </div>
 
           {/* Contact Info */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -400,15 +399,30 @@ const CompanyAddEditDialog: React.FC<CompanyAddEditDialogProps> = ({
               />
             </div>
           </div>
-          <div>
-            <label className="block text-sm font-medium mb-2">Address</label>
-            <Input
-              value={formData.address}
-              onChange={(e) =>
-                setFormData({ ...formData, address: e.target.value })
-              }
-              placeholder="123 Tech Street"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">Address</label>
+              <Input
+                value={formData.address}
+                onChange={(e) =>
+                  setFormData({ ...formData, address: e.target.value })
+                }
+                placeholder="123 Tech Street"
+              />
+            </div>
+            {isEdit && (
+              <div>
+                <label className="block text-sm font-medium mb-2">Status</label>
+                <StatusSwitch
+                  value={formData.status}
+                  onChange={(value) =>
+                    setFormData({ ...formData, status: value })
+                  }
+                  activeLabel="Active"
+                  inactiveLabel="Inactive"
+                />
+              </div>
+            )}
           </div>
 
           {/* Description */}
@@ -428,9 +442,9 @@ const CompanyAddEditDialog: React.FC<CompanyAddEditDialogProps> = ({
             </Suspense>
           </div>
         </form>
-      </DialogContent>
+      </CustomDialogContent>
 
-      <DialogActions>
+      <CustomDialogActions>
         <Button
           type="button"
           variant="outline"
@@ -465,8 +479,8 @@ const CompanyAddEditDialog: React.FC<CompanyAddEditDialogProps> = ({
             </>
           )}
         </Button>
-      </DialogActions>
-    </Dialog>
+      </CustomDialogActions>
+    </CustomDialog>
   );
 };
 

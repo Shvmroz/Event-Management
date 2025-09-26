@@ -35,9 +35,9 @@ export const _email_template_detail_view_api = async (rowID) => {
     };
     return invokeApi(requestObj);
 };
-export const _email_template_pre_view_api = async (rowID) => {
+export const _email_template_preview_api = async (rowID) => {
     const requestObj = {
-        path: `pi/email_template/email_templates/preview/${rowID}`,
+        path: `api/email_template/email_templates/preview/${rowID}`,
         method: "GET",
         headers: {
             "x-sh-auth": localStorage.getItem("authToken"),

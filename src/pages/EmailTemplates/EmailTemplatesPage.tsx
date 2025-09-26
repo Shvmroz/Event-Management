@@ -28,6 +28,7 @@ import EmailTemplateEditDialog from "./components/EmailTemplateEditDialog";
 import EmailTemplateViewDetailDialog from "./components/EmailTemplateViewDetailDialog";
 import EmailTemplateFilters from "./components/EmailTemplateFilters";
 import { _email_templates_list_api } from "@/DAL/emailTemplatesAPI";
+import { formatDate } from "@/utils/dateUtils.js";
 
 interface EmailTemplate {
   _id: string;
@@ -56,16 +57,9 @@ const EmailTemplatesPage: React.FC = () => {
   const [rowData, setRowData] = useState<EmailTemplate | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const [editDialog, setEditDialog] = useState<{
-    open: boolean;
-    template: EmailTemplate | null;
-  }>({ open: false, template: null });
-
-  const [viewDetailDialog, setViewDetailDialog] = useState<{
-    open: boolean;
-    template: EmailTemplate | null;
-  }>({ open: false, template: null });
-
+  const [editDialog, setEditDialog] = useState(false);
+  const [viewDetailDialog, setViewDetailDialog] = useState(false);
+  const [preViewDialog, setPreViewDialog] = useState(false);
   const [editLoading, setEditLoading] = useState(false);
 
   // Filter states
@@ -181,17 +175,18 @@ const EmailTemplatesPage: React.FC = () => {
   ];
 
   const handleEdit = (template: EmailTemplate) => {
-    setEditDialog({ open: true, template });
+    setEditDialog(true);
     setRowData(template);
   };
 
-  const handleViewDetail = (template: EmailTemplate) => {
-    setViewDetailDialog({ open: true, template });
+  const handlePreview = (template: EmailTemplate) => {
+    setPreViewDialog(true);
+    setRowData(template);
+    console.log("Preview Template" , preViewDialog, template);
   };
 
   const handleSaveEdit = async (data: Partial<EmailTemplate>) => {
     if (!rowData?._id) return;
-
     setEditLoading(true);
     try {
       // TODO: Replace with actual API call
@@ -205,7 +200,7 @@ const EmailTemplatesPage: React.FC = () => {
       };
 
       if (result?.code === 200) {
-        setEditDialog({ open: false, template: null });
+        setEditDialog(false);
         setRowData(null);
         setEmailTemplates((prev) =>
           prev.map((template) =>
@@ -309,16 +304,13 @@ const EmailTemplatesPage: React.FC = () => {
       action: handleEdit,
       icon: <Edit className="w-4 h-4" />,
     },
+    {
+      label: "View Template",
+      action: handlePreview,
+      icon: <EyeIcon className="w-4 h-4" />,
+    },
   ];
 
-  const formatDate = (dateString: string) =>
-    new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
 
   const getStatusBadge = (isActive: boolean) =>
     isActive ? (
@@ -422,16 +414,19 @@ const EmailTemplatesPage: React.FC = () => {
           onRowsPerPageChange,
         }}
         totalPages={totalPages}
-        onRowClick={(template) => setViewDetailDialog({ open: true, template })}
+        onRowClick={(template) => {
+          setViewDetailDialog(true);
+          setRowData(template);
+        }}
         loading={loading}
         emptyMessage="No email templates found"
       />
 
       {/* Edit Email Template Dialog */}
       <EmailTemplateEditDialog
-        open={editDialog.open}
+        open={editDialog}
         onOpenChange={(open) => {
-          setEditDialog({ open, template: null });
+          setEditDialog(open);
           if (!open) setRowData(null);
         }}
         template={rowData}
@@ -441,9 +436,12 @@ const EmailTemplatesPage: React.FC = () => {
 
       {/* View Detail Email Template Dialog */}
       <EmailTemplateViewDetailDialog
-        open={viewDetailDialog.open}
-        onOpenChange={(open) => setViewDetailDialog({ open, template: null })}
-        templateId={viewDetailDialog.template?._id}
+        open={viewDetailDialog}
+        onOpenChange={(open) => {
+          setViewDetailDialog(open);
+          if (!open) setRowData(null);
+        }}
+        templateId={rowData?._id}
       />
 
       {/* Filter Drawer */}

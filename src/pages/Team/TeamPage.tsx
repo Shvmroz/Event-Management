@@ -35,9 +35,11 @@ import {
 import { useSnackbar } from "notistack";
 import { s3baseUrl } from "@/config/config";
 import TeamMemberEditDialog from "./components/TeamMemberEditDialog";
-import TeamMemberCreateDialog from "./components/TeamMemberCreateDialog";
+
 import ChangePasswordDialog from "./components/ChangePasswordDialog";
 import TeamFilters from "./components/TeamFilters";
+import TeamMemberAddDialog from "./components/TeamMemberAddDialog";
+import { formatDate } from "@/utils/dateUtils.js";
 
 interface TeamMember {
   _id: string;
@@ -59,19 +61,10 @@ const TeamPage: React.FC = () => {
   const [addLoading, setAddLoading] = useState(false);
   const [rowData, setRowData] = useState<TeamMember | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [deleteDialog, setDeleteDialog] = useState<{
-    open: boolean;
-    member: TeamMember | null;
-  }>({ open: false, member: null });
-  const [editDialog, setEditDialog] = useState<{
-    open: boolean;
-    member: TeamMember | null;
-  }>({ open: false, member: null });
+  const [deleteDialog, setDeleteDialog] = useState(false);
+  const [editDialog, setEditDialog] = useState(false);
   const [createDialog, setCreateDialog] = useState(false);
-  const [changePasswordDialog, setChangePasswordDialog] = useState<{
-    open: boolean;
-    member: TeamMember | null;
-  }>({ open: false, member: null });
+  const [changePasswordDialog, setChangePasswordDialog] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [editLoading, setEditLoading] = useState(false);
   const [passwordLoading, setPasswordLoading] = useState(false);
@@ -176,7 +169,7 @@ const TeamPage: React.FC = () => {
   ];
 
   const handleDelete = (member: TeamMember) => {
-    setDeleteDialog({ open: true, member });
+    setDeleteDialog(true);
     setRowData(member);
   };
 
@@ -194,7 +187,7 @@ const TeamPage: React.FC = () => {
       setTeamMembers((prev) =>
         prev.filter((member) => member._id !== rowData._id)
       );
-      setDeleteDialog({ open: false, member: null });
+      setDeleteDialog(false);
       setRowData(null);
     } else {
       enqueueSnackbar(result?.message || "Failed to delete team member", {
@@ -206,7 +199,7 @@ const TeamPage: React.FC = () => {
   };
 
   const handleEdit = (member: TeamMember) => {
-    setEditDialog({ open: true, member });
+    setEditDialog(true);
     setRowData(member);
   };
 
@@ -223,7 +216,7 @@ const TeamPage: React.FC = () => {
         )
       );
       setRowData(null);
-      setEditDialog({ open: false, member: null });
+      setEditDialog(false);
       enqueueSnackbar("Team member updated successfully", {
         variant: "success",
       });
@@ -257,7 +250,7 @@ const TeamPage: React.FC = () => {
 
   const handleChangePassword = (member: TeamMember) => {
     setRowData(member);
-    setChangePasswordDialog({ open: true, member });
+    setChangePasswordDialog(true);
   };
 
   const handlePasswordChange = async (data: { new_password: string }) => {
@@ -269,7 +262,7 @@ const TeamPage: React.FC = () => {
 
     if (result?.code === 200) {
       setPasswordLoading(false);
-      setChangePasswordDialog({ open: false, member: null });
+      setChangePasswordDialog(false);
       enqueueSnackbar("Password changed successfully", { variant: "success" });
     } else {
       setPasswordLoading(false);
@@ -369,14 +362,6 @@ const TeamPage: React.FC = () => {
     },
   ];
 
-  const formatDate = (dateString: string) =>
-    new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
 
   const getModuleAccess = (access: string[]) => {
     const moduleLabels: Record<string, string> = {
@@ -540,12 +525,15 @@ const TeamPage: React.FC = () => {
 
       {/* Delete Confirmation Dialog */}
       <ConfirmDeleteDialog
-        open={deleteDialog.open}
-        onOpenChange={(open) => setDeleteDialog({ open, member: null })}
+        open={deleteDialog}
+        onOpenChange={(open) => {
+          setDeleteDialog(open);
+          if (!open) setRowData(null);
+        }}
         title="Delete Team Member"
         content={`Are you sure you want to delete "${
-          deleteDialog.member
-            ? `${deleteDialog.member.first_name} ${deleteDialog.member.last_name}`
+          rowData
+            ? `${rowData.first_name} ${rowData.last_name}`
             : ""
         }"?`}
         confirmButtonText="Delete"
@@ -555,9 +543,9 @@ const TeamPage: React.FC = () => {
 
       {/* Edit Team Member Dialog */}
       <TeamMemberEditDialog
-        open={editDialog.open}
+        open={editDialog}
         onOpenChange={(open) => {
-          setEditDialog({ open, member: null });
+          setEditDialog(open);
           if (!open) setRowData(null);
         }}
         member={rowData}
@@ -566,7 +554,7 @@ const TeamPage: React.FC = () => {
       />
 
       {/* Create Team Member Dialog */}
-      <TeamMemberCreateDialog
+      <TeamMemberAddDialog
         open={createDialog}
         onOpenChange={setCreateDialog}
         onSave={handleAddNewMember}
@@ -575,9 +563,12 @@ const TeamPage: React.FC = () => {
 
       {/* Change Password Dialog */}
       <ChangePasswordDialog
-        open={changePasswordDialog.open}
-        onOpenChange={(open) => setChangePasswordDialog({ open, member: null })}
-        member={changePasswordDialog.member}
+        open={changePasswordDialog}
+        onOpenChange={(open) => {
+          setChangePasswordDialog(open);
+          if (!open) setRowData(null);
+        }}
+        member={rowData}
         onSave={handlePasswordChange}
         loading={passwordLoading}
       />

@@ -1,16 +1,16 @@
-"use client";
-
 import React from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import SearchableSelect from "@/components/ui/searchable-select";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { CheckCircle, XCircle, Calendar, DollarSign, Globe, MapPin, AlertTriangle } from "lucide-react";
+
+const statusOptions = [
+  { value: "all", label: "All Status" },
+  { value: "published", label: "Published" },
+  { value: "draft", label: "Draft" },
+  { value: "cancelled", label: "Cancelled" },
+  { value: "completed", label: "Completed" },
+];
 
 interface EventFiltersProps {
   statusFilter: string;
@@ -74,38 +74,13 @@ const EventFilters: React.FC<EventFiltersProps> = ({
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           Status
         </label>
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger>
-            <SelectValue placeholder="Filter by status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Status</SelectItem>
-            <SelectItem value="published">
-              <div className="flex items-center">
-                <CheckCircle className="w-4 h-4 mr-2 text-green-500" />
-                Published
-              </div>
-            </SelectItem>
-            <SelectItem value="draft">
-              <div className="flex items-center">
-                <Calendar className="w-4 h-4 mr-2 text-yellow-500" />
-                Draft
-              </div>
-            </SelectItem>
-            <SelectItem value="cancelled">
-              <div className="flex items-center">
-                <XCircle className="w-4 h-4 mr-2 text-red-500" />
-                Cancelled
-              </div>
-            </SelectItem>
-            <SelectItem value="completed">
-              <div className="flex items-center">
-                <CheckCircle className="w-4 h-4 mr-2 text-blue-500" />
-                Completed
-              </div>
-            </SelectItem>
-          </SelectContent>
-        </Select>
+        <SearchableSelect
+          options={statusOptions}
+          value={statusFilter}
+          onChange={setStatusFilter}
+          placeholder="Filter by status"
+          
+        />
       </div>
 
 

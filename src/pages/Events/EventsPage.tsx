@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState, useEffect } from "react";
 import {
   Calendar,
@@ -38,6 +36,7 @@ import {
   _edit_event_api,
   _events_list_api,
 } from "@/DAL/eventAPI";
+import { formatDate, formatDateTime } from "@/utils/dateUtils.js";
 
 export interface Event {
   _id: string;
@@ -66,19 +65,10 @@ const EventsPage: React.FC = () => {
   const [rowData, setRowData] = useState<Event | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const [deleteDialog, setDeleteDialog] = useState<{
-    open: boolean;
-    event: Event | null;
-  }>({ open: false, event: null });
-  const [editDialog, setEditDialog] = useState<{
-    open: boolean;
-    event: Event | null;
-  }>({ open: false, event: null });
+  const [deleteDialog, setDeleteDialog] = useState(false);
+  const [editDialog, setEditDialog] = useState(false);
   const [createDialog, setCreateDialog] = useState(false);
-  const [detailView, setDetailView] = useState<{
-    open: boolean;
-    event: Event | null;
-  }>({ open: false, event: null });
+  const [detailView, setDetailView] = useState(false);
 
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [editLoading, setEditLoading] = useState(false);
@@ -154,12 +144,12 @@ const EventsPage: React.FC = () => {
   }
 
   const handleEdit = (event: Event) => {
-    setEditDialog({ open: true, event });
+    setEditDialog(true);
     setRowData(event);
   };
 
   const handleDelete = (event: Event) => {
-    setDeleteDialog({ open: true, event });
+    setDeleteDialog(true);
     setRowData(event);
   };
 
@@ -176,7 +166,7 @@ const EventsPage: React.FC = () => {
 
       if (result?.code === 200) {
         setEvents((prev) => prev.filter((event) => event._id !== rowData._id));
-        setDeleteDialog({ open: false, event: null });
+        setDeleteDialog(false);
         setRowData(null);
         enqueueSnackbar("Event deleted successfully", {
           variant: "success",
@@ -201,7 +191,7 @@ const EventsPage: React.FC = () => {
     try {
       const result = await _edit_event_api(rowData._id, data);
       if (result?.code === 200) {
-        setEditDialog({ open: false, event: null });
+        setEditDialog(false);
         setRowData(null);
         setEvents((prev) =>
           prev.map((event) =>
@@ -248,7 +238,8 @@ const EventsPage: React.FC = () => {
   };
 
   const handleRowClick = (event: Event) => {
-    setDetailView({ open: true, event });
+    setDetailView(true);
+    setRowData(event);
   };
 
   const handleSearch = () => {
@@ -383,23 +374,6 @@ const EventsPage: React.FC = () => {
     );
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
-
-  const formatDateTime = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
 
   const formatCurrency = (amount: number, currency: string) => {
     return new Intl.NumberFormat("en-US", {
@@ -609,10 +583,13 @@ const EventsPage: React.FC = () => {
 
       {/* Delete Confirmation Dialog */}
       <ConfirmDeleteDialog
-        open={deleteDialog.open}
-        onOpenChange={(open) => setDeleteDialog({ open, event: null })}
+        open={deleteDialog}
+        onOpenChange={(open) => {
+          setDeleteDialog(open);
+          if (!open) setRowData(null);
+        }}
         title="Delete Event"
-        content={`Are you sure you want to delete "${deleteDialog.event?.title}"? This action cannot be undone.`}
+        content={`Are you sure you want to delete "${rowData?.title}"? This action cannot be undone.`}
         confirmButtonText="Delete"
         onConfirm={handleConfirmDelete}
         loading={deleteLoading}
@@ -620,29 +597,32 @@ const EventsPage: React.FC = () => {
 
       {/* Event Dialog (Create / Edit) */}
       <EventsAddEditDialog
-        open={editDialog.open || createDialog}
+        open={editDialog || createDialog}
         onOpenChange={(open) => {
-          if (editDialog.open) {
+          if (editDialog) {
             // closing edit dialog
-            setEditDialog({ open, event: null });
+            setEditDialog(open);
             if (!open) setRowData(null);
           } else {
             // closing create dialog
             setCreateDialog(open);
           }
         }}
-        event={editDialog.open ? rowData : null} // pass event only in edit mode
-        onSave={editDialog.open ? handleSaveEdit : handleAddNewEvent}
-        loading={editDialog.open ? editLoading : addLoading}
+        event={editDialog ? rowData : null} // pass event only in edit mode
+        onSave={editDialog ? handleSaveEdit : handleAddNewEvent}
+        loading={editDialog ? editLoading : addLoading}
       />
 
       {/* Event Detail View */}
 
-      {detailView.open && detailView.event && (
+      {detailView && rowData && (
         <EventDetailView
-          open={detailView.open}
-          onClose={() => setDetailView({ open: false, event: null })}
-          eventId={detailView.event._id}
+          open={detailView}
+          onClose={() => {
+            setDetailView(false);
+            setRowData(null);
+          }}
+          eventId={rowData._id}
         />
       )}
 

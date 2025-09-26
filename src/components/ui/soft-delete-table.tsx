@@ -1,18 +1,11 @@
-"use client";
-
 import React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import SearchableSelect from "@/components/ui/searchable-select";
 import ConfirmDeleteDialog from "@/components/ui/confirm-delete-dialog";
 import { Badge } from "@/components/ui/badge";
 import { RotateCcw, Trash2, Clock, AlertTriangle } from "lucide-react";
+import { formatDate } from "@/utils/dateUtils.js";
 
 interface SoftDeleteTableProps<T> {
   data: T[];
@@ -47,23 +40,32 @@ function SoftDeleteTable<T extends { _id: string }>({
   deleteLoading = false,
   pagination,
 }: SoftDeleteTableProps<T>) {
-  const [restoreDialog, setRestoreDialog] = React.useState<{ open: boolean; item: T | null }>({ open: false, item: null });
-  const [permanentDeleteDialog, setPermanentDeleteDialog] = React.useState<{ open: boolean; item: T | null }>({ open: false, item: null });
+  const [restoreDialog, setRestoreDialog] = React.useState(false);
+  const [permanentDeleteDialog, setPermanentDeleteDialog] = React.useState(false);
+  const [rowData, setRowData] = React.useState<T | null>(null);
 
-  const handleRestore = (item: T) => setRestoreDialog({ open: true, item });
-  const handlePermanentDelete = (item: T) => setPermanentDeleteDialog({ open: true, item });
+  const handleRestore = (item: T) => {
+    setRestoreDialog(true);
+    setRowData(item);
+  };
+  const handlePermanentDelete = (item: T) => {
+    setPermanentDeleteDialog(true);
+    setRowData(item);
+  };
 
   const confirmRestore = () => {
-    if (restoreDialog.item) {
-      onRestore(restoreDialog.item);
-      setRestoreDialog({ open: false, item: null });
+    if (rowData) {
+      onRestore(rowData);
+      setRestoreDialog(false);
+      setRowData(null);
     }
   };
 
   const confirmPermanentDelete = () => {
-    if (permanentDeleteDialog.item) {
-      onPermanentDelete(permanentDeleteDialog.item);
-      setPermanentDeleteDialog({ open: false, item: null });
+    if (rowData) {
+      onPermanentDelete(rowData);
+      setPermanentDeleteDialog(false);
+      setRowData(null);
     }
   };
 
@@ -92,15 +94,6 @@ function SoftDeleteTable<T extends { _id: string }>({
     }
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
 
   const totalPages = Math.ceil(pagination.total_count / pagination.rows_per_page);
   const startItem = (pagination.page - 1) * pagination.rows_per_page + 1;
@@ -215,21 +208,19 @@ function SoftDeleteTable<T extends { _id: string }>({
                     <span className="text-sm text-gray-700 dark:text-gray-300">
                       Rows per page:
                     </span>
-                    <Select
+                    <SearchableSelect
+                      options={[
+                        { value: "5", label: "5" },
+                        { value: "10", label: "10" },
+                        { value: "20", label: "20" },
+                        { value: "50", label: "50" },
+                        { value: "100", label: "100" },
+                      ]}
                       value={pagination.rows_per_page.toString()}
-                      onValueChange={(value) => pagination.onRowsPerPageChange(parseInt(value))}
-                    >
-                      <SelectTrigger className="w-20">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="5">5</SelectItem>
-                        <SelectItem value="10">10</SelectItem>
-                        <SelectItem value="20">20</SelectItem>
-                        <SelectItem value="50">50</SelectItem>
-                        <SelectItem value="100">100</SelectItem>
-                      </SelectContent>
-                    </Select>
+                      onChange={(value) => pagination.onRowsPerPageChange(parseInt(value))}
+                      className="w-20"
+                      
+                    />
                   </div>
 
                   <div className="flex items-center space-x-2">
@@ -266,10 +257,13 @@ function SoftDeleteTable<T extends { _id: string }>({
 
       {/* Restore Confirmation Dialog */}
       <ConfirmDeleteDialog
-        open={restoreDialog.open}
-        onOpenChange={(open) => setRestoreDialog({ open, item: null })}
+        open={restoreDialog}
+        onOpenChange={(open) => {
+          setRestoreDialog(open);
+          if (!open) setRowData(null);
+        }}
         title="Restore Item"
-        content={`Are you sure you want to restore "${restoreDialog.item ? getItemName(restoreDialog.item) : ""}"? This will move the item back to the active list.`}
+        content={`Are you sure you want to restore "${rowData ? getItemName(rowData) : ""}"? This will move the item back to the active list.`}
         confirmButtonClass="bg-green-600 hover:bg-green-700 text-white"
         confirmButtonText="Restore"
         cancelButtonText="Cancel"
@@ -279,10 +273,13 @@ function SoftDeleteTable<T extends { _id: string }>({
 
       {/* Permanent Delete Confirmation Dialog */}
       <ConfirmDeleteDialog
-        open={permanentDeleteDialog.open}
-        onOpenChange={(open) => setPermanentDeleteDialog({ open, item: null })}
+        open={permanentDeleteDialog}
+        onOpenChange={(open) => {
+          setPermanentDeleteDialog(open);
+          if (!open) setRowData(null);
+        }}
         title="Permanent Delete"
-        content={`Are you sure you want to permanently delete "${permanentDeleteDialog.item ? getItemName(permanentDeleteDialog.item) : ""}"? This action cannot be undone and will completely remove all data.`}
+        content={`Are you sure you want to permanently delete "${rowData ? getItemName(rowData) : ""}"? This action cannot be undone and will completely remove all data.`}
         confirmButtonText="Permanently Delete"
         cancelButtonText="Cancel"
         onConfirm={confirmPermanentDelete}

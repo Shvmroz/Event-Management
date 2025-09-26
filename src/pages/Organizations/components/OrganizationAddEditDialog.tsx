@@ -1,19 +1,21 @@
-"use client";
-
 import React, { useState, useEffect, lazy, Suspense } from "react";
 import { useAppContext } from "@/contexts/AppContext";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
+import {
+  CustomDialog,
+  CustomDialogTitle,
+  CustomDialogContent,
+  CustomDialogActions,
+} from "@/components/ui/custom-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import SearchableSelect from "@/components/ui/searchable-select";
 // import QuillEditor from "@/components/ui/quillEditor/quillEditor";
 const QuillEditor = lazy(
   () => import("@/components/ui/quillEditor/quillEditor")
 );
 import { Save, X, Building2, EyeOff, Eye } from "lucide-react";
-import YearDropdown from "./YearDropdown";
+import StatusSwitch from "@/components/ui/status-switch";
+import { industries, years } from "@/utils/lists";
 
 interface OrganizationAddEditDialogProps {
   open: boolean;
@@ -126,36 +128,20 @@ const OrganizationAddEditDialog: React.FC<OrganizationAddEditDialogProps> = ({
   };
 
   return (
-    <Dialog
+    <CustomDialog
       open={open}
       onClose={() => onOpenChange(false)}
       maxWidth="md"
       fullWidth
-      PaperProps={{
-        sx: {
-          backgroundColor: darkMode ? "#1f2937" : "#ffffff",
-          color: darkMode ? "#ffffff" : "#000000",
-          borderRadius: "12px",
-        },
-      }}
     >
-      <DialogTitle>
-        <div
-          className="flex items-center"
-          style={{ color: darkMode ? "#ffffff" : "#000000" }}
-        >
+      <CustomDialogTitle onClose={() => onOpenChange(false)}>
+        <div className="flex items-center">
           <Building2 className="w-5 h-5 mr-2 text-[#0077ED]" />
           {isEdit ? "Edit Organization" : "Create Organization"}
         </div>
-      </DialogTitle>
+      </CustomDialogTitle>
 
-      <DialogContent
-        sx={{ paddingTop: 2, paddingBottom: 2 }}
-        style={{
-          backgroundColor: darkMode ? "#1f2937" : "#ffffff",
-          color: darkMode ? "#ffffff" : "#000000",
-        }}
-      >
+      <CustomDialogContent>
         <form
           onSubmit={handleSubmit}
           className="space-y-6"
@@ -178,7 +164,7 @@ const OrganizationAddEditDialog: React.FC<OrganizationAddEditDialogProps> = ({
 
           {/* Extra fields when adding */}
           {!isEdit && (
-            <>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium mb-2">
                   Email *
@@ -195,7 +181,7 @@ const OrganizationAddEditDialog: React.FC<OrganizationAddEditDialogProps> = ({
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  New Password *
+                  Password *
                 </label>
                 <div className="relative">
                   <Input
@@ -216,7 +202,7 @@ const OrganizationAddEditDialog: React.FC<OrganizationAddEditDialogProps> = ({
                   </button>
                 </div>
               </div>
-            </>
+            </div>
           )}
 
           {/* Social Links only in edit */}
@@ -238,71 +224,63 @@ const OrganizationAddEditDialog: React.FC<OrganizationAddEditDialogProps> = ({
               ))}
             </div>
           )}
-
-          {/* Bio */}
-          <div>
-            <label className="block text-sm font-medium mb-2">Website</label>
-            <Input
-              type="url"
-              value={formData.website}
-              onChange={(e) =>
-                setFormData({ ...formData, website: e.target.value })
-              }
-              placeholder="https://example.com"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">Website</label>
+              <Input
+                type="url"
+                value={formData.website}
+                onChange={(e) =>
+                  setFormData({ ...formData, website: e.target.value })
+                }
+                placeholder="https://example.com"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">Industry</label>
+              <SearchableSelect
+                options={industries}
+                value={formData.industry}
+                onChange={(value) =>
+                  setFormData({ ...formData, industry: value })
+                }
+                placeholder="Select industry"
+                search={true}
+              />
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Industry</label>
-              <Input
-                value={formData.industry}
-                onChange={(e) =>
-                  setFormData({ ...formData, industry: e.target.value })
-                }
-                placeholder="eg. 'Technology'"
-              />
-            </div>
-
-            <div>
               <label className="block text-sm font-medium mb-2">
                 Founded Year
               </label>
-              <YearDropdown
+              <SearchableSelect
+                options={years}
                 value={formData.founded_year}
                 onChange={(year) =>
                   setFormData({ ...formData, founded_year: year })
                 }
+                placeholder="Select year"
+                search={true}
               />
             </div>
-          </div>
-
-          {/* Checkboxes */}
-          <div>
-            <label htmlFor="status" className="block text-sm font-medium mb-2">
-              Organization Status
-            </label>
-
-            <div className="flex items-center space-x-3">
-              <input
-                type="checkbox"
-                id="status"
-                checked={formData.status}
-                onChange={(e) =>
-                  setFormData({ ...formData, status: e.target.checked })
-                }
-                className="w-4 h-4 rounded border border-gray-300 cursor-pointer"
-              />
-
-              <label
-                htmlFor="status"
-                className={`cursor-pointer text-sm font-semibold ${
-                  formData.status ? "text-green-600" : "text-red-600"
-                }`}
-              >
-                {formData.status ? "Active" : "Inactive"}
-              </label>
-            </div>
+            {isEdit && (
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Organization Status
+                </label>
+                <StatusSwitch
+                  value={formData.status}
+                  onChange={(status) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      status,
+                    }))
+                  }
+                />
+              </div>
+            )}
           </div>
 
           <div>
@@ -321,9 +299,9 @@ const OrganizationAddEditDialog: React.FC<OrganizationAddEditDialogProps> = ({
             </Suspense>
           </div>
         </form>
-      </DialogContent>
+      </CustomDialogContent>
 
-      <DialogActions>
+      <CustomDialogActions>
         <Button
           type="button"
           variant="outline"
@@ -359,8 +337,8 @@ const OrganizationAddEditDialog: React.FC<OrganizationAddEditDialogProps> = ({
             </>
           )}
         </Button>
-      </DialogActions>
-    </Dialog>
+      </CustomDialogActions>
+    </CustomDialog>
   );
 };
 

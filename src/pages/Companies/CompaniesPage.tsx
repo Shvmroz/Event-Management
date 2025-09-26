@@ -1,4 +1,3 @@
-"use client";
 
 import React, { useState, useEffect } from "react";
 import {
@@ -41,6 +40,7 @@ import {
 import CompanyAddEditDialog from "./components/CompanyAddEditDialog";
 import CompanyDetailView from "./components/CompanyDetailView";
 import CompanyFilters from "./components/CompanyFilters";
+import { formatDate } from "@/utils/dateUtils.js";
 
 export interface Company {
   _id: string;
@@ -90,19 +90,10 @@ const CompaniesPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("all");
 
-  const [deleteDialog, setDeleteDialog] = useState<{
-    open: boolean;
-    company: Company | null;
-  }>({ open: false, company: null });
-  const [editDialog, setEditDialog] = useState<{
-    open: boolean;
-    company: Company | null;
-  }>({ open: false, company: null });
+  const [deleteDialog, setDeleteDialog] = useState(false);
+  const [editDialog, setEditDialog] = useState(false);
   const [createDialog, setCreateDialog] = useState(false);
-  const [detailView, setDetailView] = useState<{
-    open: boolean;
-    company: Company | null;
-  }>({ open: false, company: null });
+  const [detailView, setDetailView] = useState(false);
 
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [editLoading, setEditLoading] = useState(false);
@@ -248,7 +239,7 @@ const CompaniesPage: React.FC = () => {
       label: "Industry",
       renderData: (company) => (
         <span className="font-medium text-gray-900 dark:text-white">
-          {company.bio?.industry ?? "N/A"}
+          {company.bio?.industry || "N/A"}
         </span>
       ),
     },
@@ -364,7 +355,7 @@ const CompaniesPage: React.FC = () => {
   }
 
   const handleEdit = (company: Company) => {
-    setEditDialog({ open: true, company });
+    setEditDialog(true);
     setRowData(company);
   };
 
@@ -373,7 +364,7 @@ const CompaniesPage: React.FC = () => {
     setEditLoading(true);
     const result = await _edit_company_api(rowData._id, data);
     if (result?.code === 200) {
-      setEditDialog({ open: false, company: null });
+      setEditDialog(false);
       setRowData(null);
       setCompanies((prev) =>
         prev.map((company) =>
@@ -412,7 +403,8 @@ const CompaniesPage: React.FC = () => {
   };
 
   const handleRowClick = (company: Company) => {
-    setDetailView({ open: true, company });
+    setDetailView(true);
+    setRowData(company);
   };
 
   const handleSearch = () => {
@@ -485,7 +477,7 @@ const CompaniesPage: React.FC = () => {
   };
 
   const handleDelete = (company: Company) => {
-    setDeleteDialog({ open: true, company });
+    setDeleteDialog(true);
     setRowData(company);
   };
 
@@ -515,7 +507,7 @@ const CompaniesPage: React.FC = () => {
           prev.filter((company) => company._id !== rowData._id)
         );
 
-        setDeleteDialog({ open: false, company: null });
+        setDeleteDialog(false);
         setRowData(null);
         enqueueSnackbar("Company moved to deleted successfully", {
           variant: "success",
@@ -623,13 +615,6 @@ const CompaniesPage: React.FC = () => {
     );
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
 
   return (
     <div className="space-y-6">
@@ -780,10 +765,13 @@ const CompaniesPage: React.FC = () => {
 
       {/* Delete Confirmation Dialog */}
       <ConfirmDeleteDialog
-        open={deleteDialog.open}
-        onOpenChange={(open) => setDeleteDialog({ open, company: null })}
+        open={deleteDialog}
+        onOpenChange={(open) => {
+          setDeleteDialog(open);
+          if (!open) setRowData(null);
+        }}
         title="Move to Deleted Companies"
-        content={`Are you sure you want to move "${deleteDialog.company?.orgn_user.name}" to deleted companies? You can restore it within 30 days before it's permanently deleted.`}
+        content={`Are you sure you want to move "${rowData?.orgn_user.name}" to deleted companies? You can restore it within 30 days before it's permanently deleted.`}
         confirmButtonText="Move to Deleted"
         onConfirm={handleConfirmDelete}
         loading={deleteLoading}
@@ -791,9 +779,9 @@ const CompaniesPage: React.FC = () => {
 
       {/* Edit Company Dialog */}
       <CompanyAddEditDialog
-        open={editDialog.open}
+        open={editDialog}
         onOpenChange={(open) => {
-          setEditDialog({ open, company: null });
+          setEditDialog(open);
           if (!open) setRowData(null);
         }}
         company={rowData}
@@ -810,11 +798,14 @@ const CompaniesPage: React.FC = () => {
       />
 
       {/* Company Detail View */}
-      {detailView.open && detailView.company && (
+      {detailView && rowData && (
         <CompanyDetailView
-          open={detailView.open}
-          companyId={detailView.company._id}
-          onClose={() => setDetailView({ open: false, company: null })}
+          open={detailView}
+          companyId={rowData._id}
+          onClose={() => {
+            setDetailView(false);
+            setRowData(null);
+          }}
         />
       )}
 

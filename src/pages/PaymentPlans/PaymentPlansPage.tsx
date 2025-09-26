@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState, useEffect } from "react";
 import {
   CreditCard,
@@ -40,6 +38,7 @@ import {
 } from "@/DAL/paymentPlanAPI";
 import PaymentPlansAddEditDialog from "./components/PaymentPlansAddEditDialog";
 import PaymentPlanFilters from "./components/PaymentPlanFilters";
+import { formatDate } from "@/utils/dateUtils.js";
 
 interface PaymentPlan {
   _id: string;
@@ -68,14 +67,8 @@ const PaymentPlansPage: React.FC = () => {
   const [rowData, setRowData] = useState<PaymentPlan | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  const [deleteDialog, setDeleteDialog] = useState<{
-    open: boolean;
-    plan: PaymentPlan | null;
-  }>({ open: false, plan: null });
-  const [editDialog, setEditDialog] = useState<{
-    open: boolean;
-    plan: PaymentPlan | null;
-  }>({ open: false, plan: null });
+  const [deleteDialog, setDeleteDialog] = useState(false);
+  const [editDialog, setEditDialog] = useState(false);
   const [createDialog, setCreateDialog] = useState(false);
 
   const [deleteLoading, setDeleteLoading] = useState(false);
@@ -303,12 +296,12 @@ const PaymentPlansPage: React.FC = () => {
   }
 
   const handleEdit = (plan: PaymentPlan) => {
-    setEditDialog({ open: true, plan });
+    setEditDialog(true);
     setRowData(plan);
   };
 
   const handleDelete = (plan: PaymentPlan) => {
-    setDeleteDialog({ open: true, plan });
+    setDeleteDialog(true);
     setRowData(plan);
   };
 
@@ -321,7 +314,7 @@ const PaymentPlansPage: React.FC = () => {
       setPaymentPlans((prev) =>
         prev.filter((plan) => plan._id !== rowData._id)
       );
-      setDeleteDialog({ open: false, plan: null });
+      setDeleteDialog(false);
       setRowData(null);
       enqueueSnackbar("Payment plan deleted successfully", {
         variant: "success",
@@ -341,7 +334,7 @@ const PaymentPlansPage: React.FC = () => {
     setEditLoading(true);
     const result = await _edit_payment_plan_api(rowData._id, data);
     if (result?.code === 200) {
-      setEditDialog({ open: false, plan: null });
+      setEditDialog(false);
       setRowData(null);
       setEditLoading(false);
       setPaymentPlans((prev) =>
@@ -485,15 +478,6 @@ const PaymentPlansPage: React.FC = () => {
     );
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
 
   const formatCurrency = (amount: number, currency: string) => {
     return new Intl.NumberFormat("en-US", {
@@ -608,10 +592,13 @@ const PaymentPlansPage: React.FC = () => {
 
       {/* Delete Confirmation Dialog */}
       <ConfirmDeleteDialog
-        open={deleteDialog.open}
-        onOpenChange={(open) => setDeleteDialog({ open, plan: null })}
+        open={deleteDialog}
+        onOpenChange={(open) => {
+          setDeleteDialog(open);
+          if (!open) setRowData(null);
+        }}
         title="Delete Payment Plan"
-        content={`Are you sure you want to delete "${deleteDialog.plan?.plan_name}"? This action cannot be undone.`}
+        content={`Are you sure you want to delete "${rowData?.plan_name}"? This action cannot be undone.`}
         confirmButtonText="Delete"
         onConfirm={handleConfirmDelete}
         loading={deleteLoading}
@@ -619,20 +606,20 @@ const PaymentPlansPage: React.FC = () => {
 
       {/* Payment Plan Dialog (Create / Edit) */}
       <PaymentPlansAddEditDialog
-        open={editDialog.open || createDialog}
+        open={editDialog || createDialog}
         onOpenChange={(open) => {
-          if (editDialog.open) {
+          if (editDialog) {
             // closing edit dialog
-            setEditDialog({ open, plan: null });
+            setEditDialog(open);
             if (!open) setRowData(null);
           } else {
             // closing create dialog
             setCreateDialog(open);
           }
         }}
-        plan={editDialog.open ? rowData : null} // pass plan only in edit mode
-        onSave={editDialog.open ? handleSaveEdit : handleAddNewPlan}
-        loading={editDialog.open ? editLoading : addLoading}
+        plan={editDialog ? rowData : null} // pass plan only in edit mode
+        onSave={editDialog ? handleSaveEdit : handleAddNewPlan}
+        loading={editDialog ? editLoading : addLoading}
       />
 
       {/* CSV Export Dialog */}

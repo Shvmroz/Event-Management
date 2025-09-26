@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useState } from 'react';
 import AnalyticsSkeleton from '@/components/ui/skeleton/analytics-skeleton';
 import {
@@ -19,13 +17,7 @@ import {
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import SearchableSelect from '@/components/ui/searchable-select';
 import { Badge } from '@/components/ui/badge';
 import CsvExportDialog from '@/components/ui/csv-export-dialog';
 import {
@@ -167,8 +159,23 @@ const AnalyticsPage: React.FC = () => {
   // CSV Export state
   const [exportDialog, setExportDialog] = useState(false);
 
+  // Format month helper function
+  const formatMonth = (monthString: string) => {
+    const [year, month] = monthString.split('-');
+    return new Date(parseInt(year), parseInt(month) - 1).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+    });
+  };
+
   // Get available months from the data
   const availableMonths = monthlyData.map(item => item.month).sort().reverse();
+  
+  // Convert to SearchableSelect format
+  const monthOptions = availableMonths.map(month => ({
+    value: month,
+    label: formatMonth(month)
+  }));
 
   React.useEffect(() => {
     // Simulate loading
@@ -179,14 +186,6 @@ const AnalyticsPage: React.FC = () => {
   if (loading) {
     return <AnalyticsSkeleton />;
   }
-
-  const formatMonth = (monthString: string) => {
-    const [year, month] = monthString.split('-');
-    return new Date(parseInt(year), parseInt(month) - 1).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-    });
-  };
 
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -242,18 +241,14 @@ const AnalyticsPage: React.FC = () => {
               <Download className="w-4 h-4 mr-2" />
               Export CSV
             </Button>
-            <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-              <SelectTrigger className="w-48">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {availableMonths.map(month => (
-                  <SelectItem key={month} value={month}>
-                    {formatMonth(month)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <SearchableSelect
+              options={monthOptions}
+              value={selectedMonth}
+              onChange={setSelectedMonth}
+              placeholder="Select month"
+              className="w-48"
+              search={true}
+            />
           </div>
         </div>
       </div>

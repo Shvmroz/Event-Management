@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState, useEffect } from "react";
 import {
   Building2,
@@ -37,6 +35,7 @@ import {
 import OrganizationAddEditDialog from "./components/OrganizationAddEditDialog";
 import OrganizationDetailView from "./components/OrganizationDetailView";
 import OrganizationFilters from "./components/OrganizationFilters";
+import { formatDate } from "@/utils/dateUtils.js";
 
 interface Organization {
   _id: string;
@@ -77,19 +76,10 @@ const OrganizationsPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState("all");
 
-  const [deleteDialog, setDeleteDialog] = useState<{
-    open: boolean;
-    organization: Organization | null;
-  }>({ open: false, organization: null });
-  const [editDialog, setEditDialog] = useState<{
-    open: boolean;
-    organization: Organization | null;
-  }>({ open: false, organization: null });
+  const [deleteDialog, setDeleteDialog] = useState(false);
+  const [editDialog, setEditDialog] = useState(false);
   const [createDialog, setCreateDialog] = useState(false);
-  const [detailView, setDetailView] = useState<{
-    open: boolean;
-    organization: Organization | null;
-  }>({ open: false, organization: null });
+  const [detailView, setDetailView] = useState(false);
 
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [editLoading, setEditLoading] = useState(false);
@@ -199,7 +189,7 @@ const OrganizationsPage: React.FC = () => {
       key: "industry",
       label: "Industry",
       renderData: (organization) => (
-        <span className="text-sm text-gray-900 dark:text-white capitalize">
+        <span className="text-sm text-gray-900 dark:text-white">
           {organization.bio?.industry || "N/A"}
         </span>
       ),
@@ -263,15 +253,7 @@ const OrganizationsPage: React.FC = () => {
       key: "status",
       label: "Status",
       renderData: (organization) =>
-        organization.status ? (
-          <span className="px-2 py-1 text-xs font-medium text-green-700 bg-green-100 dark:bg-green-800 dark:text-green-100 rounded">
-            Active
-          </span>
-        ) : (
-          <span className="px-2 py-1 text-xs font-medium text-red-700 bg-red-100 dark:bg-red-800 dark:text-red-100 rounded">
-            Inactive
-          </span>
-        ),
+        getStatusBadge(organization.status),
     },
 
     {
@@ -356,12 +338,12 @@ const OrganizationsPage: React.FC = () => {
   }, [currentPage, rowsPerPage, activeTab]);
 
   const handleEdit = (organization: Organization) => {
-    setEditDialog({ open: true, organization });
+    setEditDialog(true);
     setRowData(organization);
   };
 
   const handleDelete = (organization: Organization) => {
-    setDeleteDialog({ open: true, organization });
+    setDeleteDialog(true);
     setRowData(organization);
   };
 
@@ -392,7 +374,7 @@ const OrganizationsPage: React.FC = () => {
           prev.filter((org) => org._id !== rowData._id)
         );
 
-        setDeleteDialog({ open: false, organization: null });
+        setDeleteDialog(false);
         setRowData(null);
         enqueueSnackbar("Organization moved to deleted successfully", {
           variant: "success",
@@ -417,7 +399,7 @@ const OrganizationsPage: React.FC = () => {
     const result = await _edit_organizations_api(rowData._id, data);
 
     if (result?.code === 200) {
-      setEditDialog({ open: false, organization: null });
+      setEditDialog(false);
       setRowData(null);
       setEditLoading(false);
       setOrganizations((prev) =>
@@ -523,7 +505,8 @@ const OrganizationsPage: React.FC = () => {
   };
 
   const handleRowClick = (organization: Organization) => {
-    setDetailView({ open: true, organization });
+    setDetailView(true);
+    setRowData(organization);
   };
 
   const handleSearch = () => {
@@ -618,7 +601,7 @@ const OrganizationsPage: React.FC = () => {
     },
   ];
 
-  const getStatusBadge = (status: string) => {
+  const getStatusBadge = (status: string | boolean) => {
     const statusConfig = {
       active: {
         label: "Active",
@@ -641,22 +624,21 @@ const OrganizationsPage: React.FC = () => {
           "bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400",
       },
     };
-
-    const config =
-      statusConfig[status as keyof typeof statusConfig] ||
-      statusConfig.inactive;
-
+  
+    let normalizedStatus: keyof typeof statusConfig;
+  
+    if (typeof status === "boolean") {
+      normalizedStatus = status ? "active" : "inactive";
+    } else {
+      normalizedStatus = (status.toLowerCase() as keyof typeof statusConfig) || "inactive";
+    }
+  
+    const config = statusConfig[normalizedStatus] || statusConfig.inactive;
+  
     return <Badge className={config.className}>{config.label}</Badge>;
   };
+  
 
-  const formatDate = (dateString: string) =>
-    new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
 
   if (loading && organizations.length === 0) {
     return <TableSkeleton rows={8} columns={8} showFilters={true} />;
@@ -812,19 +794,22 @@ const OrganizationsPage: React.FC = () => {
 
       {/* Delete Confirmation Dialog */}
       <ConfirmDeleteDialog
-        open={deleteDialog.open}
-        onOpenChange={(open) => setDeleteDialog({ open, organization: null })}
+        open={deleteDialog}
+        onOpenChange={(open) => {
+          setDeleteDialog(open);
+          if (!open) setRowData(null);
+        }}
         title="Move to Deleted Organizations"
-        content={`Are you sure you want to move "${deleteDialog.organization?.orgn_user.name}" to deleted organizations? You can restore it within 30 days before it's permanently deleted.`}
+        content={`Are you sure you want to move "${rowData?.orgn_user.name}" to deleted organizations? You can restore it within 30 days before it's permanently deleted.`}
         confirmButtonText="Move to Deleted"
         onConfirm={handleConfirmDelete}
         loading={deleteLoading}
       />
       {/* Add/Edit Organization Dialog */}
       <OrganizationAddEditDialog
-        open={editDialog.open}
+        open={editDialog}
         onOpenChange={(open) => {
-          setEditDialog({ open, organization: null });
+          setEditDialog(open);
           if (!open) setRowData(null);
         }}
         organization={rowData} // pass for edit
@@ -839,11 +824,14 @@ const OrganizationsPage: React.FC = () => {
         loading={addLoading}
       />
       {/* Organization Detail View */}
-      {detailView.open && detailView.organization && (
+      {detailView && rowData && (
         <OrganizationDetailView
-          open={detailView.open}
-          organizationId={detailView.organization._id}
-          onClose={() => setDetailView({ open: false, organization: null })}
+          open={detailView}
+          organizationId={rowData?._id}
+          onClose={() => {
+            setDetailView(false);
+            setRowData(null);
+          }}
         />
       )}
 

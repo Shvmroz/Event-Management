@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useEffect, useState } from "react";
 import {
   Building2,
@@ -13,11 +11,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import IconButton from "@mui/material/IconButton";
+import {
+  CustomDialog,
+  CustomDialogTitle,
+  CustomDialogContent,
+  CustomDialogActions,
+} from "@/components/ui/custom-dialog";
 import { useAppContext } from "@/contexts/AppContext";
 import { _organization_detail_view_api } from "@/DAL/organizationAPI";
 import { useSnackbar } from "notistack";
@@ -82,35 +81,24 @@ const OrganizationDetailView = ({
   if (!organization) return null;
 
   return (
-    <Dialog
+    <CustomDialog
       open={open}
       onClose={onClose}
       maxWidth="md"
       fullWidth
-      PaperProps={{
-        sx: {
-          backgroundColor: darkMode ? "#1f2937" : "#ffffff",
-          color: darkMode ? "#ffffff" : "#000000",
-        },
-      }}
     >
-      <DialogTitle>
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 bg-gradient-to-r from-[#0077ED] to-[#4A9AFF] rounded-xl flex items-center justify-center">
-              <Building2 className="w-6 h-6 text-white" />
-            </div>
-            <h1 className="text-2xl font-bold">
-              {organization.orgn_user?.name}
-            </h1>
+      <CustomDialogTitle onClose={onClose}>
+        <div className="flex items-center space-x-4">
+          <div className="w-12 h-12 bg-gradient-to-r from-[#0077ED] to-[#4A9AFF] rounded-xl flex items-center justify-center">
+            <Building2 className="w-6 h-6 text-white" />
           </div>
-          <IconButton onClick={onClose}>
-            <X className="w-5 h-5 text-foreground" />
-          </IconButton>
+          <h1 className="text-2xl font-bold">
+            {organization.orgn_user?.name}
+          </h1>
         </div>
-      </DialogTitle>
+      </CustomDialogTitle>
 
-      <DialogContent dividers>
+      <CustomDialogContent dividers>
         {loading && (
           <div className="flex items-center justify-center min-h-[400px]">
             <Spinner />
@@ -361,12 +349,12 @@ const OrganizationDetailView = ({
             </CardContent>
           </Card>
         )}
-      </DialogContent>
+      </CustomDialogContent>
 
-      <DialogActions>
+      <CustomDialogActions>
         <Button onClick={onClose}>Close</Button>
-      </DialogActions>
-    </Dialog>
+      </CustomDialogActions>
+    </CustomDialog>
   );
 };
 

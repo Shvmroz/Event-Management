@@ -1,5 +1,3 @@
-"use client";
-
 import React, { lazy, Suspense, useState } from "react";
 import SettingsSkeleton from "@/components/ui/skeleton/settings-skeleton";
 import { Shield, Save, Edit, FileText, Scale, Calendar } from "lucide-react";
@@ -9,6 +7,7 @@ const QuillEditor = lazy(
 );
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { formatDate } from "@/utils/dateUtils.js";
 
 interface LegalSettings {
   privacy_policy: string;
@@ -126,16 +125,6 @@ const SettingsPage: React.FC = () => {
     }
   };
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-      timeZoneName: "short",
-    });
-  };
 
   return (
     <div className="space-y-6">

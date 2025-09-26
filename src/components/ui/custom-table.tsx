@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -10,13 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal, ChevronLeft, ChevronRight } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import SearchableSelect from "@/components/ui/searchable-select";
 import { cn } from "@/lib/utils";
 
 // ---------------- Table Primitives ----------------
@@ -279,21 +271,19 @@ const CustomTable: React.FC<CustomTableProps> = ({
               <span className="text-sm text-gray-700 dark:text-gray-300">
                 Rows per page:
               </span>
-              <Select
+              <SearchableSelect
+                options={[
+                  { value: "5", label: "5" },
+                  { value: "10", label: "10" },
+                  { value: "20", label: "20" },
+                  { value: "50", label: "50" },
+                  { value: "100", label: "100" },
+                ]}
                 value={rows_per_page.toString()}
-                onValueChange={(value) => onRowsPerPageChange(parseInt(value))}
-              >
-                <SelectTrigger className="w-20">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="5">5</SelectItem>
-                  <SelectItem value="10">10</SelectItem>
-                  <SelectItem value="20">20</SelectItem>
-                  <SelectItem value="50">50</SelectItem>
-                  <SelectItem value="100">100</SelectItem>
-                </SelectContent>
-              </Select>
+                onChange={(value) => onRowsPerPageChange(parseInt(value))}
+                className="w-20"
+                
+              />
             </div>
 
             <div className="flex items-center space-x-2">

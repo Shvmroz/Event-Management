@@ -1,12 +1,11 @@
-"use client";
-
 import React, { useState, useEffect } from "react";
 import { useAppContext } from "@/contexts/AppContext";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
-import IconButton from "@mui/material/IconButton";
+import {
+  CustomDialog,
+  CustomDialogTitle,
+  CustomDialogContent,
+  CustomDialogActions,
+} from "@/components/ui/custom-dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,6 +13,7 @@ import { X, Mail, Info, Code, Calendar, User } from "lucide-react";
 import { _email_template_detail_view_api } from "@/DAL/emailTemplatesAPI";
 import { useSnackbar } from "notistack";
 import Spinner from "@/components/ui/spinner";
+import { formatDate } from "@/utils/dateUtils.js";
 
 interface EmailTemplateViewDetailDialogProps {
   open: boolean;
@@ -50,44 +50,22 @@ const EmailTemplateViewDetailDialog: React.FC<
 
   if (!templateId) return null;
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-  };
 
   return (
-    <Dialog
+    <CustomDialog
       open={open}
       onClose={() => onOpenChange(false)}
       maxWidth="md"
       fullWidth
-      PaperProps={{
-        sx: {
-          backgroundColor: darkMode ? "#1f2937" : "#ffffff",
-          color: darkMode ? "#ffffff" : "#000000",
-          borderRadius: "12px",
-          maxHeight: "90vh",
-        },
-      }}
     >
       {/* --- Title --- */}
-      <DialogTitle>
-        <div className="flex items-center justify-between">
-          <h1 className="text-lg font-semibold text-gray-900 dark:text-white">
-            {templateDetail?.name || "Template Details"}
-          </h1>
-          <IconButton onClick={() => onOpenChange(false)}>
-            <X className="w-5 h-5 text-foreground" />
-          </IconButton>
-        </div>
-      </DialogTitle>
+      <CustomDialogTitle onClose={() => onOpenChange(false)}>
+        <h1 className="text-lg font-semibold text-gray-900 dark:text-white">
+          {templateDetail?.name || "Template Details"}
+        </h1>
+      </CustomDialogTitle>
 
-      <DialogContent dividers className="space-y-4">
+      <CustomDialogContent dividers className="space-y-4">
         {loading ? (
           <div className="flex items-center justify-center min-h-[400px]">
             <Spinner />
@@ -245,14 +223,14 @@ const EmailTemplateViewDetailDialog: React.FC<
             </Card>
           </div>
         )}
-      </DialogContent>
+      </CustomDialogContent>
 
-      <DialogActions>
+      <CustomDialogActions>
         <Button onClick={() => onOpenChange(false)} className="text-sm">
           Close
         </Button>
-      </DialogActions>
-    </Dialog>
+      </CustomDialogActions>
+    </CustomDialog>
   );
 };
 

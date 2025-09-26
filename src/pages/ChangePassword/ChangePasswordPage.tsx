@@ -1,10 +1,9 @@
-"use client";
-
 import React, { useState } from "react";
 import { Lock, Save, Eye, EyeOff } from "lucide-react";
 import { useSnackbar } from "notistack";
 import { _change_password_api } from "@/DAL/authAPI";
 import Spinner from "../../components/ui/spinner";
+import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
 
 const ChangePasswordPage: React.FC = () => {
@@ -94,7 +93,7 @@ const ChangePasswordPage: React.FC = () => {
             </label>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input
+              <Input
                 type={showOldPassword ? "text" : "password"}
                 value={passwords.oldPassword}
                 onChange={(e) =>
@@ -102,10 +101,10 @@ const ChangePasswordPage: React.FC = () => {
                 }
                 placeholder="Enter current password"
                 required
-                className={`w-full pl-10 pr-12 py-3 bg-gray-50 dark:bg-gray-700 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                className={`w-full pl-10 pr-12 py-3 ${
                   passwords.oldPassword.length > 0 && !oldPassValid
                     ? "border-red-500"
-                    : "border-gray-200 dark:border-gray-600"
+                    : ""
                 }`}
               />
               <button
@@ -134,7 +133,7 @@ const ChangePasswordPage: React.FC = () => {
             </label>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input
+              <Input
                 type={showNewPassword ? "text" : "password"}
                 value={passwords.newPassword}
                 onChange={(e) =>
@@ -142,10 +141,10 @@ const ChangePasswordPage: React.FC = () => {
                 }
                 placeholder="Enter new password"
                 required
-                className={`w-full pl-10 pr-12 py-3 bg-gray-50 dark:bg-gray-700 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                className={`w-full pl-10 pr-12 py-3 ${
                   passwords.newPassword.length > 0 && !newPassValid
                     ? "border-red-500"
-                    : "border-gray-200 dark:border-gray-600"
+                    : ""
                 }`}
               />
               <button
@@ -174,7 +173,7 @@ const ChangePasswordPage: React.FC = () => {
             </label>
             <div className="relative">
               <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input
+              <Input
                 type={showConfirmPassword ? "text" : "password"}
                 value={passwords.confirmPassword}
                 onChange={(e) =>
@@ -185,10 +184,10 @@ const ChangePasswordPage: React.FC = () => {
                 }
                 placeholder="Confirm new password"
                 required
-                className={`w-full pl-10 pr-12 py-3 bg-gray-50 dark:bg-gray-700 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent ${
+                className={`w-full pl-10 pr-12 py-3 ${
                   passwords.confirmPassword.length > 0 && !confirmPassValid
                     ? "border-red-500"
-                    : "border-gray-200 dark:border-gray-600"
+                    : ""
                 }`}
               />
               <button

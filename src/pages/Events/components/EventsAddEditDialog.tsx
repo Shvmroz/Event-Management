@@ -1,20 +1,16 @@
-"use client";
-
 import React, { useState, useEffect, Suspense, lazy } from "react";
 import { useAppContext } from "@/contexts/AppContext";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
+import {
+  CustomDialog,
+  CustomDialogTitle,
+  CustomDialogContent,
+  CustomDialogActions,
+} from "@/components/ui/custom-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import SearchableSelect from "@/components/ui/searchable-select";
+import StatusSwitch from "@/components/ui/status-switch";
+import { Switch } from "@/components/ui/switch";
 import { Save, X, Calendar } from "lucide-react";
 import { _organizations_list_api } from "@/DAL/organizationAPI";
 import { useSnackbar } from "notistack";
@@ -31,10 +27,22 @@ interface EventsAddEditDialogProps {
   event?: any | null;
 }
 
-const venueTypes = ["physical", "virtual", "hybrid"];
-const statuses = ["published", "cancelled"];
-const currencies = ["USD"];
-const platforms = ["Zoom", "Google Meet", "Microsoft Teams", "WebEx", "Other"];
+const venueTypes = [
+  { value: "physical", label: "Physical" },
+  { value: "virtual", label: "Virtual" },
+  { value: "hybrid", label: "Hybrid" },
+];
+const statuses = [
+  { value: "published", label: "Published" },
+  { value: "cancelled", label: "Cancelled" },
+];
+const platforms = [
+  { value: "Zoom", label: "Zoom" },
+  { value: "Google Meet", label: "Google Meet" },
+  { value: "Microsoft Teams", label: "Microsoft Teams" },
+  { value: "WebEx", label: "WebEx" },
+  { value: "Other", label: "Other" },
+];
 
 const EventsAddEditDialog: React.FC<EventsAddEditDialogProps> = ({
   open,
@@ -153,7 +161,7 @@ const EventsAddEditDialog: React.FC<EventsAddEditDialogProps> = ({
         },
         status: event.status || "draft",
         ticketPrice: event.ticketPrice ?? "",
-        currency: event.currency || "USD",
+        currency: "USD",
         isPaidEvent: event.isPaidEvent ?? false,
         max_attendees: event.max_attendees ?? "",
         registration_deadline: event.registration_deadline
@@ -191,11 +199,10 @@ const EventsAddEditDialog: React.FC<EventsAddEditDialogProps> = ({
   }, [event, open]);
 
   useEffect(() => {
-    if(open && !event) {
+    if (open && !event) {
       getOrgList();
     }
-  }, [open])
-  
+  }, [open]);
 
   const updateVenue = (field: string, value: string) => {
     setFormData({
@@ -215,38 +222,20 @@ const EventsAddEditDialog: React.FC<EventsAddEditDialogProps> = ({
   };
 
   return (
-    <Dialog
+    <CustomDialog
       open={open}
-      // onClose={() => onOpenChange(false)}
+      onClose={() => onOpenChange(false)}
       maxWidth="md"
       fullWidth
-      onBackdropClick={handleBackdropClick}
-      PaperProps={{
-        sx: {
-          backgroundColor: darkMode ? "#1f2937" : "#ffffff",
-          color: darkMode ? "#ffffff" : "#000000",
-          borderRadius: "12px",
-          overflow: "hidden",
-        },
-      }}
     >
-      <DialogTitle>
-        <div
-          className="flex items-center"
-          style={{ color: darkMode ? "#ffffff" : "#000000" }}
-        >
+      <CustomDialogTitle onClose={() => onOpenChange(false)}>
+        <div className="flex items-center">
           <Calendar className="w-5 h-5 mr-2 text-[#0077ED]" />
           {isEdit ? "Edit Event" : "Create Event"}
         </div>
-      </DialogTitle>
+      </CustomDialogTitle>
 
-      <DialogContent
-        sx={{ paddingTop: 2, paddingBottom: 2 }}
-        style={{
-          backgroundColor: darkMode ? "#1f2937" : "#ffffff",
-          color: darkMode ? "#ffffff" : "#000000",
-        }}
-      >
+      <CustomDialogContent>
         <form onSubmit={handleSubmit} className="space-y-6" id="event-form">
           {/* Event Title */}
           <div>
@@ -265,51 +254,24 @@ const EventsAddEditDialog: React.FC<EventsAddEditDialogProps> = ({
 
           {/* Organization Select */}
           {!isEdit && (
-           <div>
-           <label className="block text-sm font-medium mb-2">
-             Organization *
-           </label>
-           <Select
-             value={formData.organization_id}
-             onValueChange={(value) =>
-               setFormData({ ...formData, organization_id: value })
-             }
-             required
-             disabled={!organizations.length} // disable until data comes
-           >
-             <SelectTrigger
-               style={{
-                 backgroundColor: darkMode ? "#374151" : "#ffffff",
-                 color: darkMode ? "#ffffff" : "#000000",
-                 borderColor: darkMode ? "#4b5563" : "#d1d5db",
-               }}
-             >
-               {organizations.length === 0 ? (
-                 <div className="flex items-center gap-2 text-gray-400">
-                   <Spinner size="sm" />
-                   Loading organizations list...
-                 </div>
-               ) : (
-                 <SelectValue placeholder="Select organization" />
-               )}
-             </SelectTrigger>
-         
-             <SelectContent
-               style={{
-                 backgroundColor: darkMode ? "#374151" : "#ffffff",
-                 color: darkMode ? "#ffffff" : "#000000",
-                 borderColor: darkMode ? "#4b5563" : "#d1d5db",
-               }}
-             >
-               {organizations.map((org: any) => (
-                 <SelectItem key={org._id} value={org._id}>
-                   {org.orgn_user?.name || "Unnamed Org"}
-                 </SelectItem>
-               ))}
-             </SelectContent>
-           </Select>
-         </div>
-         
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Organization *
+              </label>
+              <SearchableSelect
+                options={organizations.map((org: any) => ({
+                  value: org._id,
+                  label: org.orgn_user?.name || "Unnamed Org",
+                }))}
+                value={formData.organization_id}
+                onChange={(value) =>
+                  setFormData({ ...formData, organization_id: value })
+                }
+                placeholder="Select organization"
+                disabled={!organizations.length}
+                search={true}
+              />
+            </div>
           )}
 
           {/* Schedule */}
@@ -365,79 +327,75 @@ const EventsAddEditDialog: React.FC<EventsAddEditDialogProps> = ({
             <label className="block text-sm font-medium mb-2">
               Venue Type *
             </label>
-            <Select
+            <SearchableSelect
+              options={venueTypes}
               value={formData.venue.type}
-              onValueChange={(value) => updateVenue("type", value)}
-              required
-            >
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {venueTypes.map((type) => (
-                  <SelectItem key={type} value={type}>
-                    {type.charAt(0).toUpperCase() + type.slice(1)}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              onChange={(value) => updateVenue("type", value)}
+              placeholder="Select venue type"
+              
+            />
           </div>
 
           {/* Physical Venue Fields */}
           {(formData.venue.type === "physical" ||
             formData.venue.type === "hybrid") && (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Address
-                </label>
-                <Input
-                  value={formData.venue.address}
-                  onChange={(e) => updateVenue("address", e.target.value)}
-                  placeholder="Enter address"
-                />
-              </div>
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    Address
+                  </label>
+                  <Input
+                    value={formData.venue.address}
+                    onChange={(e) => updateVenue("address", e.target.value)}
+                    placeholder="Enter address"
+                  />
+                </div>
 
-              <div>
-                <label className="block text-sm font-medium mb-2">City</label>
-                <Input
-                  value={formData.venue.city}
-                  onChange={(e) => updateVenue("city", e.target.value)}
-                  placeholder="Enter city"
-                />
-              </div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">City</label>
+                  <Input
+                    value={formData.venue.city}
+                    onChange={(e) => updateVenue("city", e.target.value)}
+                    placeholder="Enter city"
+                  />
+                </div>
 
-              <div>
-                <label className="block text-sm font-medium mb-2">State</label>
-                <Input
-                  value={formData.venue.state}
-                  onChange={(e) => updateVenue("state", e.target.value)}
-                  placeholder="Enter state"
-                />
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    State
+                  </label>
+                  <Input
+                    value={formData.venue.state}
+                    onChange={(e) => updateVenue("state", e.target.value)}
+                    placeholder="Enter state"
+                  />
+                </div>
               </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    Postal Code
+                  </label>
+                  <Input
+                    value={formData.venue.postal_code}
+                    onChange={(e) => updateVenue("postal_code", e.target.value)}
+                    placeholder="Enter postal code"
+                  />
+                </div>
 
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Country
-                </label>
-                <Input
-                  value={formData.venue.country}
-                  onChange={(e) => updateVenue("country", e.target.value)}
-                  placeholder="Enter country"
-                />
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    Country
+                  </label>
+                  <Input
+                    value={formData.venue.country}
+                    onChange={(e) => updateVenue("country", e.target.value)}
+                    placeholder="Enter country"
+                  />
+                </div>
               </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-2">
-                  Postal Code
-                </label>
-                <Input
-                  value={formData.venue.postal_code}
-                  onChange={(e) => updateVenue("postal_code", e.target.value)}
-                  placeholder="Enter postal code"
-                />
-              </div>
-            </div>
+            </>
           )}
 
           {/* Virtual Venue Fields */}
@@ -460,21 +418,13 @@ const EventsAddEditDialog: React.FC<EventsAddEditDialogProps> = ({
                 <label className="block text-sm font-medium mb-2">
                   Platform
                 </label>
-                <Select
+                <SearchableSelect
+                  options={platforms}
                   value={formData.venue.platform}
-                  onValueChange={(value) => updateVenue("platform", value)}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select platform" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {platforms.map((platform) => (
-                      <SelectItem key={platform} value={platform}>
-                        {platform}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  onChange={(value) => updateVenue("platform", value)}
+                  placeholder="Select platform"
+                  
+                />
               </div>
             </div>
           )}
@@ -490,36 +440,17 @@ const EventsAddEditDialog: React.FC<EventsAddEditDialogProps> = ({
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Status *
                 </label>
-                <Select
-                  value={formData.status}
-                  onValueChange={(value) =>
-                    setFormData({ ...formData, status: value })
+                <StatusSwitch
+                  value={formData.status === "published"}
+                  onChange={(value) =>
+                    setFormData({
+                      ...formData,
+                      status: value ? "published" : "draft",
+                    })
                   }
-                  required
-                >
-                  <SelectTrigger
-                    style={{
-                      backgroundColor: darkMode ? "#374151" : "#ffffff",
-                      color: darkMode ? "#ffffff" : "#000000",
-                      borderColor: darkMode ? "#4b5563" : "#d1d5db",
-                    }}
-                  >
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent
-                    style={{
-                      backgroundColor: darkMode ? "#374151" : "#ffffff",
-                      color: darkMode ? "#ffffff" : "#000000",
-                      borderColor: darkMode ? "#4b5563" : "#d1d5db",
-                    }}
-                  >
-                    {statuses.map((status) => (
-                      <SelectItem key={status} value={status}>
-                        {status.charAt(0).toUpperCase() + status.slice(1)}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  activeLabel="Published"
+                  inactiveLabel="Draft"
+                />
               </div>
 
               <div>
@@ -543,104 +474,85 @@ const EventsAddEditDialog: React.FC<EventsAddEditDialogProps> = ({
                 />
               </div>
             </div>
-            {/* Paid Event Checkbox */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Event Type Switches */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Paid Event */}
-              <label
-                htmlFor="isPaidEvent"
-                className="flex items-center space-x-2 cursor-pointer select-none p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
-              >
-                <input
-                  type="checkbox"
-                  id="isPaidEvent"
-                  checked={formData.isPaidEvent}
-                  onChange={(e) =>
-                    setFormData({ ...formData, isPaidEvent: e.target.checked })
-                  }
-                  className="w-4 h-4 bg-gray-100 border-gray-300 rounded"
-                />
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Paid Event
-                </span>
-              </label>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Event Type
+                </label>
+                <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-800 p-3 rounded-lg h-10">
+                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                    {formData.isPaidEvent ? "Paid Event" : "Free Event"}
+                  </span>
+                  <Switch
+                    checked={formData.isPaidEvent}
+                    onCheckedChange={(checked) =>
+                      setFormData({ ...formData, isPaidEvent: checked })
+                    }
+                    className="data-[state=checked]:bg-[#0077ED]"
+                  />
+                </div>
+              </div>
 
               {/* Public Event */}
-              <label
-                htmlFor="is_public"
-                className="flex items-center space-x-2 cursor-pointer select-none p-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
-              >
-                <input
-                  type="checkbox"
-                  id="is_public"
-                  checked={formData.is_public}
-                  onChange={(e) =>
-                    setFormData({ ...formData, is_public: e.target.checked })
-                  }
-                  className="w-4 h-4 bg-gray-100 border-gray-300 rounded"
-                />
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Public Event
-                </span>
-              </label>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  Event Visibility
+                </label>
+                <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-800 p-3 rounded-lg h-10">
+                  <span className="text-sm text-gray-600 dark:text-gray-400">
+                    {formData.is_public ? "Public Event" : "Private Event"}
+                  </span>
+                  <Switch
+                    checked={formData.is_public}
+                    onCheckedChange={(checked) =>
+                      setFormData({ ...formData, is_public: checked })
+                    }
+                    className="data-[state=checked]:bg-[#0077ED]"
+                  />
+                </div>
+              </div>
             </div>
 
             {/* Show only if Paid Event is true */}
             {formData.isPaidEvent && (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Ticket Price
-                  </label>
-                  <Input
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    value={formData.ticketPrice}
-                    onChange={(e) =>
-                      setFormData({ ...formData, ticketPrice: e.target.value })
-                    }
-                    placeholder="0.00"
-                    style={{
-                      backgroundColor: darkMode ? "#374151" : "#ffffff",
-                      color: darkMode ? "#ffffff" : "#000000",
-                      borderColor: darkMode ? "#4b5563" : "#d1d5db",
-                    }}
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                    Currency
-                  </label>
-                  <Select
-                    value={formData.currency}
-                    onValueChange={(value) =>
-                      setFormData({ ...formData, currency: value })
-                    }
-                  >
-                    <SelectTrigger
-                      style={{
-                        backgroundColor: darkMode ? "#374151" : "#ffffff",
-                        color: darkMode ? "#ffffff" : "#000000",
-                        borderColor: darkMode ? "#4b5563" : "#d1d5db",
-                      }}
-                    >
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent
-                      style={{
-                        backgroundColor: darkMode ? "#374151" : "#ffffff",
-                        color: darkMode ? "#ffffff" : "#000000",
-                        borderColor: darkMode ? "#4b5563" : "#d1d5db",
-                      }}
-                    >
-                      {currencies.map((currency) => (
-                        <SelectItem key={currency} value={currency}>
-                          {currency}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+              <div className="mt-6 p-4 bg-gray-50 dark:bg-blue-900/20 rounded-lg border border-gray-200 dark:border-gray-800">
+                <h4 className="text-sm font-semibold text-gray-800 dark:text-blue-200 mb-4 flex items-center">
+                  <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+                  Payment Settings
+                </h4>
+                <div className="grid grid-cols-1 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Ticket Price (USD) *
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">
+                        $
+                      </span>
+                      <Input
+                        type="number"
+                        min="0"
+                        step="0.01"
+                        value={formData.ticketPrice}
+                        onChange={(e) =>
+                          setFormData({
+                            ...formData,
+                            ticketPrice: e.target.value,
+                          })
+                        }
+                        placeholder="0.00"
+                        className="pl-8"
+                        required
+                        style={{
+                          backgroundColor: darkMode ? "#374151" : "#ffffff",
+                          color: darkMode ? "#ffffff" : "#000000",
+                          borderColor: darkMode ? "#4b5563" : "#d1d5db",
+                        }}
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
@@ -663,11 +575,9 @@ const EventsAddEditDialog: React.FC<EventsAddEditDialogProps> = ({
             </div>
           </div>
         </form>
-      </DialogContent>
+      </CustomDialogContent>
 
-      <DialogActions
-        sx={{ borderTop: `1px solid ${darkMode ? "#374151" : "#e5e7eb"}` }}
-      >
+      <CustomDialogActions>
         <Button
           type="button"
           variant="outline"
@@ -700,8 +610,8 @@ const EventsAddEditDialog: React.FC<EventsAddEditDialogProps> = ({
             </>
           )}
         </Button>
-      </DialogActions>
-    </Dialog>
+      </CustomDialogActions>
+    </CustomDialog>
   );
 };
 

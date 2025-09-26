@@ -173,15 +173,20 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
   const logout = async () => {
     const result = await _logout_api();
     if (result?.code === 200) {
-      navigate("/login");
       localStorage.removeItem("authToken");
       localStorage.removeItem("userData");
       setUser(null);
+      setIsAuthenticated(false);
+      navigate("/login");
       enqueueSnackbar("Logged out successfully", { variant: "success" });
       return { success: true };
     } else {
-      enqueueSnackbar(result?.message || "Logout failed", { variant: "error" });
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("userData");
+      setUser(null);
+      setIsAuthenticated(false);
       navigate("/login");
+      enqueueSnackbar(result?.message || "Logout failed", { variant: "error" });
       return { success: false };
     }
   };

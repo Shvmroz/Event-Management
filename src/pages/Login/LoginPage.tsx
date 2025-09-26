@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock, Calendar } from "lucide-react";
 import { useAppContext } from "@/contexts/AppContext";
+import { Input } from "@/components/ui/input";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -103,7 +104,7 @@ export default function LoginPage() {
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                       <Mail className="h-5 w-5 text-gray-400" />
                     </div>
-                    <input
+                    <Input
                       id="email"
                       name="email"
                       type="email"
@@ -111,7 +112,7 @@ export default function LoginPage() {
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0077ED] focus:border-transparent transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                      className="block w-full pl-10 pr-3 py-3"
                       placeholder="Enter your email"
                     />
                   </div>
@@ -128,7 +129,7 @@ export default function LoginPage() {
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                       <Lock className="h-5 w-5 text-gray-400" />
                     </div>
-                    <input
+                    <Input
                       id="password"
                       name="password"
                       type={showPassword ? "text" : "password"}
@@ -136,7 +137,7 @@ export default function LoginPage() {
                       required
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="block w-full pl-10 pr-12 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0077ED] focus:border-transparent transition-colors bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                      className="block w-full pl-10 pr-12 py-3"
                       placeholder="Enter your password"
                     />
                     <button

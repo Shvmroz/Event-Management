@@ -1,13 +1,5 @@
-"use client";
-
 import React from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import SearchableSelect from "@/components/ui/searchable-select";
 import { Input } from "@/components/ui/input";
 import {
   CheckCircle,
@@ -16,6 +8,18 @@ import {
   Clock,
   AlertTriangle,
 } from "lucide-react";
+
+const statusOptions = [
+  { value: "all", label: "All Status" },
+  { value: "active", label: "Active" },
+  { value: "inactive", label: "Inactive" },
+];
+
+const subscriptionStatusOptions = [
+  { value: "all", label: "All Subscriptions" },
+  { value: "active", label: "Active" },
+  { value: "inactive", label: "Inactive" },
+];
 
 interface OrganizationFiltersProps {
   statusFilter: string;
@@ -49,26 +53,13 @@ const OrganizationFilters: React.FC<OrganizationFiltersProps> = ({
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           Status
         </label>
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger>
-            <SelectValue placeholder="Filter by status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Status</SelectItem>
-            <SelectItem value="active">
-              <div className="flex items-center">
-                <CheckCircle className="w-4 h-4 mr-2 text-green-500" />
-                Active
-              </div>
-            </SelectItem>
-            <SelectItem value="inactive">
-              <div className="flex items-center">
-                <XCircle className="w-4 h-4 mr-2 text-red-500" />
-                Inactive
-              </div>
-            </SelectItem>
-          </SelectContent>
-        </Select>
+        <SearchableSelect
+          options={statusOptions}
+          value={statusFilter}
+          onChange={setStatusFilter}
+          placeholder="Filter by status"
+          
+        />
       </div>
 
       {/* Subscription Status Filter */}
@@ -76,29 +67,13 @@ const OrganizationFilters: React.FC<OrganizationFiltersProps> = ({
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           Subscription Status
         </label>
-        <Select
+        <SearchableSelect
+          options={subscriptionStatusOptions}
           value={subscriptionStatusFilter}
-          onValueChange={setSubscriptionStatusFilter}
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Filter by subscription" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Subscriptions</SelectItem>
-            <SelectItem value="active">
-              <div className="flex items-center">
-                <CheckCircle className="w-4 h-4 mr-2 text-green-500" />
-                Active
-              </div>
-            </SelectItem>
-            <SelectItem value="inactive">
-              <div className="flex items-center">
-                <XCircle className="w-4 h-4 mr-2 text-red-500" />
-                Inactive
-              </div>
-            </SelectItem>
-          </SelectContent>
-        </Select>
+          onChange={setSubscriptionStatusFilter}
+          placeholder="Filter by subscription"
+          
+        />
       </div>
       <div className="space-y-2">
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">

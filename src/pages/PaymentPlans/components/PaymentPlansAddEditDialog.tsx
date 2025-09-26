@@ -1,11 +1,11 @@
-"use client";
-
 import React, { useState, useEffect, lazy, Suspense } from "react";
 import { useAppContext } from "@/contexts/AppContext";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
+import {
+  CustomDialog,
+  CustomDialogTitle,
+  CustomDialogContent,
+  CustomDialogActions,
+} from "@/components/ui/custom-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 // import QuillEditor from "@/components/ui/quillEditor/quillEditor";
@@ -13,14 +13,10 @@ const QuillEditor = lazy(
   () => import("@/components/ui/quillEditor/quillEditor")
 );
 
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import SearchableSelect from "@/components/ui/searchable-select";
 import { Save, X, CreditCard } from "lucide-react";
+import StatusSwitch from "@/components/ui/status-switch";
+import { Switch } from "@/components/ui/switch";
 
 interface PaymentPlan {
   _id?: string;
@@ -45,7 +41,11 @@ interface PaymentPlansAddEditDialogProps {
   loading?: boolean;
 }
 
-const billingCycles = ["weekly", "monthly", "yearly"];
+const billingCycles = [
+  { value: "weekly", label: "Weekly" },
+  { value: "monthly", label: "Monthly" },
+  { value: "yearly", label: "Yearly" },
+];
 const planTypes = [
   { value: "recurring", label: "Recurring" },
   { value: "one_time", label: "One-time" },
@@ -126,34 +126,20 @@ const PaymentPlansAddEditDialog: React.FC<PaymentPlansAddEditDialogProps> = ({
   };
 
   return (
-    <Dialog
+    <CustomDialog
       open={open}
       onClose={() => onOpenChange(false)}
       maxWidth="md"
       fullWidth
-      PaperProps={{
-        sx: {
-          backgroundColor: darkMode ? "#1f2937" : "#ffffff",
-          color: darkMode ? "#ffffff" : "#000000",
-          borderRadius: "12px",
-          maxHeight: "90vh",
-        },
-      }}
     >
-      <DialogTitle style={{ color: darkMode ? "#ffffff" : "#000000" }}>
+      <CustomDialogTitle onClose={() => onOpenChange(false)}>
         <div className="flex items-center">
           {!isEdit && <CreditCard className="w-5 h-5 mr-2 text-[#0077ED]" />}
           {isEdit ? "Edit Payment Plan" : "Create Payment Plan"}
         </div>
-      </DialogTitle>
+      </CustomDialogTitle>
 
-      <DialogContent
-        sx={{ paddingTop: 2, paddingBottom: 2 }}
-        style={{
-          backgroundColor: darkMode ? "#1f2937" : "#ffffff",
-          color: darkMode ? "#ffffff" : "#000000",
-        }}
-      >
+      <CustomDialogContent>
         <form
           onSubmit={handleSubmit}
           className="space-y-6"
@@ -196,23 +182,15 @@ const PaymentPlansAddEditDialog: React.FC<PaymentPlansAddEditDialogProps> = ({
               <label className="block text-sm font-medium mb-2">
                 Plan Type *
               </label>
-              <Select
+              <SearchableSelect
+                options={planTypes}
                 value={formData.plan_type}
-                onValueChange={(value) =>
+                onChange={(value) =>
                   setFormData({ ...formData, plan_type: value })
                 }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {planTypes.map((type) => (
-                    <SelectItem key={type.value} value={type.value}>
-                      {type.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                placeholder="Select plan type"
+                
+              />
             </div>
 
             {/* Billing Cycle */}
@@ -220,23 +198,15 @@ const PaymentPlansAddEditDialog: React.FC<PaymentPlansAddEditDialogProps> = ({
               <label className="block text-sm font-medium mb-2">
                 Billing Cycle *
               </label>
-              <Select
+              <SearchableSelect
+                options={billingCycles}
                 value={formData.billing_cycle}
-                onValueChange={(value) =>
+                onChange={(value) =>
                   setFormData({ ...formData, billing_cycle: value })
                 }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {billingCycles.map((cycle) => (
-                    <SelectItem key={cycle} value={cycle}>
-                      {cycle.charAt(0).toUpperCase() + cycle.slice(1)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                placeholder="Select billing cycle"
+                
+              />
             </div>
 
             {/* Max Events */}
@@ -307,42 +277,36 @@ const PaymentPlansAddEditDialog: React.FC<PaymentPlansAddEditDialogProps> = ({
               />
             </div>
 
-            {/* Checkboxes */}
-            <div className="flex gap-6 items-center">
-              <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  id="is_active"
-                  checked={formData.is_active}
-                  onChange={(e) =>
-                    setFormData({ ...formData, is_active: e.target.checked })
-                  }
-                  className="w-4 h-4 rounded border border-gray-300 cursor-pointer"
-                />
-                <label
-                  htmlFor="is_active"
-                  className="text-sm font-medium cursor-pointer"
-                >
-                  Active Plan
-                </label>
-              </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Plan Status
+              </label>
+              <StatusSwitch
+                value={formData.is_active}
+                onChange={(is_active) =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    is_active,
+                  }))
+                }
+              />
+            </div>
 
-              <div className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  id="is_popular"
-                  checked={formData.is_popular}
-                  onChange={(e) =>
-                    setFormData({ ...formData, is_popular: e.target.checked })
-                  }
-                  className="w-4 h-4 rounded border border-gray-300 cursor-pointer"
-                />
-                <label
-                  htmlFor="is_popular"
-                  className="text-sm font-medium cursor-pointer"
-                >
+            <div>
+              <label className="block text-sm font-medium mb-2">
+                Plan Visibility
+              </label>
+              <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-800 p-3 rounded-lg h-10">
+                <span className="text-sm text-gray-600 dark:text-gray-400">
                   Popular Plan
-                </label>
+                </span>
+                <Switch
+                  checked={formData.is_popular}
+                  onCheckedChange={(checked) =>
+                    setFormData({ ...formData, is_popular: checked })
+                  }
+                  className="data-[state=checked]:bg-[#0077ED]"
+                />
               </div>
             </div>
           </div>
@@ -364,11 +328,9 @@ const PaymentPlansAddEditDialog: React.FC<PaymentPlansAddEditDialogProps> = ({
             </Suspense>
           </div>
         </form>
-      </DialogContent>
+      </CustomDialogContent>
 
-      <DialogActions
-        sx={{ borderTop: `1px solid ${darkMode ? "#374151" : "#e5e7eb"}` }}
-      >
+      <CustomDialogActions>
         <Button
           type="button"
           variant="outline"
@@ -398,8 +360,8 @@ const PaymentPlansAddEditDialog: React.FC<PaymentPlansAddEditDialogProps> = ({
             </>
           )}
         </Button>
-      </DialogActions>
-    </Dialog>
+      </CustomDialogActions>
+    </CustomDialog>
   );
 };
 

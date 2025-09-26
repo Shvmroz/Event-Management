@@ -1,16 +1,27 @@
-"use client";
-
 import React from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import SearchableSelect from "@/components/ui/searchable-select";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Star, CheckCircle, XCircle, CreditCard, Calendar, AlertTriangle } from "lucide-react";
+
+const statusOptions = [
+  { value: "all", label: "All Status" },
+  { value: "active", label: "Active" },
+  { value: "inactive", label: "Inactive" },
+];
+
+const typeOptions = [
+  { value: "all", label: "All Types" },
+  { value: "recurring", label: "Recurring" },
+  { value: "one-time", label: "One time" },
+];
+
+const billingCycleOptions = [
+  { value: "all", label: "All Cycles" },
+  { value: "weekly", label: "Weekly" },
+  { value: "monthly", label: "Monthly" },
+  { value: "yearly", label: "Yearly" },
+];
 
 interface PaymentPlanFiltersProps {
   statusFilter: string;
@@ -48,26 +59,13 @@ const PaymentPlanFilters: React.FC<PaymentPlanFiltersProps> = ({
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           Status
         </label>
-        <Select value={statusFilter} onValueChange={setStatusFilter}>
-          <SelectTrigger>
-            <SelectValue placeholder="Filter by status" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Status</SelectItem>
-            <SelectItem value="active">
-              <div className="flex items-center">
-                <CheckCircle className="w-4 h-4 mr-2 text-green-500" />
-                Active
-              </div>
-            </SelectItem>
-            <SelectItem value="inactive">
-              <div className="flex items-center">
-                <XCircle className="w-4 h-4 mr-2 text-red-500" />
-                Inactive
-              </div>
-            </SelectItem>
-          </SelectContent>
-        </Select>
+        <SearchableSelect
+          options={statusOptions}
+          value={statusFilter}
+          onChange={setStatusFilter}
+          placeholder="Filter by status"
+          
+        />
       </div>
 
       {/* Plan Type Filter */}
@@ -75,26 +73,13 @@ const PaymentPlanFilters: React.FC<PaymentPlanFiltersProps> = ({
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           Plan Type
         </label>
-        <Select value={typeFilter} onValueChange={setTypeFilter}>
-          <SelectTrigger>
-            <SelectValue placeholder="Filter by type" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Types</SelectItem>
-            <SelectItem value="recurring">
-              <div className="flex items-center">
-                <CreditCard className="w-4 h-4 mr-2 text-blue-500" />
-                Recurring
-              </div>
-            </SelectItem>
-            <SelectItem value="one-time">
-              <div className="flex items-center">
-                <Calendar className="w-4 h-4 mr-2 text-purple-500" />
-                One time
-              </div>
-            </SelectItem>
-          </SelectContent>
-        </Select>
+        <SearchableSelect
+          options={typeOptions}
+          value={typeFilter}
+          onChange={setTypeFilter}
+          placeholder="Filter by type"
+          
+        />
       </div>
 
       {/* Billing Cycle Filter */}
@@ -102,17 +87,13 @@ const PaymentPlanFilters: React.FC<PaymentPlanFiltersProps> = ({
         <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           Billing Cycle
         </label>
-        <Select value={billingCycleFilter} onValueChange={setBillingCycleFilter}>
-          <SelectTrigger>
-            <SelectValue placeholder="Filter by billing cycle" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">All Cycles</SelectItem>
-            <SelectItem value="weekly">Weekly</SelectItem>
-            <SelectItem value="monthly">Monthly</SelectItem>
-            <SelectItem value="yearly">Yearly</SelectItem>
-          </SelectContent>
-        </Select>
+        <SearchableSelect
+          options={billingCycleOptions}
+          value={billingCycleFilter}
+          onChange={setBillingCycleFilter}
+          placeholder="Filter by billing cycle"
+          
+        />
       </div>
 
       {/* Date Range Filter */}

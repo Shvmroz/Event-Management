@@ -1,11 +1,11 @@
-"use client";
-
 import React, { useState } from "react";
 import { useAppContext } from "@/contexts/AppContext";
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
-import DialogActions from "@mui/material/DialogActions";
+import {
+  CustomDialog,
+  CustomDialogTitle,
+  CustomDialogContent,
+  CustomDialogActions,
+} from "@/components/ui/custom-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Download, Calendar, FileText, X, AlertTriangle } from "lucide-react";
@@ -81,36 +81,20 @@ const CsvExportDialog: React.FC<CsvExportDialogProps> = ({
   };
 
   return (
-    <Dialog
+    <CustomDialog
       open={open}
       onClose={() => onOpenChange(false)}
       maxWidth="sm"
       fullWidth
-      PaperProps={{
-        sx: {
-          backgroundColor: darkMode ? "#1f2937" : "#ffffff",
-          color: darkMode ? "#ffffff" : "#000000",
-          borderRadius: "12px",
-        },
-      }}
     >
-      <DialogTitle>
-        <div
-          className="flex items-center"
-          style={{ color: darkMode ? "#ffffff" : "#000000" }}
-        >
+      <CustomDialogTitle onClose={() => onOpenChange(false)}>
+        <div className="flex items-center">
           <Download className="w-5 h-5 mr-2 text-[#0077ED]" />
           Export {title}
         </div>
-      </DialogTitle>
+      </CustomDialogTitle>
 
-      <DialogContent
-        sx={{ paddingTop: 2, paddingBottom: 3 }}
-        style={{
-          backgroundColor: darkMode ? "#1f2937" : "#ffffff",
-          color: darkMode ? "#ffffff" : "#000000",
-        }}
-      >
+      <CustomDialogContent>
         <div className="space-y-6">
           <div className="flex items-center space-x-3 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
             <FileText className="w-5 h-5 text-blue-600" />
@@ -166,11 +150,9 @@ const CsvExportDialog: React.FC<CsvExportDialogProps> = ({
             </p>
           </div>
         </div>
-      </DialogContent>
+      </CustomDialogContent>
 
-      <DialogActions
-        sx={{ borderTop: `1px solid ${darkMode ? "#374151" : "#e5e7eb"}` }}
-      >
+      <CustomDialogActions>
         <Button
           type="button"
           variant="outline"
@@ -207,8 +189,8 @@ const CsvExportDialog: React.FC<CsvExportDialogProps> = ({
             </>
           )}
         </Button>
-      </DialogActions>
-    </Dialog>
+      </CustomDialogActions>
+    </CustomDialog>
   );
 };
 

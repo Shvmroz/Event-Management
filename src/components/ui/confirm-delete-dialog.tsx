@@ -1,9 +1,12 @@
-"use client";
-
 import React from "react";
-import { Dialog } from "@mui/material";
 import { AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  CustomDialog,
+  CustomDialogTitle,
+  CustomDialogContent,
+  CustomDialogActions,
+} from "@/components/ui/custom-dialog";
 
 interface ConfirmDeleteDialogProps {
   open: boolean;
@@ -33,38 +36,30 @@ const ConfirmDeleteDialog: React.FC<ConfirmDeleteDialogProps> = ({
   };
 
   return (
-    <Dialog
+    <CustomDialog
       open={open}
       onClose={handleClose}
       maxWidth="sm"
       fullWidth
-      PaperProps={{
-        className:
-          "p-6 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 shadow-xl",
-      }}
-      sx={{
-        "& .MuiDialog-paper": {
-          borderRadius: "12px",
-        },
-      }}
     >
-      {/* Header */}
-      <div className="flex items-center space-x-3 mb-3">
-        <div className="p-2 bg-gray-100 dark:bg-red-600/20 rounded-full">
-          {confirmButtonClass ? (
-            <AlertTriangle className="w-5 h-5 text-green-600 dark:text-green-400" />
-          ) : (
-            <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400" />
-          )}
+      <CustomDialogTitle onClose={handleClose}>
+        <div className="flex items-center space-x-3">
+          <div className="p-2 bg-gray-100 dark:bg-red-600/20 rounded-full">
+            {confirmButtonClass ? (
+              <AlertTriangle className="w-5 h-5 text-green-600 dark:text-green-400" />
+            ) : (
+              <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400" />
+            )}
+          </div>
+          <h2 className="text-lg font-semibold">{title}</h2>
         </div>
-        <h2 className="text-lg font-semibold">{title}</h2>
-      </div>
+      </CustomDialogTitle>
 
-      {/* Content */}
-      <p className="text-gray-600 dark:text-gray-400">{content}</p>
+      <CustomDialogContent>
+        <p className="text-gray-600 dark:text-gray-400">{content}</p>
+      </CustomDialogContent>
 
-      {/* Footer */}
-      <div className="flex justify-end space-x-2 mt-6">
+      <CustomDialogActions>
         <Button
           onClick={handleClose}
           disabled={loading}
@@ -91,8 +86,8 @@ const ConfirmDeleteDialog: React.FC<ConfirmDeleteDialogProps> = ({
             confirmButtonText
           )}
         </Button>
-      </div>
-    </Dialog>
+      </CustomDialogActions>
+    </CustomDialog>
   );
 };
 
