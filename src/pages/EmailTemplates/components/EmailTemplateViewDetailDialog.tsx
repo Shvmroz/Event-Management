@@ -9,7 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { X, Mail, Info, Code, Calendar, User } from "lucide-react";
+import { Mail, Info, Code, Calendar, User } from "lucide-react";
 import { _email_template_detail_view_api } from "@/DAL/emailTemplatesAPI";
 import { useSnackbar } from "notistack";
 import Spinner from "@/components/ui/spinner";

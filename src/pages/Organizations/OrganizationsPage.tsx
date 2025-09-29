@@ -10,7 +10,6 @@ import {
   ExternalLink,
   Calendar,
   Users,
-  DollarSign,
   Building,
 } from "lucide-react";
 import CustomTable, {

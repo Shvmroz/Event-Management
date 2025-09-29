@@ -1,8 +1,7 @@
 import React from "react";
 import SearchableSelect from "@/components/ui/searchable-select";
 import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
-import { Star, CheckCircle, XCircle, CreditCard, Calendar, AlertTriangle } from "lucide-react";
+import {  AlertTriangle } from "lucide-react";
 
 const statusOptions = [
   { value: "all", label: "All Status" },

@@ -20,15 +20,15 @@ const StatusSwitch: React.FC<StatusSwitchProps> = ({
   disabled = false,
 }) => {
   return (
-    <div className={cn('flex bg-gray-50 dark:bg-gray-700 rounded-md p-1 h-10 border border-gray-300 dark:border-gray-600', className)}>
+    <div className={cn('flex dark:bg-gray-700 rounded-md p-0.5 h-10 bg-gray-50', className)}>
       <button
         type="button"
         onClick={() => !disabled && onChange(true)}
         disabled={disabled}
         className={cn(
-          'flex-1 flex items-center justify-center px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 h-full',
+          'flex-1 flex items-center justify-center px-3 py-2 rounded-sm text-sm font-medium transition-all duration-200 h-full',
           value
-            ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
+            ? 'bg-green-100 dark:bg-green-600/30 text-green-700 dark:text-green-400'
             : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200',
           disabled && 'opacity-50 cursor-not-allowed'
         )}
@@ -41,9 +41,9 @@ const StatusSwitch: React.FC<StatusSwitchProps> = ({
         onClick={() => !disabled && onChange(false)}
         disabled={disabled}
         className={cn(
-          'flex-1 flex items-center justify-center px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 h-full',
+          'flex-1 flex items-center justify-center px-3 py-2 rounded-sm text-sm font-medium transition-all duration-200 h-full',
           !value
-            ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400'
+            ? 'bg-red-100 dark:bg-red-600/30 text-red-700 dark:text-red-400'
             : 'text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200',
           disabled && 'opacity-50 cursor-not-allowed'
         )}

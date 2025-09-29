@@ -2,7 +2,7 @@ import React from "react";
 import SearchableSelect from "@/components/ui/searchable-select";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import { CheckCircle, XCircle, Calendar, DollarSign, Globe, MapPin, AlertTriangle } from "lucide-react";
+import { DollarSign, Globe,  AlertTriangle } from "lucide-react";
 
 const statusOptions = [
   { value: "all", label: "All Status" },
@@ -51,7 +51,6 @@ const EventFilters: React.FC<EventFiltersProps> = ({
         <Switch
           checked={paidOnlyFilter}
           onCheckedChange={setPaidOnlyFilter}
-          className="data-[state=checked]:bg-[#0077ED]"
         />
       </div>
 
@@ -65,7 +64,6 @@ const EventFilters: React.FC<EventFiltersProps> = ({
         <Switch
           checked={publicOnlyFilter}
           onCheckedChange={setPublicOnlyFilter}
-          className="data-[state=checked]:bg-[#0077ED]"
         />
       </div>
 

@@ -9,20 +9,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { _add_admin_team_api } from "@/DAL/adminTeamAPI";
-
 import { Switch } from "@/components/ui/switch";
-import {
-  Save,
-  X,
-  Users,
-  Eye,
-  EyeOff,
-  Shield,
-  Plus,
-  Edit,
-  Trash2,
-} from "lucide-react";
-import { useSnackbar } from "notistack";
+import { X, Users, Eye, EyeOff, Shield } from "lucide-react";
 import Spinner from "../../../components/ui/spinner";
 
 interface TeamMemberAddDialogProps {
@@ -225,7 +213,7 @@ const TeamMemberAddDialog: React.FC<TeamMemberAddDialogProps> = ({
               {availableModules.map((module) => (
                 <div
                   key={module}
-                  className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                  className="flex items-center justify-between bg-gray-50 dark:bg-gray-700 p-3 rounded-md h-10"
                 >
                   <div className="flex items-center space-x-2">
                     <Shield className="w-4 h-4 text-blue-600" />
@@ -238,7 +226,6 @@ const TeamMemberAddDialog: React.FC<TeamMemberAddDialogProps> = ({
                     onCheckedChange={(checked) =>
                       handleAccessChange(module, checked)
                     }
-                    className="data-[state=checked]:bg-[#0077ED]"
                   />
                 </div>
               ))}

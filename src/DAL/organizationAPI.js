@@ -60,13 +60,3 @@ export const _edit_organizations_api = async (rowID, data) => {
     return invokeApi(requestObj);
 };
 
-// export const _delete_organizations_api = async (rowID) => {
-//     const requestObj = {
-//         // path: `api/admin/delete_admin_team/${rowID}`,
-//         method: "DELETE",
-//         headers: {
-//             "x-sh-auth": localStorage.getItem("authToken"),
-//         },
-//     };
-//     return invokeApi(requestObj);
-// };

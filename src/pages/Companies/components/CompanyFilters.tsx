@@ -1,8 +1,7 @@
 import React from "react";
 import SearchableSelect from "@/components/ui/searchable-select";
 import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
-import { CheckCircle, XCircle, Building, AlertTriangle } from "lucide-react";
+import {  AlertTriangle } from "lucide-react";
 import { industries } from "@/utils/lists";
 
 const statusOptions = [

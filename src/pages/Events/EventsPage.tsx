@@ -8,13 +8,8 @@ import {
   Edit,
   Trash2,
   MapPin,
-  DollarSign,
-  Users,
-  Clock,
   Globe,
-  CheckCircle,
-  XCircle,
-  Eye,
+  Users, 
 } from "lucide-react";
 import CustomTable, {
   TableHeader,

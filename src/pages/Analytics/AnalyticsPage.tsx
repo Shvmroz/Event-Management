@@ -1,24 +1,23 @@
 import React, { useState } from 'react';
 import AnalyticsSkeleton from '@/components/ui/skeleton/analytics-skeleton';
 import {
-  BarChart3,
+
   Download,
   TrendingUp,
   Calendar,
   Users,
   Building2,
-  Building,
+
   DollarSign,
   CreditCard,
   Activity,
   ArrowUpRight,
   ArrowDownRight,
-  Filter,
+
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import SearchableSelect from '@/components/ui/searchable-select';
-import { Badge } from '@/components/ui/badge';
 import CsvExportDialog from '@/components/ui/csv-export-dialog';
 import {
   BarChart,

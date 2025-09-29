@@ -3,15 +3,7 @@ import {
   Mail,
   Search,
   Filter,
-  Plus,
-  Download,
   Edit,
-  Trash2,
-  Eye,
-  Calendar,
-  User,
-  FileText,
-  Tag,
   EyeIcon,
 } from "lucide-react";
 import CustomTable, {

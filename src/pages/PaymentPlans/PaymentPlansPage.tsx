@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from "react";
 import {
-  CreditCard,
   Search,
   Filter,
   Plus,
   Download,
   Edit,
   Trash2,
-  DollarSign,
   Calendar,
   Users,
   Building,
@@ -38,7 +36,7 @@ import {
 } from "@/DAL/paymentPlanAPI";
 import PaymentPlansAddEditDialog from "./components/PaymentPlansAddEditDialog";
 import PaymentPlanFilters from "./components/PaymentPlanFilters";
-import { formatDate } from "@/utils/dateUtils.js";
+import { formatDateTime } from "@/utils/dateUtils.js";
 
 interface PaymentPlan {
   _id: string;
@@ -251,7 +249,7 @@ const PaymentPlansPage: React.FC = () => {
       label: "Created",
       renderData: (rowData) => (
         <span className="text-gray-600 dark:text-gray-400">
-          {formatDate(rowData.createdAt)}
+          {formatDateTime(rowData.createdAt)}
         </span>
       ),
     },
@@ -477,7 +475,6 @@ const PaymentPlansPage: React.FC = () => {
       </div>
     );
   };
-
 
   const formatCurrency = (amount: number, currency: string) => {
     return new Intl.NumberFormat("en-US", {

@@ -1,9 +1,6 @@
-import { useNavigate } from "react-router-dom";
-import { Home, ArrowLeft, AlertTriangle } from "lucide-react";
 
+import {  AlertTriangle } from "lucide-react";
 export default function NotFoundPage() {
-  const navigate = useNavigate();
-
   return (
     <div className="mt-10 flex items-center justify-center">
       <div className="max-w-sm w-full text-center">

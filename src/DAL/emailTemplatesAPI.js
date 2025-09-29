@@ -46,14 +46,3 @@ export const _email_template_preview_api = async (rowID) => {
     return invokeApi(requestObj);
 };
 
-// export const _edit__email_template_api = async (rowID, data) => {
-//     const requestObj = {
-//         path: `api/events/${rowID}`,
-//         method: "PUT",
-//         headers: {
-//             "x-sh-auth": localStorage.getItem("authToken"),
-//         },
-//         postData: data,
-//     };
-//     return invokeApi(requestObj);
-// };

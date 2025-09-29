@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import ConfigurationSkeleton from '@/components/ui/skeleton/configuration-skeleton';
+import React, { useState } from "react";
+import ConfigurationSkeleton from "@/components/ui/skeleton/configuration-skeleton";
 import {
   CreditCard,
   Save,
@@ -9,14 +9,13 @@ import {
   DollarSign,
   Key,
   Shield,
-  Calendar,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Switch } from '@/components/ui/switch';
-import { cn } from '@/lib/utils';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Switch } from "@/components/ui/switch";
+import { cn } from "@/lib/utils";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 
 interface StripeConfig {
   live_str_pub_key: string;
@@ -37,14 +36,14 @@ const StripeConfigurationPage: React.FC = () => {
     sand_pub: false,
     sand_private: false,
   });
-  
+
   const [originalData] = useState<StripeConfig>({
     live_str_pub_key: "pk_live_51234567890abcdef",
     live_str_private_key: "sk_live_51234567890abcdef",
     sand_str_pub_key: "pk_test_51234567890abcdef",
     sand_str_private_key: "sk_test_51234567890abcdef",
     mode: "live",
-    supportedCurrencies: ["USD", "EUR", "GBP", "CAD"]
+    supportedCurrencies: ["USD"],
   });
 
   const [formData, setFormData] = useState<StripeConfig>(originalData);
@@ -72,29 +71,29 @@ const StripeConfigurationPage: React.FC = () => {
     setIsSaving(true);
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
       setIsEditing(false);
     } catch (error) {
-      console.error('Error saving Stripe configuration:', error);
+      console.error("Error saving Stripe configuration:", error);
     } finally {
       setIsSaving(false);
     }
   };
 
   const toggleKeyVisibility = (keyType: keyof typeof showKeys) => {
-    setShowKeys(prev => ({ ...prev, [keyType]: !prev[keyType] }));
+    setShowKeys((prev) => ({ ...prev, [keyType]: !prev[keyType] }));
   };
 
   const maskKey = (key: string, visible: boolean) => {
     if (visible) return key;
-    return key.substring(0, 8) + '•'.repeat(key.length - 8);
+    return key.substring(0, 8) + "•".repeat(key.length - 8);
   };
 
   const getModeColor = (mode: string) => {
-    return mode === 'live' 
-      ? 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400'
-      : 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400';
+    return mode === "live"
+      ? "bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400"
+      : "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400";
   };
 
   return (
@@ -149,37 +148,34 @@ const StripeConfigurationPage: React.FC = () => {
         </div>
       </div>
 
-         {/* Security Notice */}
-         <Card className="border-yellow-200 dark:border-yellow-800 bg-yellow-50 dark:bg-yellow-900/20">
-        <CardContent className="p-6">
-          <div className="flex items-start space-x-3">
-            <Shield className="w-5 h-5 text-yellow-600 mt-0.5" />
-            <div>
-              <h4 className="font-medium text-yellow-800 dark:text-yellow-200">
-                Security Notice
-              </h4>
-              <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
-                Keep your API keys secure and never share them publicly. Live keys should only be used in production environments.
-              </p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
       {/* Current Mode Display */}
-      <Card>
+      <Card
+        className={cn(
+          formData.mode === "live"
+            ? "bg-green-50 border-green-200 dark:bg-green-900/20 dark:border-green-800"
+            : "bg-yellow-50 border-yellow-200 dark:bg-yellow-900/20 dark:border-yellow-800"
+        )}
+      >
         <CardContent className="p-6">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center space-x-3">
-              <div className="p-2 bg-[#0077ED]/10 rounded-lg">
-                <Shield className="w-5 h-5 text-[#0077ED]" />
+              <div
+                className={cn(
+                  "p-2 rounded-lg",
+                  formData.mode === "live"
+                    ? "bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-400"
+                    : "bg-yellow-100 text-yellow-700 dark:bg-yellow-900 dark:text-yellow-400"
+                )}
+              >
+                <Shield className="w-5 h-5" />
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
                   Current Mode
                 </h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Your Stripe integration is currently running in {formData.mode} mode
+                  Your Stripe integration is currently running in{" "}
+                  {formData.mode} mode
                 </p>
               </div>
             </div>
@@ -187,7 +183,7 @@ const StripeConfigurationPage: React.FC = () => {
               {formData.mode.toUpperCase()}
             </Badge>
           </div>
-          
+
           {/* Mode Toggle */}
           {isEditing && (
             <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
@@ -201,23 +197,33 @@ const StripeConfigurationPage: React.FC = () => {
                   </p>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <span className={cn(
-                    "text-sm font-medium",
-                    formData.mode === 'sandbox' ? 'text-[#0077ED]' : 'text-gray-500'
-                  )}>
+                  <span
+                    className={cn(
+                      "text-sm font-medium",
+                      formData.mode === "sandbox"
+                        ? "text-yellow-900 dark:text-yellow-400"
+                        : "text-gray-500 dark:text-gray-400"
+                    )}
+                  >
                     Sandbox
                   </span>
                   <Switch
-                    checked={formData.mode === 'live'}
-                    onCheckedChange={(checked) => 
-                      setFormData({ ...formData, mode: checked ? 'live' : 'sandbox' })
+                    checked={formData.mode === "live"}
+                    onCheckedChange={(checked) =>
+                      setFormData({
+                        ...formData,
+                        mode: checked ? "live" : "sandbox",
+                      })
                     }
-                    className="data-[state=checked]:bg-[#0077ED] data-[state=unchecked]:bg-yellow-500"
                   />
-                  <span className={cn(
-                    "text-sm font-medium",
-                    formData.mode === 'live' ? 'text-[#0077ED]' : 'text-gray-500'
-                  )}>
+                  <span
+                    className={cn(
+                      "text-sm font-medium",
+                      formData.mode === "live"
+                        ? "text-green-600 dark:text-green-400"
+                        : "text-gray-500 dark:text-gray-400"
+                    )}
+                  >
                     Live
                   </span>
                 </div>
@@ -246,18 +252,31 @@ const StripeConfigurationPage: React.FC = () => {
               <div className="relative">
                 <Key className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <Input
-                  value={isEditing ? formData.live_str_pub_key : maskKey(formData.live_str_pub_key, showKeys.live_pub)}
-                  onChange={(e) => setFormData({ ...formData, live_str_pub_key: e.target.value })}
+                  value={
+                    isEditing
+                      ? formData.live_str_pub_key
+                      : maskKey(formData.live_str_pub_key, showKeys.live_pub)
+                  }
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      live_str_pub_key: e.target.value,
+                    })
+                  }
                   disabled={!isEditing}
                   className="pl-10 pr-12 font-mono text-sm"
                   placeholder="pk_live_..."
                 />
                 <button
                   type="button"
-                  onClick={() => toggleKeyVisibility('live_pub')}
+                  onClick={() => toggleKeyVisibility("live_pub")}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
-                  {showKeys.live_pub ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showKeys.live_pub ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
                 </button>
               </div>
             </div>
@@ -270,18 +289,34 @@ const StripeConfigurationPage: React.FC = () => {
               <div className="relative">
                 <Key className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <Input
-                  value={isEditing ? formData.live_str_private_key : maskKey(formData.live_str_private_key, showKeys.live_private)}
-                  onChange={(e) => setFormData({ ...formData, live_str_private_key: e.target.value })}
+                  value={
+                    isEditing
+                      ? formData.live_str_private_key
+                      : maskKey(
+                          formData.live_str_private_key,
+                          showKeys.live_private
+                        )
+                  }
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      live_str_private_key: e.target.value,
+                    })
+                  }
                   disabled={!isEditing}
                   className="pl-10 pr-12 font-mono text-sm"
                   placeholder="sk_live_..."
                 />
                 <button
                   type="button"
-                  onClick={() => toggleKeyVisibility('live_private')}
+                  onClick={() => toggleKeyVisibility("live_private")}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
-                  {showKeys.live_private ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showKeys.live_private ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
                 </button>
               </div>
             </div>
@@ -305,18 +340,31 @@ const StripeConfigurationPage: React.FC = () => {
               <div className="relative">
                 <Key className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <Input
-                  value={isEditing ? formData.sand_str_pub_key : maskKey(formData.sand_str_pub_key, showKeys.sand_pub)}
-                  onChange={(e) => setFormData({ ...formData, sand_str_pub_key: e.target.value })}
+                  value={
+                    isEditing
+                      ? formData.sand_str_pub_key
+                      : maskKey(formData.sand_str_pub_key, showKeys.sand_pub)
+                  }
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      sand_str_pub_key: e.target.value,
+                    })
+                  }
                   disabled={!isEditing}
                   className="pl-10 pr-12 font-mono text-sm"
                   placeholder="pk_test_..."
                 />
                 <button
                   type="button"
-                  onClick={() => toggleKeyVisibility('sand_pub')}
+                  onClick={() => toggleKeyVisibility("sand_pub")}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
-                  {showKeys.sand_pub ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showKeys.sand_pub ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
                 </button>
               </div>
             </div>
@@ -329,18 +377,34 @@ const StripeConfigurationPage: React.FC = () => {
               <div className="relative">
                 <Key className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <Input
-                  value={isEditing ? formData.sand_str_private_key : maskKey(formData.sand_str_private_key, showKeys.sand_private)}
-                  onChange={(e) => setFormData({ ...formData, sand_str_private_key: e.target.value })}
+                  value={
+                    isEditing
+                      ? formData.sand_str_private_key
+                      : maskKey(
+                          formData.sand_str_private_key,
+                          showKeys.sand_private
+                        )
+                  }
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      sand_str_private_key: e.target.value,
+                    })
+                  }
                   disabled={!isEditing}
                   className="pl-10 pr-12 font-mono text-sm"
                   placeholder="sk_test_..."
                 />
                 <button
                   type="button"
-                  onClick={() => toggleKeyVisibility('sand_private')}
+                  onClick={() => toggleKeyVisibility("sand_private")}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
                 >
-                  {showKeys.sand_private ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showKeys.sand_private ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
                 </button>
               </div>
             </div>
@@ -372,8 +436,6 @@ const StripeConfigurationPage: React.FC = () => {
           </p>
         </CardContent>
       </Card>
-
-   
     </div>
   );
 };

@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/custom-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Download, Calendar, FileText, X, AlertTriangle } from "lucide-react";
+import { Download, FileText, X, AlertTriangle } from "lucide-react";
 
 interface CsvExportDialogProps {
   open: boolean;

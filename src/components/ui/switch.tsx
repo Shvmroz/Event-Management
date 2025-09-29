@@ -1,33 +1,39 @@
-import * as React from 'react';
-import * as SwitchPrimitives from '@radix-ui/react-switch';
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
-import { cn } from '@/lib/utils';
+interface SwitchProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> {
+  checked?: boolean;
+  onCheckedChange?: (checked: boolean) => void;
+}
 
-const Switch = React.forwardRef<
-  React.ElementRef<typeof SwitchPrimitives.Root>,
-  React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root>
->(({ className, ...props }, ref) => (
-  <SwitchPrimitives.Root
-    className={cn(
-      'peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors ' +
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background ' +
-        'disabled:cursor-not-allowed disabled:opacity-50 ' +
-        'data-[state=checked]:bg-primary ' +
-        'data-[state=unchecked]:bg-gray-300 dark:data-[state=unchecked]:bg-gray-600',
-      className
-    )}
-    {...props}
-    ref={ref}
-  >
-    <SwitchPrimitives.Thumb
-      className={cn(
-        'pointer-events-none block h-5 w-5 rounded-full shadow-lg ring-0 transition-transform ' +
-          'bg-white dark:bg-gray-200 ' + // <-- thumb color for light and dark
-          'data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0'
-      )}
-    />
-  </SwitchPrimitives.Root>
-));
-Switch.displayName = SwitchPrimitives.Root.displayName;
+const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
+  ({ className, checked, onCheckedChange, ...props }, ref) => (
+    <label className="relative inline-flex items-center cursor-pointer">
+      <input
+        type="checkbox"
+        ref={ref}
+        className="sr-only peer"
+        checked={checked}
+        onChange={(e) => onCheckedChange?.(e.target.checked)}
+        {...props}
+      />
+      <div
+        className={cn(
+          "h-6 w-11 rounded-full transition-colors relative",
+          "bg-gray-300 dark:bg-gray-600 peer-checked:bg-[#0077ED]",
+          "after:content-[''] after:absolute after:top-[2px] after:left-[2px]",
+          "after:h-5 after:w-5 after:rounded-full after:bg-white dark:after:bg-gray-200",
+          "after:transition-transform after:shadow-lg",
+          "peer-checked:after:translate-x-5",
+          "disabled:cursor-not-allowed disabled:opacity-50",
+          className
+        )}
+      />
+    </label>
+  )
+);
+
+Switch.displayName = "Switch";
 
 export { Switch };

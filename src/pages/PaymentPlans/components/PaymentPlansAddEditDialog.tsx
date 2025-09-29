@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/custom-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-// import QuillEditor from "@/components/ui/quillEditor/quillEditor";
 const QuillEditor = lazy(
   () => import("@/components/ui/quillEditor/quillEditor")
 );
@@ -296,7 +295,7 @@ const PaymentPlansAddEditDialog: React.FC<PaymentPlansAddEditDialogProps> = ({
               <label className="block text-sm font-medium mb-2">
                 Plan Visibility
               </label>
-              <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-800 p-3 rounded-lg h-10">
+              <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-700 p-3 rounded-md h-10">
                 <span className="text-sm text-gray-600 dark:text-gray-400">
                   Popular Plan
                 </span>
@@ -305,7 +304,6 @@ const PaymentPlansAddEditDialog: React.FC<PaymentPlansAddEditDialogProps> = ({
                   onCheckedChange={(checked) =>
                     setFormData({ ...formData, is_popular: checked })
                   }
-                  className="data-[state=checked]:bg-[#0077ED]"
                 />
               </div>
             </div>

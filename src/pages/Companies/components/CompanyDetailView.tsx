@@ -5,15 +5,13 @@ import {
   DollarSign,
   Users,
   Globe,
-  X,
   Mail,
   Phone,
   MapPin,
-  QrCode,
   Facebook,
   Twitter,
   Linkedin,
-  Info,
+  
   Briefcase,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";

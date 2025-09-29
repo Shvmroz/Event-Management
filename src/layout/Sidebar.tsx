@@ -9,7 +9,6 @@ import {
   Settings,
   Home,
   Building,
-  Cog,
   CreditCard,
   Mail,
   Receipt,
@@ -129,7 +128,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             alt="ExiBy Logo" 
             className="w-8 h-8 object-contain"
           />
-          <h1 className="text-blue-500 dark:text-white text-3xl font-extrabold leading-tight mt-1">
+          <h1 className=" text-gray-900 dark:text-white text-2xl font-extrabold leading-tight mt-1">
             EXIBY
           </h1>
         </div>

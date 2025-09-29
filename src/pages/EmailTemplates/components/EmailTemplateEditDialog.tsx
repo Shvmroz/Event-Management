@@ -8,10 +8,9 @@ import {
 } from "@/components/ui/custom-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import SearchableSelect from "@/components/ui/searchable-select";
 import StatusSwitch from "@/components/ui/status-switch";
-import { Save, X, Eye } from "lucide-react";
+import { Save, X } from "lucide-react";
 import QuillEditor from "@/components/ui/quillEditor/quillEditor";
 
 const templateTypes = [

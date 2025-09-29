@@ -7,8 +7,6 @@ import {
   Users,
   DollarSign,
   ExternalLink,
-  X,
-  Activity,
   Info,
   AlertTriangle,
 } from "lucide-react";

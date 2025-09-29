@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect } from "react";
-import { User, Mail, Save, Pencil, Image as ImageIcon, Trash } from "lucide-react";
+import { User, Mail, Pencil, Image as ImageIcon, Trash } from "lucide-react";
 import { _update_admin_profile_api } from "@/DAL/authAPI";
 import { useSnackbar } from "notistack";
 import Spinner from "../../components/ui/spinner";

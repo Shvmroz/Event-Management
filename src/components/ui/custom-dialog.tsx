@@ -4,7 +4,6 @@ import {
   DialogTitle as MuiDialogTitle,
   DialogContent as MuiDialogContent,
   DialogActions as MuiDialogActions,
-  IconButton,
   SxProps,
   Theme,
 } from "@mui/material";
@@ -106,19 +105,16 @@ const CustomDialogTitle: React.FC<CustomDialogTitleProps> = ({
     >
       <div className="flex-1">{children}</div>
       {showCloseButton && onClose && (
-        <IconButton
-          onClick={onClose}
-          size="small"
-          sx={{
-            color: darkMode ? "#9ca3af" : "#6b7280",
-            "&:hover": {
-              backgroundColor: darkMode ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.04)",
-              color: darkMode ? "#ffffff" : "#111827",
-            },
-          }}
-        >
-          <X className="w-5 h-5" />
-        </IconButton>
+      <button
+      onClick={onClose}
+      className={`
+        p-1 rounded-full transition-colors
+        ${darkMode ? "text-gray-400 hover:bg-white/10 hover:text-white" : "text-gray-500 hover:bg-black/5 hover:text-gray-900"}
+      `}
+    >
+      <X className="w-6 h-6" />
+    </button>
+    
       )}
     </MuiDialogTitle>
   );

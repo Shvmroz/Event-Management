@@ -9,13 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import {
-  Save,
-  X,
-  Shield,
-  ImageIcon,
-  Trash,
-} from "lucide-react";
+import { Save, X, Shield, ImageIcon, Trash } from "lucide-react";
 import StatusSwitch from "@/components/ui/status-switch";
 import {
   deleteFileFunction,
@@ -23,7 +17,6 @@ import {
 } from "@/utils/fileUploadRemoveFunctions";
 import { s3baseUrl } from "@/config/config";
 import { useSnackbar } from "notistack";
-import { Badge } from "@mui/material";
 
 interface TeamMember {
   _id: string;
@@ -345,7 +338,7 @@ const TeamMemberEditDialog: React.FC<TeamMemberEditDialogProps> = ({
               {availableModules.map((module) => (
                 <div
                   key={module}
-                  className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                  className="flex items-center justify-between bg-gray-50 dark:bg-gray-700 p-3 rounded-md h-10"
                 >
                   <div className="flex items-center space-x-2">
                     <Shield className="w-4 h-4 text-blue-600" />
@@ -358,7 +351,6 @@ const TeamMemberEditDialog: React.FC<TeamMemberEditDialogProps> = ({
                     onCheckedChange={(checked) =>
                       handleAccessChange(module, checked)
                     }
-                    className="data-[state=checked]:bg-[#0077ED]"
                   />
                 </div>
               ))}

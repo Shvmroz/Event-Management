@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Bell,
   Calendar,
@@ -9,8 +9,6 @@ import {
   CheckCircle,
   Info,
   X,
-  Check,
-  CheckCheck,
   MailOpen,
   Mail,
 } from "lucide-react";

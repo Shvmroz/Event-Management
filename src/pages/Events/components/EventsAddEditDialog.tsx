@@ -481,7 +481,7 @@ const EventsAddEditDialog: React.FC<EventsAddEditDialogProps> = ({
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Event Type
                 </label>
-                <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-800 p-3 rounded-lg h-10">
+                <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-700 p-3 rounded-md h-10">
                   <span className="text-sm text-gray-600 dark:text-gray-400">
                     {formData.isPaidEvent ? "Paid Event" : "Free Event"}
                   </span>
@@ -490,7 +490,6 @@ const EventsAddEditDialog: React.FC<EventsAddEditDialogProps> = ({
                     onCheckedChange={(checked) =>
                       setFormData({ ...formData, isPaidEvent: checked })
                     }
-                    className="data-[state=checked]:bg-[#0077ED]"
                   />
                 </div>
               </div>
@@ -500,7 +499,7 @@ const EventsAddEditDialog: React.FC<EventsAddEditDialogProps> = ({
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   Event Visibility
                 </label>
-                <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-800 p-3 rounded-lg h-10">
+                <div className="flex items-center justify-between bg-gray-50 dark:bg-gray-700 p-3 rounded-md h-10">
                   <span className="text-sm text-gray-600 dark:text-gray-400">
                     {formData.is_public ? "Public Event" : "Private Event"}
                   </span>
@@ -509,7 +508,6 @@ const EventsAddEditDialog: React.FC<EventsAddEditDialogProps> = ({
                     onCheckedChange={(checked) =>
                       setFormData({ ...formData, is_public: checked })
                     }
-                    className="data-[state=checked]:bg-[#0077ED]"
                   />
                 </div>
               </div>

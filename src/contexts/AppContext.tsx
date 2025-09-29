@@ -181,11 +181,6 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
       enqueueSnackbar("Logged out successfully", { variant: "success" });
       return { success: true };
     } else {
-      localStorage.removeItem("authToken");
-      localStorage.removeItem("userData");
-      setUser(null);
-      setIsAuthenticated(false);
-      navigate("/login");
       enqueueSnackbar(result?.message || "Logout failed", { variant: "error" });
       return { success: false };
     }

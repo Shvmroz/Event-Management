@@ -16,8 +16,8 @@ interface QuillEditorProps {
 const ReactQuill = lazy(() => import('react-quill'));
 
 const QuillEditor: React.FC<QuillEditorProps> = ({
-  value = '',                  // default empty string
-  onChange = () => {},          // default noop
+  value = '', 
+  onChange = () => {},
   placeholder = 'Enter description...',
   disabled = false,
   className = '',

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  Users,
   Search,
   Filter,
   Plus,
@@ -35,7 +34,6 @@ import {
 import { useSnackbar } from "notistack";
 import { s3baseUrl } from "@/config/config";
 import TeamMemberEditDialog from "./components/TeamMemberEditDialog";
-
 import ChangePasswordDialog from "./components/ChangePasswordDialog";
 import TeamFilters from "./components/TeamFilters";
 import TeamMemberAddDialog from "./components/TeamMemberAddDialog";

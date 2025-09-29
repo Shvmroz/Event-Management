@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Building2,
   Globe,
@@ -6,18 +6,18 @@ import {
   Users,
   DollarSign,
   Building,
-  X,
+
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   CustomDialog,
   CustomDialogTitle,
   CustomDialogContent,
   CustomDialogActions,
 } from "@/components/ui/custom-dialog";
-import { useAppContext } from "@/contexts/AppContext";
+
 import { _organization_detail_view_api } from "@/DAL/organizationAPI";
 import { useSnackbar } from "notistack";
 import Spinner from "../../../components/ui/spinner";
@@ -34,7 +34,7 @@ const OrganizationDetailView = ({
   organizationId,
 }: OrganizationDetailViewProps) => {
   const { enqueueSnackbar } = useSnackbar();
-  const { darkMode } = useAppContext();
+
   const [organization, setOrganization] = useState<any | null>(null);
   const [loading, setLoading] = useState(false);
 
