@@ -9,7 +9,7 @@ import {
   Trash2,
   MapPin,
   Globe,
-  Users, 
+  Users,
 } from "lucide-react";
 import CustomTable, {
   TableHeader,
@@ -17,7 +17,6 @@ import CustomTable, {
 } from "@/components/ui/custom-table";
 import ConfirmDeleteDialog from "@/components/ui/confirm-delete-dialog";
 import CustomDrawer from "@/components/ui/custom-drawer";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import CsvExportDialog from "@/components/ui/csv-export-dialog";
 import { Badge } from "@/components/ui/badge";
@@ -32,6 +31,7 @@ import {
   _events_list_api,
 } from "@/DAL/eventAPI";
 import { formatDate, formatDateTime } from "@/utils/dateUtils.js";
+import Button from "@/components/ui/custom-button";
 
 export interface Event {
   _id: string;
@@ -369,7 +369,6 @@ const EventsPage: React.FC = () => {
     );
   };
 
-
   const formatCurrency = (amount: number, currency: string) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -444,7 +443,7 @@ const EventsPage: React.FC = () => {
       renderData: (event) => (
         <div className="space-y-1">
           <div className="text-sm text-red-600 dark:text-red-400 font-medium">
-           {formatDate(event.registration_deadline)}
+            {formatDate(event.registration_deadline)}
           </div>
         </div>
       ),
@@ -486,15 +485,15 @@ const EventsPage: React.FC = () => {
         <div className="flex items-center space-x-3">
           <Button
             onClick={() => setExportDialog(true)}
-            variant="outline"
-            className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+            variant="outlined"
           >
             <Download className="w-4 h-4 mr-2" />
             Export CSV
           </Button>
           <Button
             onClick={() => setCreateDialog(true)}
-            className="bg-[#0077ED] hover:bg-[#0066CC] text-white"
+            variant="contained"
+            color="primary"
           >
             <Plus className="w-4 h-4 mr-2" />
             Add Event
@@ -516,35 +515,21 @@ const EventsPage: React.FC = () => {
                   className="pl-10 pr-24"
                 />
               </div>
-              {filtersApplied?.search && filtersApplied.search !== "" ? (
-                <Button
-                  onClick={() => {
-                    setSearchQuery("");
-                    setCurrentPage(1);
-                    getListEvents("");
-                  }}
-                  variant="outline"
-                  className="absolute right-0 top-1/2 transform -translate-y-1/2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  Clear
-                </Button>
-              ) : (
-                <Button
-                  onClick={handleSearch}
-                  disabled={searchQuery === ""}
-                  variant="outline"
-                  className="absolute right-0 top-1/2 transform -translate-y-1/2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  Search
-                </Button>
-              )}
+              <Button
+                onClick={handleSearch}
+                disabled={searchQuery === ""}
+                variant="outlined"
+                className="absolute right-0 top-1/2 transform -translate-y-1/2"
+              >
+                Search
+              </Button>
             </div>
           </div>
           <div className="flex items-center space-x-3">
             <Button
               onClick={() => setFilterDrawerOpen(true)}
-              variant="outline"
-              className="relative border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+              variant="outlined"
+              className="relative"
             >
               <Filter className="w-4 h-4 mr-2" />
               Filters

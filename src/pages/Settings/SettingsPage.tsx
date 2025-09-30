@@ -1,13 +1,9 @@
-import React, { lazy, Suspense, useState } from "react";
+import React, { Suspense, useState } from "react";
 import SettingsSkeleton from "@/components/ui/skeleton/settings-skeleton";
-import { Shield, Save, Edit, FileText, Scale, Calendar } from "lucide-react";
-import { Button } from "@/components/ui/button";
-const QuillEditor = lazy(
-  () => import("@/components/ui/quillEditor/quillEditor")
-);
+import {  Save, Edit, FileText, Scale } from "lucide-react";
+import QuillEditor from "@/components/ui/quillEditor/quillEditor";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { formatDate } from "@/utils/dateUtils.js";
+import Button from "@/components/ui/custom-button";
 
 interface LegalSettings {
   privacy_policy: string;
@@ -16,9 +12,10 @@ interface LegalSettings {
 }
 
 const SettingsPage: React.FC = () => {
-  const [isEditing, setIsEditing] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState("privacy");
+  const [isEditingPrivacy, setIsEditingPrivacy] = useState(false);
+  const [isEditingTerms, setIsEditingTerms] = useState(false);
+  const [isSavingPrivacy, setIsSavingPrivacy] = useState(false);
+  const [isSavingTerms, setIsSavingTerms] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const [originalData] = useState<LegalSettings>({
@@ -95,17 +92,26 @@ const SettingsPage: React.FC = () => {
     return <SettingsSkeleton />;
   }
 
-  const handleEdit = () => {
-    setIsEditing(true);
+  const handleEditPrivacy = () => {
+    setIsEditingPrivacy(true);
   };
 
-  const handleCancel = () => {
+  const handleEditTerms = () => {
+    setIsEditingTerms(true);
+  };
+
+  const handleCancelPrivacy = () => {
     setFormData(originalData);
-    setIsEditing(false);
+    setIsEditingPrivacy(false);
   };
 
-  const handleSave = async () => {
-    setIsSaving(true);
+  const handleCancelTerms = () => {
+    setFormData(originalData);
+    setIsEditingTerms(false);
+  };
+
+  const handleSavePrivacy = async () => {
+    setIsSavingPrivacy(true);
     try {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1500));
@@ -117,11 +123,32 @@ const SettingsPage: React.FC = () => {
       };
 
       setFormData(updatedData);
-      setIsEditing(false);
+      setIsEditingPrivacy(false);
     } catch (error) {
-      console.error("Error saving legal settings:", error);
+      console.error("Error saving privacy policy:", error);
     } finally {
-      setIsSaving(false);
+      setIsSavingPrivacy(false);
+    }
+  };
+
+  const handleSaveTerms = async () => {
+    setIsSavingTerms(true);
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      // Update the updated_at timestamp
+      const updatedData = {
+        ...formData,
+        updated_at: new Date().toISOString(),
+      };
+
+      setFormData(updatedData);
+      setIsEditingTerms(false);
+    } catch (error) {
+      console.error("Error saving terms & conditions:", error);
+    } finally {
+      setIsSavingTerms(false);
     }
   };
 
@@ -138,125 +165,148 @@ const SettingsPage: React.FC = () => {
             Configure your privacy policy and terms & conditions
           </p>
         </div>
-        <div className="flex items-center space-x-3">
-          {!isEditing ? (
-            <Button
-              onClick={handleEdit}
-              className="bg-[#0077ED] hover:bg-[#0066CC] text-white"
-            >
-              <Edit className="w-4 h-4 mr-2" />
-              Edit Settings
-            </Button>
-          ) : (
-            <div className="flex space-x-2">
-              <Button
-                variant="outline"
-                onClick={handleCancel}
-                disabled={isSaving}
-              >
-                Cancel
-              </Button>
-              <Button
-                onClick={handleSave}
-                disabled={isSaving}
-                className="bg-[#0077ED] hover:bg-[#0066CC] text-white"
-              >
-                {isSaving ? (
-                  <div className="flex items-center">
-                    <div className="animate-spin rounded-full h-4 w-4 border-2 border-white/30 border-t-2 border-t-white mr-2"></div>
-                    Saving...
-                  </div>
-                ) : (
-                  <>
-                    <Save className="w-4 h-4 mr-2" />
-                    Save Changes
-                  </>
-                )}
-              </Button>
-            </div>
-          )}
-        </div>
       </div>
 
-      {/* Legal Documents Editor */}
+      {/* Privacy Policy Section */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center text-lg">
-            <Shield className="w-5 h-5 mr-2 text-[#0077ED]" />
-            Legal Documents
+            <FileText className="w-5 h-5 mr-2 text-[#0077ED]" />
+            Privacy Policy
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <Tabs
-            value={activeTab}
-            onValueChange={setActiveTab}
-            className="space-y-6"
-          >
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger
-                value="privacy"
-                className="flex items-center space-x-2"
-              >
-                <FileText className="w-4 h-4" />
-                <span>Privacy Policy</span>
-              </TabsTrigger>
-              <TabsTrigger
-                value="terms"
-                className="flex items-center space-x-2"
-              >
-                <Scale className="w-4 h-4" />
-                <span>Terms & Conditions</span>
-              </TabsTrigger>
-            </TabsList>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                Privacy Policy Content
+              </label>
+              <QuillEditor
+                value={formData.privacy_policy}
+                onChange={(value) =>
+                  setFormData({ ...formData, privacy_policy: value })
+                }
+                placeholder="Enter your privacy policy content..."
+                disabled={!isEditingPrivacy}
+                rows={16}
+              />
+            </div>
 
-            <TabsContent value="privacy" className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-                  Privacy Policy Content
-                </label>
-                <Suspense fallback={<div>Loading editor...</div>}>
-                  <QuillEditor
-                    value={formData.privacy_policy}
-                    onChange={(value) =>
-                      setFormData({ ...formData, privacy_policy: value })
-                    }
-                    placeholder="Enter your privacy policy content..."
-                    disabled={!isEditing}
-                    rows={16}
-                  />
-                </Suspense>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="terms" className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-                  Terms & Conditions Content
-                </label>
-                <Suspense fallback={<div>Loading editor...</div>}>
-                  <QuillEditor
-                    value={formData.terms_conditions}
-                    onChange={(value) =>
-                      setFormData({ ...formData, terms_conditions: value })
-                    }
-                    placeholder="Enter your terms & conditions content..."
-                    disabled={!isEditing}
-                    rows={16}
-                  />
-                </Suspense>
-              </div>
-            </TabsContent>
-          </Tabs>
-
-          {/* Last Updated Info */}
-          <div className="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-            <div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
-              <Calendar className="w-4 h-4" />
-              <span>Last updated: {formatDate(formData.updated_at)}</span>
+            {/* Privacy Policy Action Buttons */}
+            <div className="flex justify-end space-x-2 pt-4 border-t border-gray-200 dark:border-gray-700">
+              {!isEditingPrivacy ? (
+                <Button
+                  onClick={handleEditPrivacy}
+                  variant="contained"
+                  color="primary"
+                >
+                  <Edit className="w-4 h-4 mr-2" />
+                  Edit Privacy Policy
+                </Button>
+              ) : (
+                <div className="flex space-x-2">
+                  <Button
+                    variant="outlined"
+                    onClick={handleCancelPrivacy}
+                    disabled={isSavingPrivacy}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleSavePrivacy}
+                    disabled={isSavingPrivacy}
+                    variant="contained"
+                  color="primary"
+                  >
+                    {isSavingPrivacy ? (
+                      <div className="flex items-center">
+                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-white/30 border-t-2 border-t-white mr-2"></div>
+                        Saving...
+                      </div>
+                    ) : (
+                      <>
+                        <Save className="w-4 h-4 mr-2" />
+                        Save Privacy Policy
+                      </>
+                    )}
+                  </Button>
+                </div>
+              )}
             </div>
           </div>
         </CardContent>
       </Card>
+
+      {/* Terms & Conditions Section */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center text-lg">
+            <Scale className="w-5 h-5 mr-2 text-[#0077ED]" />
+            Terms & Conditions
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                Terms & Conditions Content
+              </label>
+              <QuillEditor
+                value={formData.terms_conditions}
+                onChange={(value) =>
+                  setFormData({ ...formData, terms_conditions: value })
+                }
+                placeholder="Enter your terms & conditions content..."
+                disabled={!isEditingTerms}
+                rows={16}
+              />
+            </div>
+
+            {/* Terms & Conditions Action Buttons */}
+            <div className="flex justify-end space-x-2 pt-4 border-t border-gray-200 dark:border-gray-700">
+              {!isEditingTerms ? (
+                <Button
+                  onClick={handleEditTerms}
+                   variant="contained"
+                  color="primary"
+                >
+                  <Edit className="w-4 h-4 mr-2" />
+                  Edit Terms & Conditions
+                </Button>
+              ) : (
+                <div className="flex space-x-2">
+                  <Button
+                    variant="outlined"
+                    onClick={handleCancelTerms}
+                    disabled={isSavingTerms}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    onClick={handleSaveTerms}
+                    disabled={isSavingTerms}
+                     variant="contained"
+                  color="primary"
+                  >
+                    {isSavingTerms ? (
+                      <div className="flex items-center">
+                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-white/30 border-t-2 border-t-white mr-2"></div>
+                        Saving...
+                      </div>
+                    ) : (
+                      <>
+                        <Save className="w-4 h-4 mr-2" />
+                        Save Terms & Conditions
+                      </>
+                    )}
+                  </Button>
+                </div>
+              )}
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
     </div>
   );
 };

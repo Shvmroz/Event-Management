@@ -19,7 +19,6 @@ import CustomTable, {
 import ConfirmDeleteDialog from "@/components/ui/confirm-delete-dialog";
 
 import CustomDrawer from "@/components/ui/custom-drawer";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import CsvExportDialog from "@/components/ui/csv-export-dialog";
 import { Badge } from "@/components/ui/badge";
@@ -33,11 +32,11 @@ import {
 } from "@/DAL/adminTeamAPI";
 import { useSnackbar } from "notistack";
 import { s3baseUrl } from "@/config/config";
-import TeamMemberEditDialog from "./components/TeamMemberEditDialog";
+import TeamAddEditDialog from "./components/TeamAddEditDialog";
 import ChangePasswordDialog from "./components/ChangePasswordDialog";
 import TeamFilters from "./components/TeamFilters";
-import TeamMemberAddDialog from "./components/TeamMemberAddDialog";
-import { formatDate } from "@/utils/dateUtils.js";
+import { formatDateTime } from "@/utils/dateUtils.js";
+import Button from "@/components/ui/custom-button";
 
 interface TeamMember {
   _id: string;
@@ -60,8 +59,7 @@ const TeamPage: React.FC = () => {
   const [rowData, setRowData] = useState<TeamMember | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [deleteDialog, setDeleteDialog] = useState(false);
-  const [editDialog, setEditDialog] = useState(false);
-  const [createDialog, setCreateDialog] = useState(false);
+  const [teamMemberDialog, setTeamMemberDialog] = useState(false);
   const [changePasswordDialog, setChangePasswordDialog] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [editLoading, setEditLoading] = useState(false);
@@ -155,7 +153,7 @@ const TeamPage: React.FC = () => {
       label: "Created",
       renderData: (row) => (
         <span className="text-gray-600 dark:text-gray-400">
-          {row.createdAt ? formatDate(row.createdAt) : "-"}
+          {row.createdAt ? formatDateTime(row.createdAt) : "-"}
         </span>
       ),
     },
@@ -197,8 +195,8 @@ const TeamPage: React.FC = () => {
   };
 
   const handleEdit = (member: TeamMember) => {
-    setEditDialog(true);
     setRowData(member);
+    setTeamMemberDialog(true);
   };
 
   const handleSaveEdit = async (data: Partial<TeamMember>) => {
@@ -214,7 +212,7 @@ const TeamPage: React.FC = () => {
         )
       );
       setRowData(null);
-      setEditDialog(false);
+      setTeamMemberDialog(false);
       enqueueSnackbar("Team member updated successfully", {
         variant: "success",
       });
@@ -233,7 +231,7 @@ const TeamPage: React.FC = () => {
 
     if (result?.code === 200) {
       setTeamMembers((prev) => [result.admin, ...prev]);
-      setCreateDialog(false);
+      setTeamMemberDialog(false);
       enqueueSnackbar("Admin member added successfully", {
         variant: "success",
       });
@@ -243,6 +241,21 @@ const TeamPage: React.FC = () => {
         variant: "error",
       });
       setAddLoading(false);
+    }
+  };
+
+  const handleOpenAddDialog = () => {
+    setRowData(null); // Clear rowData for add mode
+    setTeamMemberDialog(true);
+  };
+
+  const handleTeamMemberSave = async (data: Partial<TeamMember>) => {
+    if (rowData) {
+      // Edit mode
+      await handleSaveEdit(data);
+    } else {
+      // Add mode
+      await handleAddNewMember(data);
     }
   };
 
@@ -360,7 +373,6 @@ const TeamPage: React.FC = () => {
     },
   ];
 
-
   const getModuleAccess = (access: string[]) => {
     const moduleLabels: Record<string, string> = {
       dashboard: "Dashboard",
@@ -400,12 +412,12 @@ const TeamPage: React.FC = () => {
   const getStatusBadge = (status: boolean) =>
     status ? (
       <Badge className="bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400 ">
-        <CheckCircle className="w-3 h-3 mr-1" />
+        {/* <CheckCircle className="w-3 h-3 mr-1" /> */}
         Active
       </Badge>
     ) : (
       <Badge className="bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400">
-        <XCircle className="w-3 h-3 mr-1" />
+        {/* <XCircle className="w-3 h-3 mr-1" /> */}
         Inactive
       </Badge>
     );
@@ -427,17 +439,14 @@ const TeamPage: React.FC = () => {
           </p>
         </div>
         <div className="flex items-center space-x-3">
-          <Button
-            onClick={() => setExportDialog(true)}
-            variant="outline"
-            className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-          >
+          <Button onClick={() => setExportDialog(true)} variant="outlined">
             <Download className="w-4 h-4 mr-2" />
             Export CSV
           </Button>
           <Button
-            onClick={() => setCreateDialog(true)}
-            className="bg-[#0077ED] hover:bg-[#0066CC] text-white"
+            onClick={handleOpenAddDialog}
+            variant="contained"
+            color="primary"
           >
             <Plus className="w-4 h-4 mr-2" />
             Add Team Member
@@ -462,35 +471,21 @@ const TeamPage: React.FC = () => {
               </div>
 
               {/* Search Button */}
-              {filtersApplied?.search && filtersApplied.search !== "" ? (
-                <Button
-                  onClick={() => {
-                    setSearchQuery("");
-                    setCurrentPage(1);
-                    getListTeamMembers(""); // reset to no search
-                  }}
-                  variant="outline"
-                  className="absolute right-0 top-1/2 transform -translate-y-1/2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  Clear
-                </Button>
-              ) : (
-                <Button
-                  onClick={handleSearch}
-                  variant="outline"
-                  disabled={searchQuery === ""}
-                  className="absolute right-0 top-1/2 transform -translate-y-1/2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  Search
-                </Button>
-              )}
+              <Button
+                onClick={handleSearch}
+                variant="outlined"
+                disabled={searchQuery === ""}
+                className="absolute right-0 top-1/2 transform -translate-y-1/2"
+              >
+                Search
+              </Button>
             </div>
           </div>
           <div className="flex items-center space-x-3">
             <Button
               onClick={() => setFilterDrawerOpen(true)}
-              variant="outline"
-              className="relative border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+              variant="outlined"
+              className="relative"
             >
               <Filter className="w-4 h-4 mr-2" />
               Filters
@@ -530,33 +525,23 @@ const TeamPage: React.FC = () => {
         }}
         title="Delete Team Member"
         content={`Are you sure you want to delete "${
-          rowData
-            ? `${rowData.first_name} ${rowData.last_name}`
-            : ""
+          rowData ? `${rowData.first_name} ${rowData.last_name}` : ""
         }"?`}
         confirmButtonText="Delete"
         onConfirm={handleConfirmDelete}
         loading={deleteLoading}
       />
 
-      {/* Edit Team Member Dialog */}
-      <TeamMemberEditDialog
-        open={editDialog}
+      {/* Team Member Dialog - Handles both Add and Edit */}
+      <TeamAddEditDialog
+        open={teamMemberDialog}
         onOpenChange={(open) => {
-          setEditDialog(open);
+          setTeamMemberDialog(open);
           if (!open) setRowData(null);
         }}
         member={rowData}
-        onSave={handleSaveEdit}
-        loading={editLoading}
-      />
-
-      {/* Create Team Member Dialog */}
-      <TeamMemberAddDialog
-        open={createDialog}
-        onOpenChange={setCreateDialog}
-        onSave={handleAddNewMember}
-        loading={addLoading}
+        onSave={handleTeamMemberSave}
+        loading={rowData ? editLoading : addLoading}
       />
 
       {/* Change Password Dialog */}

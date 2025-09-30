@@ -6,7 +6,6 @@ import {
   CustomDialogContent,
   CustomDialogActions,
 } from "@/components/ui/custom-dialog";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Mail, Info, Code, Calendar, User } from "lucide-react";
@@ -14,6 +13,7 @@ import { _email_template_detail_view_api } from "@/DAL/emailTemplatesAPI";
 import { useSnackbar } from "notistack";
 import Spinner from "@/components/ui/spinner";
 import { formatDate } from "@/utils/dateUtils.js";
+import Button from "@/components/ui/custom-button";
 
 interface EmailTemplateViewDetailDialogProps {
   open: boolean;
@@ -49,7 +49,6 @@ const EmailTemplateViewDetailDialog: React.FC<
   }, [open, templateId]);
 
   if (!templateId) return null;
-
 
   return (
     <CustomDialog
@@ -88,14 +87,18 @@ const EmailTemplateViewDetailDialog: React.FC<
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-medium mb-1">Template Type</label>
+                    <label className="block font-medium mb-1">
+                      Template Type
+                    </label>
                     <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
                       {templateDetail?.template_type?.replace(/_/g, " ") || "-"}
                     </Badge>
                   </div>
 
                   <div>
-                    <label className="block font-medium mb-1">Template For</label>
+                    <label className="block font-medium mb-1">
+                      Template For
+                    </label>
                     <Badge className="bg-indigo-100 text-indigo-800 dark:bg-indigo-900/20 dark:text-indigo-400">
                       {templateDetail?.template_for || "-"}
                     </Badge>
@@ -104,7 +107,9 @@ const EmailTemplateViewDetailDialog: React.FC<
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div>
-                    <label className="block font-medium mb-1">Active Status</label>
+                    <label className="block font-medium mb-1">
+                      Active Status
+                    </label>
                     <Badge
                       className={
                         templateDetail?.is_active
@@ -226,7 +231,7 @@ const EmailTemplateViewDetailDialog: React.FC<
       </CustomDialogContent>
 
       <CustomDialogActions>
-        <Button onClick={() => onOpenChange(false)} className="text-sm">
+        <Button variant="outlined" onClick={() => onOpenChange(false)}>
           Close
         </Button>
       </CustomDialogActions>

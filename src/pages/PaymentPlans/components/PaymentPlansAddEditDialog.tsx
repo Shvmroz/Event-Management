@@ -6,16 +6,14 @@ import {
   CustomDialogContent,
   CustomDialogActions,
 } from "@/components/ui/custom-dialog";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-const QuillEditor = lazy(
-  () => import("@/components/ui/quillEditor/quillEditor")
-);
+import QuillEditor from "@/components/ui/quillEditor/quillEditor";
 
 import SearchableSelect from "@/components/ui/searchable-select";
 import { Save, X, CreditCard } from "lucide-react";
 import StatusSwitch from "@/components/ui/status-switch";
 import { Switch } from "@/components/ui/switch";
+import Button from "@/components/ui/custom-button";
 
 interface PaymentPlan {
   _id?: string;
@@ -188,7 +186,6 @@ const PaymentPlansAddEditDialog: React.FC<PaymentPlansAddEditDialogProps> = ({
                   setFormData({ ...formData, plan_type: value })
                 }
                 placeholder="Select plan type"
-                
               />
             </div>
 
@@ -204,7 +201,6 @@ const PaymentPlansAddEditDialog: React.FC<PaymentPlansAddEditDialogProps> = ({
                   setFormData({ ...formData, billing_cycle: value })
                 }
                 placeholder="Select billing cycle"
-                
               />
             </div>
 
@@ -314,28 +310,24 @@ const PaymentPlansAddEditDialog: React.FC<PaymentPlansAddEditDialogProps> = ({
             <label className="block text-sm font-medium mb-2">
               Description
             </label>
-            <Suspense fallback={<div>Loading editor...</div>}>
-              <QuillEditor
-                value={formData.description}
-                onChange={(value) =>
-                  setFormData({ ...formData, description: value })
-                }
-                placeholder="Enter plan description"
-                rows={4}
-              />
-            </Suspense>
+            <QuillEditor
+              value={formData.description}
+              onChange={(value) =>
+                setFormData({ ...formData, description: value })
+              }
+              placeholder="Enter plan description"
+              rows={4}
+            />
           </div>
         </form>
       </CustomDialogContent>
 
       <CustomDialogActions>
         <Button
-          type="button"
-          variant="outline"
+          variant="outlined"
           onClick={() => onOpenChange(false)}
           disabled={loading}
         >
-          <X className="w-4 h-4 mr-2" />
           Cancel
         </Button>
         <Button
@@ -344,7 +336,8 @@ const PaymentPlansAddEditDialog: React.FC<PaymentPlansAddEditDialogProps> = ({
           disabled={
             loading || !formData.description.replace(/<[^>]*>/g, "").trim()
           }
-          className="bg-[#0077ED] hover:bg-[#0066CC] text-white"
+          variant="contained"
+          color="primary"
         >
           {loading ? (
             <div className="flex items-center">

@@ -105,20 +105,20 @@ const NotificationsList: React.FC<NotificationsListProps> = ({ onClose }) => {
         </div>
         <div className="flex items-center space-x-2">
           {unreadNotificationsCount > 0 && (
-            <button
+            <span
               onClick={markAllNotificationsAsRead}
-              className="text-xs text-[#0077ED] hover:text-[#0066CC] font-medium"
+              className="text-xs text-[#0077ED] hover:text-[#0066CC] font-medium cursor-pointer"
             >
               Mark all read
-            </button>
+            </span>
           )}
           {onClose && (
-            <button
+            <span
               onClick={onClose}
-              className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+              className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded cursor-pointer"
             >
               <X className="w-4 h-4 text-gray-500" />
-            </button>
+            </span>
           )}
         </div>
       </div>

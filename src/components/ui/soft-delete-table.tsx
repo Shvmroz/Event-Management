@@ -1,11 +1,11 @@
 import React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import SearchableSelect from "@/components/ui/searchable-select";
 import ConfirmDeleteDialog from "@/components/ui/confirm-delete-dialog";
 import { Badge } from "@/components/ui/badge";
 import { RotateCcw, Trash2, Clock, AlertTriangle } from "lucide-react";
 import { formatDate } from "@/utils/dateUtils.js";
+import Button from "./custom-button";
 
 interface SoftDeleteTableProps<T> {
   data: T[];
@@ -41,7 +41,8 @@ function SoftDeleteTable<T extends { _id: string }>({
   pagination,
 }: SoftDeleteTableProps<T>) {
   const [restoreDialog, setRestoreDialog] = React.useState(false);
-  const [permanentDeleteDialog, setPermanentDeleteDialog] = React.useState(false);
+  const [permanentDeleteDialog, setPermanentDeleteDialog] =
+    React.useState(false);
   const [rowData, setRowData] = React.useState<T | null>(null);
 
   const handleRestore = (item: T) => {
@@ -94,10 +95,14 @@ function SoftDeleteTable<T extends { _id: string }>({
     }
   };
 
-
-  const totalPages = Math.ceil(pagination.total_count / pagination.rows_per_page);
+  const totalPages = Math.ceil(
+    pagination.total_count / pagination.rows_per_page
+  );
   const startItem = (pagination.page - 1) * pagination.rows_per_page + 1;
-  const endItem = Math.min(pagination.page * pagination.rows_per_page, pagination.total_count);
+  const endItem = Math.min(
+    pagination.page * pagination.rows_per_page,
+    pagination.total_count
+  );
 
   return (
     <>
@@ -136,12 +141,17 @@ function SoftDeleteTable<T extends { _id: string }>({
                   {data.length === 0 ? (
                     <tr>
                       <td colSpan={5} className="text-center py-12">
-                        <p className="text-gray-500 dark:text-gray-400">{emptyMessage}</p>
+                        <p className="text-gray-500 dark:text-gray-400">
+                          {emptyMessage}
+                        </p>
                       </td>
                     </tr>
                   ) : (
                     data.map((item, index) => (
-                      <tr key={item._id} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                      <tr
+                        key={item._id}
+                        className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
+                      >
                         <td className="px-4 py-4">
                           <span className="text-gray-500 dark:text-gray-400 text-sm">
                             {index + 1}
@@ -199,7 +209,8 @@ function SoftDeleteTable<T extends { _id: string }>({
               <div className="flex items-center justify-between px-6 py-4 border-t border-gray-100 dark:border-gray-700">
                 <div className="flex items-center space-x-2">
                   <span className="text-sm text-gray-700 dark:text-gray-300">
-                    Showing {startItem} to {endItem} of {pagination.total_count} results
+                    Showing {startItem} to {endItem} of {pagination.total_count}{" "}
+                    results
                   </span>
                 </div>
 
@@ -217,19 +228,21 @@ function SoftDeleteTable<T extends { _id: string }>({
                         { value: "100", label: "100" },
                       ]}
                       value={pagination.rows_per_page.toString()}
-                      onChange={(value) => pagination.onRowsPerPageChange(parseInt(value))}
+                      onChange={(value) =>
+                        pagination.onRowsPerPageChange(parseInt(value))
+                      }
                       className="w-20"
-                      
                     />
                   </div>
 
                   <div className="flex items-center space-x-2">
                     <Button
-                      variant="outline"
+                      variant="outlined"
                       size="sm"
-                      onClick={() => pagination.handleChangePage(pagination.page - 1)}
+                      onClick={() =>
+                        pagination.handleChangePage(pagination.page - 1)
+                      }
                       disabled={pagination.page <= 1}
-                      className="text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
                     >
                       <ChevronLeft className="h-4 w-4" />
                     </Button>
@@ -239,11 +252,12 @@ function SoftDeleteTable<T extends { _id: string }>({
                     </span>
 
                     <Button
-                      variant="outline"
+                      variant="outlined"
                       size="sm"
-                      onClick={() => pagination.handleChangePage(pagination.page + 1)}
+                      onClick={() =>
+                        pagination.handleChangePage(pagination.page + 1)
+                      }
                       disabled={pagination.page >= totalPages}
-                      className="text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
                     >
                       <ChevronRight className="h-4 w-4" />
                     </Button>
@@ -263,8 +277,10 @@ function SoftDeleteTable<T extends { _id: string }>({
           if (!open) setRowData(null);
         }}
         title="Restore Item"
-        content={`Are you sure you want to restore "${rowData ? getItemName(rowData) : ""}"? This will move the item back to the active list.`}
-        confirmButtonClass="bg-green-600 hover:bg-green-700 text-white"
+        content={`Are you sure you want to restore "${
+          rowData ? getItemName(rowData) : ""
+        }"? This will move the item back to the active list.`}
+        success={true}
         confirmButtonText="Restore"
         cancelButtonText="Cancel"
         onConfirm={confirmRestore}
@@ -279,7 +295,9 @@ function SoftDeleteTable<T extends { _id: string }>({
           if (!open) setRowData(null);
         }}
         title="Permanent Delete"
-        content={`Are you sure you want to permanently delete "${rowData ? getItemName(rowData) : ""}"? This action cannot be undone and will completely remove all data.`}
+        content={`Are you sure you want to permanently delete "${
+          rowData ? getItemName(rowData) : ""
+        }"? This action cannot be undone and will completely remove all data.`}
         confirmButtonText="Permanently Delete"
         cancelButtonText="Cancel"
         onConfirm={confirmPermanentDelete}

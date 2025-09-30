@@ -1,12 +1,12 @@
 import React from "react";
 import { AlertTriangle } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import {
   CustomDialog,
   CustomDialogTitle,
   CustomDialogContent,
   CustomDialogActions,
 } from "@/components/ui/custom-dialog";
+import Button from "./custom-button";
 
 interface ConfirmDeleteDialogProps {
   open: boolean;
@@ -17,7 +17,7 @@ interface ConfirmDeleteDialogProps {
   cancelButtonText?: string;
   onConfirm: () => void;
   loading?: boolean;
-  confirmButtonClass?: string;
+  success?: boolean;
 }
 
 const ConfirmDeleteDialog: React.FC<ConfirmDeleteDialogProps> = ({
@@ -29,23 +29,18 @@ const ConfirmDeleteDialog: React.FC<ConfirmDeleteDialogProps> = ({
   cancelButtonText = "Cancel",
   onConfirm,
   loading = false,
-  confirmButtonClass,
+  success = false,
 }) => {
   const handleClose = () => {
     if (!loading) onOpenChange(false);
   };
 
   return (
-    <CustomDialog
-      open={open}
-      onClose={handleClose}
-      maxWidth="sm"
-      fullWidth
-    >
+    <CustomDialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
       <CustomDialogTitle onClose={handleClose}>
         <div className="flex items-center space-x-3">
-          <div className="p-2 bg-gray-100 dark:bg-red-600/20 rounded-full">
-            {confirmButtonClass ? (
+          <div className="p-2 bg-gray-100 dark:bg-gray-500/20 rounded-full">
+            {success ? (
               <AlertTriangle className="w-5 h-5 text-green-600 dark:text-green-400" />
             ) : (
               <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400" />
@@ -63,17 +58,17 @@ const ConfirmDeleteDialog: React.FC<ConfirmDeleteDialogProps> = ({
         <Button
           onClick={handleClose}
           disabled={loading}
-          variant="outline"
-          className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+          variant="outlined"
         >
           {cancelButtonText}
         </Button>
         <Button
           onClick={onConfirm}
           disabled={loading}
+          variant="contained"
           className={
-            confirmButtonClass
-              ? confirmButtonClass
+            success
+              ? "bg-green-600 hover:bg-green-700 text-white"
               : "bg-red-600 hover:bg-red-700 text-white"
           }
         >

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense, lazy } from "react";
+import React, { useState, useEffect } from "react";
 import { useAppContext } from "@/contexts/AppContext";
 import {
   CustomDialog,
@@ -6,7 +6,6 @@ import {
   CustomDialogContent,
   CustomDialogActions,
 } from "@/components/ui/custom-dialog";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import SearchableSelect from "@/components/ui/searchable-select";
 import StatusSwitch from "@/components/ui/status-switch";
@@ -14,10 +13,8 @@ import { Switch } from "@/components/ui/switch";
 import { Save, X, Calendar } from "lucide-react";
 import { _organizations_list_api } from "@/DAL/organizationAPI";
 import { useSnackbar } from "notistack";
-import Spinner from "@/components/ui/spinner";
-const QuillEditor = lazy(
-  () => import("@/components/ui/quillEditor/quillEditor")
-);
+import QuillEditor from "@/components/ui/quillEditor/quillEditor";
+import Button from "@/components/ui/custom-button";
 
 interface EventsAddEditDialogProps {
   open: boolean;
@@ -560,16 +557,14 @@ const EventsAddEditDialog: React.FC<EventsAddEditDialogProps> = ({
               <label className="block text-sm font-medium mb-2">
                 Description
               </label>
-              <Suspense fallback={<div>Loading editor...</div>}>
-                <QuillEditor
-                  value={formData.description}
-                  onChange={(value) =>
-                    setFormData({ ...formData, description: value })
-                  }
-                  placeholder="Enter plan description"
-                  rows={4}
-                />
-              </Suspense>
+              <QuillEditor
+                value={formData.description}
+                onChange={(value) =>
+                  setFormData({ ...formData, description: value })
+                }
+                placeholder="Enter plan description"
+                rows={4}
+              />
             </div>
           </div>
         </form>
@@ -577,24 +572,18 @@ const EventsAddEditDialog: React.FC<EventsAddEditDialogProps> = ({
 
       <CustomDialogActions>
         <Button
-          type="button"
-          variant="outline"
+          variant="outlined"
           onClick={() => onOpenChange(false)}
           disabled={loading}
-          style={{
-            backgroundColor: darkMode ? "#374151" : "#f9fafb",
-            color: darkMode ? "#f3f4f6" : "#374151",
-            borderColor: darkMode ? "#4b5563" : "#d1d5db",
-          }}
         >
-          <X className="w-4 h-4 mr-2" />
           Cancel
         </Button>
         <Button
           form="event-form"
           type="submit"
           disabled={loading || !formData.title || !formData.description}
-          className="bg-[#0077ED] hover:bg-[#0066CC] text-white dark:text-white"
+          variant="contained"
+          color="primary"
         >
           {loading ? (
             <div className="flex items-center">

@@ -13,10 +13,9 @@ import {
   Calendar,
   Globe,
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { formatDate } from '@/utils/dateUtils.js';
+import Button from '@/components/ui/custom-button';
 
 interface EmailConfig {
   mailcub_key: string;
@@ -128,7 +127,8 @@ const EmailConfigurationPage: React.FC = () => {
           {!isEditing ? (
             <Button
               onClick={handleEdit}
-              className="bg-[#0077ED] hover:bg-[#0066CC] text-white"
+              color="primary"
+              variant="contained"
             >
               <Edit className="w-4 h-4 mr-2" />
               Edit Configuration
@@ -136,7 +136,7 @@ const EmailConfigurationPage: React.FC = () => {
           ) : (
             <div className="flex space-x-2">
               <Button
-                variant="outline"
+                variant="outlined"
                 onClick={handleCancel}
                 disabled={isSaving}
               >
@@ -145,7 +145,8 @@ const EmailConfigurationPage: React.FC = () => {
               <Button
                 onClick={handleSave}
                 disabled={isSaving}
-                className="bg-[#0077ED] hover:bg-[#0066CC] text-white"
+                 color="primary"
+              variant="contained"
               >
                 {isSaving ? (
                   <div className="flex items-center">
@@ -188,13 +189,12 @@ const EmailConfigurationPage: React.FC = () => {
                   className="pl-10 pr-12 font-mono text-sm"
                   placeholder="mc_live_..."
                 />
-                <button
-                  type="button"
+                <span
                   onClick={() => setShowApiKey(!showApiKey)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
                 >
                   {showApiKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
+                </span>
               </div>
             </div>
 
@@ -282,20 +282,7 @@ const EmailConfigurationPage: React.FC = () => {
             )}
           </div>
 
-          {/* Updated At (Read-only) */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Last Updated
-            </label>
-            <div className="relative">
-              <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <Input
-                value={formatDate(formData.updated_at)}
-                disabled
-                className="pl-10 bg-gray-50 dark:bg-gray-700"
-              />
-            </div>
-          </div>
+
         </CardContent>
       </Card>
 

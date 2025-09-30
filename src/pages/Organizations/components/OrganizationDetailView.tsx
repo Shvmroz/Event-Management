@@ -8,7 +8,6 @@ import {
   Building,
 
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import {
@@ -21,6 +20,7 @@ import {
 import { _organization_detail_view_api } from "@/DAL/organizationAPI";
 import { useSnackbar } from "notistack";
 import Spinner from "../../../components/ui/spinner";
+import Button from "@/components/ui/custom-button";
 
 interface OrganizationDetailViewProps {
   open: boolean;
@@ -352,7 +352,12 @@ const OrganizationDetailView = ({
       </CustomDialogContent>
 
       <CustomDialogActions>
-        <Button onClick={onClose}>Close</Button>
+        <Button
+          onClick={onClose}
+          variant="outlined"
+        >
+          Close
+        </Button>
       </CustomDialogActions>
     </CustomDialog>
   );

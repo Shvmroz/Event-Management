@@ -10,12 +10,12 @@ import {
   Key,
   Shield,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import Button from "@/components/ui/custom-button";
 
 interface StripeConfig {
   live_str_pub_key: string;
@@ -110,17 +110,14 @@ const StripeConfigurationPage: React.FC = () => {
         </div>
         <div className="flex items-center space-x-3">
           {!isEditing ? (
-            <Button
-              onClick={handleEdit}
-              className="bg-[#0077ED] hover:bg-[#0066CC] text-white"
-            >
+            <Button onClick={handleEdit} variant="contained" color="primary">
               <Edit className="w-4 h-4 mr-2" />
               Edit Configuration
             </Button>
           ) : (
             <div className="flex space-x-2">
               <Button
-                variant="outline"
+                variant="contained"
                 onClick={handleCancel}
                 disabled={isSaving}
               >
@@ -129,7 +126,8 @@ const StripeConfigurationPage: React.FC = () => {
               <Button
                 onClick={handleSave}
                 disabled={isSaving}
-                className="bg-[#0077ED] hover:bg-[#0066CC] text-white"
+                variant="contained"
+                color="primary"
               >
                 {isSaving ? (
                   <div className="flex items-center">
@@ -267,17 +265,16 @@ const StripeConfigurationPage: React.FC = () => {
                   className="pl-10 pr-12 font-mono text-sm"
                   placeholder="pk_live_..."
                 />
-                <button
-                  type="button"
+                <span
                   onClick={() => toggleKeyVisibility("live_pub")}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
                 >
                   {showKeys.live_pub ? (
                     <EyeOff className="w-4 h-4" />
                   ) : (
                     <Eye className="w-4 h-4" />
                   )}
-                </button>
+                </span>
               </div>
             </div>
 
@@ -307,17 +304,16 @@ const StripeConfigurationPage: React.FC = () => {
                   className="pl-10 pr-12 font-mono text-sm"
                   placeholder="sk_live_..."
                 />
-                <button
-                  type="button"
+                <span
                   onClick={() => toggleKeyVisibility("live_private")}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
                 >
                   {showKeys.live_private ? (
                     <EyeOff className="w-4 h-4" />
                   ) : (
                     <Eye className="w-4 h-4" />
                   )}
-                </button>
+                </span>
               </div>
             </div>
           </CardContent>
@@ -355,17 +351,16 @@ const StripeConfigurationPage: React.FC = () => {
                   className="pl-10 pr-12 font-mono text-sm"
                   placeholder="pk_test_..."
                 />
-                <button
-                  type="button"
+                <span
                   onClick={() => toggleKeyVisibility("sand_pub")}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer "
                 >
                   {showKeys.sand_pub ? (
                     <EyeOff className="w-4 h-4" />
                   ) : (
                     <Eye className="w-4 h-4" />
                   )}
-                </button>
+                </span>
               </div>
             </div>
 
@@ -395,17 +390,16 @@ const StripeConfigurationPage: React.FC = () => {
                   className="pl-10 pr-12 font-mono text-sm"
                   placeholder="sk_test_..."
                 />
-                <button
-                  type="button"
+                <span
                   onClick={() => toggleKeyVisibility("sand_private")}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
                 >
                   {showKeys.sand_private ? (
                     <EyeOff className="w-4 h-4" />
                   ) : (
                     <Eye className="w-4 h-4" />
                   )}
-                </button>
+                </span>
               </div>
             </div>
           </CardContent>

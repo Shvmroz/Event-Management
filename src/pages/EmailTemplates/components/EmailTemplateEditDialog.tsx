@@ -6,12 +6,12 @@ import {
   CustomDialogContent,
   CustomDialogActions,
 } from "@/components/ui/custom-dialog";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import SearchableSelect from "@/components/ui/searchable-select";
 import StatusSwitch from "@/components/ui/status-switch";
 import { Save, X } from "lucide-react";
 import QuillEditor from "@/components/ui/quillEditor/quillEditor";
+import Button from "@/components/ui/custom-button";
 
 const templateTypes = [
   "welcome",
@@ -65,7 +65,6 @@ const EmailTemplateEditDialog: React.FC<EmailTemplateEditDialogProps> = ({
     is_active: true,
   });
 
-
   useEffect(() => {
     if (template) {
       setFormData({
@@ -111,9 +110,6 @@ const EmailTemplateEditDialog: React.FC<EmailTemplateEditDialogProps> = ({
       variables: extractVariables(content),
     });
   };
-
-
-
 
   return (
     <CustomDialog
@@ -202,12 +198,12 @@ const EmailTemplateEditDialog: React.FC<EmailTemplateEditDialogProps> = ({
               <label className="block text-sm font-medium text-gray-800 dark:text-gray-200 mb-2">
                 Email Content (HTML)
               </label>
-               <QuillEditor
-                 value={formData.content}
-                 onChange={handleContentChange}
-                 placeholder="Enter email content..."
-                 rows={8}
-               />
+              <QuillEditor
+                value={formData.content}
+                onChange={handleContentChange}
+                placeholder="Enter email content..."
+                rows={8}
+              />
             </div>
 
             {/* Variables */}
@@ -227,35 +223,30 @@ const EmailTemplateEditDialog: React.FC<EmailTemplateEditDialogProps> = ({
               </div>
             </div>
 
-             {/* Status */}
-             <div>
-               <label className="block text-sm font-medium text-gray-800 dark:text-gray-200 mb-2">
-                 Template Status
-               </label>
-               <StatusSwitch
-                 value={formData.is_active}
-                 onChange={(value) => setFormData({ ...formData, is_active: value })}
-                 activeLabel="Active"
-                 inactiveLabel="Inactive"
-               />
-             </div>
+            {/* Status */}
+            <div>
+              <label className="block text-sm font-medium text-gray-800 dark:text-gray-200 mb-2">
+                Template Status
+              </label>
+              <StatusSwitch
+                value={formData.is_active}
+                onChange={(value) =>
+                  setFormData({ ...formData, is_active: value })
+                }
+                activeLabel="Active"
+                inactiveLabel="Inactive"
+              />
+            </div>
           </form>
         </div>
       </CustomDialogContent>
 
       <CustomDialogActions>
         <Button
-          type="button"
-          variant="outline"
+          variant="outlined"
           onClick={() => onOpenChange(false)}
           disabled={loading}
-          style={{
-            backgroundColor: darkMode ? "#374151" : "#f9fafb",
-            color: darkMode ? "#f3f4f6" : "#374151",
-            borderColor: darkMode ? "#4b5563" : "#d1d5db",
-          }}
         >
-          <X className="w-4 h-4 mr-2" />
           Cancel
         </Button>
 
@@ -263,7 +254,8 @@ const EmailTemplateEditDialog: React.FC<EmailTemplateEditDialogProps> = ({
           form="template-edit-form"
           type="submit"
           disabled={loading}
-          className="bg-[#0077ED] hover:bg-[#0066CC] text-white dark:text-white"
+          variant="contained"
+          color="primary"
         >
           {loading ? (
             <div className="flex items-center">

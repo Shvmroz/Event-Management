@@ -5,6 +5,7 @@ import { _change_password_api } from "@/DAL/authAPI";
 import Spinner from "../../components/ui/spinner";
 import { Input } from "@/components/ui/input";
 import { useNavigate } from "react-router-dom";
+import Button from "@/components/ui/custom-button";
 
 const ChangePasswordPage: React.FC = () => {
   const navigate = useNavigate();
@@ -107,17 +108,16 @@ const ChangePasswordPage: React.FC = () => {
                     : ""
                 }`}
               />
-              <button
-                type="button"
+              <span
                 onClick={() => setShowOldPassword(!showOldPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
               >
                 {showOldPassword ? (
                   <EyeOff className="w-4 h-4" />
                 ) : (
                   <Eye className="w-4 h-4" />
                 )}
-              </button>
+              </span>
             </div>
             {passwords.oldPassword.length > 0 && !oldPassValid && (
               <p className="text-red-600 text-[12px] mt-1 ms-1">
@@ -147,17 +147,16 @@ const ChangePasswordPage: React.FC = () => {
                     : ""
                 }`}
               />
-              <button
-                type="button"
+              <span
                 onClick={() => setShowNewPassword(!showNewPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
               >
                 {showNewPassword ? (
                   <EyeOff className="w-4 h-4" />
                 ) : (
                   <Eye className="w-4 h-4" />
                 )}
-              </button>
+              </span>
             </div>
             {passwords.newPassword.length > 0 && !newPassValid && (
               <p className="text-red-600 text-[12px] mt-1 ms-1">
@@ -190,17 +189,16 @@ const ChangePasswordPage: React.FC = () => {
                     : ""
                 }`}
               />
-              <button
-                type="button"
+              <span
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
               >
                 {showConfirmPassword ? (
                   <EyeOff className="w-4 h-4" />
                 ) : (
                   <Eye className="w-4 h-4" />
                 )}
-              </button>
+              </span>
             </div>
             {!passwordsMatch && passwords.confirmPassword.length > 0 && (
               <p className="text-red-600 text-[12px] mt-1 ms-1">
@@ -216,18 +214,19 @@ const ChangePasswordPage: React.FC = () => {
 
           {/* Action Button */}
           <div className="flex justify-end">
-            <button
+            <Button
               type="submit"
               disabled={!isFormValid || loading}
-              className="flex items-center space-x-2 px-6 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg font-medium transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
+              variant="contained"
+              color="primary"
             >
               {loading ? (
-                <Spinner size="sm" className="text-white" />
+                <Spinner size="sm" className="text-white mr-2" />
               ) : (
-                <Save className="w-4 h-4" />
+                <Save className="w-4 h-4 mr-2" />
               )}
               <span>Update Password</span>
-            </button>
+            </Button>
           </div>
         </div>
       </form>

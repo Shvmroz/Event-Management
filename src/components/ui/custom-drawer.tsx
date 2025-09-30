@@ -1,8 +1,8 @@
 import React from "react";
 import * as SheetPrimitive from "@radix-ui/react-dialog";
 import { X, RotateCcw, Filter } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import Button from "./custom-button";
 
 interface CustomDrawerProps {
   open: boolean;
@@ -42,7 +42,7 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({
       <SheetPrimitive.Description className="sr-only">
         This drawer contains filter options for the list.
       </SheetPrimitive.Description>
-      
+
       <SheetPrimitive.Portal>
         {/* Overlay */}
         <SheetPrimitive.Overlay
@@ -83,13 +83,7 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({
           <div className="p-4 border-t border-gray-200 dark:border-gray-700">
             <div className="flex flex-col sm:flex-row gap-3 w-full">
               {showClearButton && onClear && (
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={onClear}
-                  disabled={loading}
-                  className="flex-1 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
+                <Button variant="outlined" onClick={onClear} disabled={loading}>
                   {clearButtonIcon && (
                     <span className="mr-2">{clearButtonIcon}</span>
                   )}
@@ -99,10 +93,11 @@ const CustomDrawer: React.FC<CustomDrawerProps> = ({
 
               {showFilterButton && onFilter && (
                 <Button
-                  type="button"
+                  variant="contained"
+                  color="primary"
                   onClick={onFilter}
                   disabled={applyButtonDisabled}
-                  className="flex-1 bg-blue-500 hover:bg-blue-600 text-white"
+                  fullWidth
                 >
                   {loading ? (
                     <div className="flex items-center">

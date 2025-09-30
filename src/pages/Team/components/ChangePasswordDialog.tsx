@@ -1,27 +1,19 @@
-import React, { useState } from 'react';
-import { useAppContext } from '@/contexts/AppContext';
+import React, { useState } from "react";
+import { useAppContext } from "@/contexts/AppContext";
 import {
   CustomDialog,
   CustomDialogTitle,
   CustomDialogContent,
   CustomDialogActions,
-} from '@/components/ui/custom-dialog';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Save, X, Key, Eye, EyeOff, Lock } from 'lucide-react';
-
-interface TeamMember {
-  _id: string;
-  name: string;
-  email: string;
-  role: string;
-  status: boolean;
-}
+} from "@/components/ui/custom-dialog";
+import { Input } from "@/components/ui/input";
+import { Save, Eye, EyeOff, Lock } from "lucide-react";
+import Button from "@/components/ui/custom-button";
 
 interface ChangePasswordDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  member: TeamMember | any;
+  member: any;
   onSave: (data: { new_password: string }) => void;
   loading?: boolean;
 }
@@ -37,75 +29,68 @@ const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
-    newPassword: '',
-    confirmPassword: '',
+    newPassword: "",
+    confirmPassword: "",
   });
   const [errors, setErrors] = useState({
-    newPassword: '',
-    confirmPassword: '',
+    newPassword: "",
+    confirmPassword: "",
   });
 
   const validateForm = () => {
-    const newErrors = { newPassword: '', confirmPassword: '' };
-    
+    const newErrors = { newPassword: "", confirmPassword: "" };
+
     if (formData.newPassword.length < 6) {
-      newErrors.newPassword = 'Password must be at least 6 characters';
+      newErrors.newPassword = "Password must be at least 6 characters";
     }
-    
+
     if (formData.newPassword !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
+      newErrors.confirmPassword = "Passwords do not match";
     }
-    
+
     setErrors(newErrors);
     return !newErrors.newPassword && !newErrors.confirmPassword;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
-    
-    
+
     if (member) {
       let req_data = { new_password: formData.newPassword };
       onSave(req_data); //api call
-  
       // Reset form
       setFormData({
-        newPassword: '',
-        confirmPassword: '',
+        newPassword: "",
+        confirmPassword: "",
       });
-      setErrors({ newPassword: '', confirmPassword: '' });
+      setErrors({ newPassword: "", confirmPassword: "" });
     }
   };
 
   const handleClose = () => {
-    setFormData({ newPassword: '', confirmPassword: '' });
-    setErrors({ newPassword: '', confirmPassword: '' });
+    setFormData({ newPassword: "", confirmPassword: "" });
+    setErrors({ newPassword: "", confirmPassword: "" });
     onOpenChange(false);
   };
 
   return (
-    <CustomDialog 
-      open={open} 
-      onClose={handleClose}
-      maxWidth="sm"
-      fullWidth
-    >
+    <CustomDialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
       <CustomDialogTitle onClose={handleClose}>
-        <div className="flex items-center">
-          <Key className="w-5 h-5 mr-2 text-[#0077ED]" />
-          Change Password - {member?.name}
-        </div>
+        Change Password
       </CustomDialogTitle>
 
       <CustomDialogContent>
-        <div className="space-y-6">
-          <div className="flex items-center space-x-3 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-            <Lock className="w-5 h-5 text-blue-600" />
+        <div className="space-y-4">
+          <div className="flex items-center space-x-3 p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+            <Lock className="w-4 h-4 text-blue-600" />
             <div>
-              <p className="text-sm font-medium text-gray-900 dark:text-white">
-                Password Security
+              <p className="text-sm text-gray-900 dark:text-white">
+                You are changing the password for
+                <b className="ms-1">
+                  {member?.first_name} {member?.last_name}
+                </b>
               </p>
               <p className="text-xs text-gray-600 dark:text-gray-400">
                 Choose a strong password with at least 6 characters
@@ -113,7 +98,11 @@ const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-6" id="change-password-form">
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-6"
+            id="change-password-form"
+          >
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                 New Password *
@@ -121,28 +110,35 @@ const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <Input
-                  type={showNewPassword ? 'text' : 'password'}
+                  type={showNewPassword ? "text" : "password"}
                   value={formData.newPassword}
-                  onChange={(e) => setFormData({ ...formData, newPassword: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, newPassword: e.target.value })
+                  }
                   placeholder="Enter new password"
                   className="pl-10 pr-12"
                   style={{
-                    backgroundColor: darkMode ? '#374151' : '#ffffff',
-                    color: darkMode ? '#ffffff' : '#000000',
-                    borderColor: darkMode ? '#4b5563' : '#d1d5db'
+                    backgroundColor: darkMode ? "#374151" : "#ffffff",
+                    color: darkMode ? "#ffffff" : "#000000",
+                    borderColor: darkMode ? "#4b5563" : "#d1d5db",
                   }}
                   required
                 />
-                <button
-                  type="button"
+                <span
                   onClick={() => setShowNewPassword(!showNewPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
                 >
-                  {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
+                  {showNewPassword ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
+                </span>
               </div>
               {errors.newPassword && (
-                <p className="text-red-500 text-xs mt-1">{errors.newPassword}</p>
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.newPassword}
+                </p>
               )}
             </div>
 
@@ -153,28 +149,38 @@ const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <Input
-                  type={showConfirmPassword ? 'text' : 'password'}
+                  type={showConfirmPassword ? "text" : "password"}
                   value={formData.confirmPassword}
-                  onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      confirmPassword: e.target.value,
+                    })
+                  }
                   placeholder="Confirm new password"
                   className="pl-10 pr-12"
                   style={{
-                    backgroundColor: darkMode ? '#374151' : '#ffffff',
-                    color: darkMode ? '#ffffff' : '#000000',
-                    borderColor: darkMode ? '#4b5563' : '#d1d5db'
+                    backgroundColor: darkMode ? "#374151" : "#ffffff",
+                    color: darkMode ? "#ffffff" : "#000000",
+                    borderColor: darkMode ? "#4b5563" : "#d1d5db",
                   }}
                   required
                 />
-                <button
-                  type="button"
+                <span
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 cursor-pointer"
                 >
-                  {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                </button>
+                  {showConfirmPassword ? (
+                    <EyeOff className="w-4 h-4" />
+                  ) : (
+                    <Eye className="w-4 h-4" />
+                  )}
+                </span>
               </div>
               {errors.confirmPassword && (
-                <p className="text-red-500 text-xs mt-1">{errors.confirmPassword}</p>
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.confirmPassword}
+                </p>
               )}
             </div>
           </form>
@@ -182,24 +188,17 @@ const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({
       </CustomDialogContent>
 
       <CustomDialogActions>
-        <Button
-          type="button"
-          variant="outline"
-          onClick={handleClose}
-          style={{
-            backgroundColor: darkMode ? '#374151' : '#f9fafb',
-            color: darkMode ? '#f3f4f6' : '#374151',
-            borderColor: darkMode ? '#4b5563' : '#d1d5db'
-          }}
-        >
-          <X className="w-4 h-4 mr-2" />
+        <Button variant="outlined" onClick={handleClose}>
           Cancel
         </Button>
         <Button
           form="change-password-form"
           type="submit"
-          disabled={loading || !formData.newPassword || !formData.confirmPassword}
-          className="bg-[#0077ED] hover:bg-[#0066CC] text-white dark:text-white"
+          disabled={
+            loading || !formData.newPassword || !formData.confirmPassword
+          }
+          variant="contained"
+          color="primary"
         >
           {loading ? (
             <div className="flex items-center">

@@ -11,6 +11,7 @@ import {
   User,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import Button from "@/components/ui/custom-button";
 
 // Dummy data matching your API response structure
 const dashboardData = {
@@ -279,130 +280,131 @@ const DashboardPage: React.FC = () => {
 
   return (
     <div className="space-y-8">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
-              Dashboard Overview
-            </h1>
-            <p className="text-gray-600 dark:text-gray-400 mt-2">
-              Monitor your platform performance and key metrics
-            </p>
-          </div>
-          <button
-            onClick={() => navigate("/analytics")}
-            className="hidden sm:flex items-center space-x-2 px-4 py-2 bg-[#0077ED] hover:bg-[#0066CC] text-white rounded-lg font-medium transition-colors shadow-sm"
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            Dashboard Overview
+          </h1>
+          <p className="text-gray-600 dark:text-gray-400 mt-2">
+            Monitor your platform performance and key metrics
+          </p>
+        </div>
+        <Button
+          className="hidden sm:flex space-x-2 items-center"
+          variant="contained"
+          color="primary"
+          onClick={() => navigate("/analytics")}
+        >
+          <TrendingUp className="w-4 h-4" />
+          <span>View Analytics</span>
+        </Button>
+      </div>
+
+
+      {/* Key Metrics */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {metrics.map((metric, i) => (
+          <MetricCard
+            key={i}
+            {...metric}
+            onClick={() => navigate(metric.path)}
+          />
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Top Organizations */}
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col h-[360px]">
+          <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-gray-100 dark:border-gray-700">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+              Top Organizations
+            </h2>
+            <span
+              onClick={() => navigate("/organizations")}
+              className="flex items-center space-x-1 text-blue-500 hover:text-blue-600 text-sm font-medium cursor-pointer"
             >
-            <TrendingUp className="w-4 h-4" />
-            <span>View Analytics</span>
-          </button>
+              <span>View All</span>
+              <ChevronRight className="w-4 h-4" />
+            </span>
+          </div>
+          <div className="flex-1 overflow-auto">
+            <table className="w-full">
+              <thead className="bg-gray-50 dark:bg-gray-700/50 sticky top-0">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
+                    Rank
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
+                    Organization
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
+                    Events
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
+                    Revenue
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                {data.top_organizations.map((org, i) => (
+                  <OrganizationRow
+                    key={org._id}
+                    organization={org}
+                    rank={i + 1}
+                    maxRevenue={maxRevenue}
+                  />
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        {/* Key Metrics */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {metrics.map((metric, i) => (
-            <MetricCard
-              key={i}
-              {...metric}
-              onClick={() => navigate(metric.path)}
-            />
-          ))}
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Top Organizations */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col h-[360px]">
-            <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-gray-100 dark:border-gray-700">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                Top Organizations
-              </h2>
-              <button
-                onClick={() => navigate("/organizations")}
-                className="flex items-center space-x-1 text-[#0077ED] hover:text-[#0066CC] text-sm font-medium"
-              >
-                <span>View All</span>
-                <ChevronRight className="w-4 h-4" />
-              </button>
-            </div>
-            <div className="flex-1 overflow-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50 dark:bg-gray-700/50 sticky top-0">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
-                      Rank
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
-                      Organization
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
-                      Events
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
-                      Revenue
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                  {data.top_organizations.map((org, i) => (
-                    <OrganizationRow
-                      key={org._id}
-                      organization={org}
-                      rank={i + 1}
-                      maxRevenue={maxRevenue}
-                    />
-                  ))}
-                </tbody>
-              </table>
-            </div>
+        {/* Recent Activities */}
+        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col h-[360px]">
+          <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-gray-100 dark:border-gray-700">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+              Recent Activities
+            </h2>
           </div>
 
-          {/* Recent Activities */}
-          <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 flex flex-col h-[360px]">
-            <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-gray-100 dark:border-gray-700">
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
-                Recent Activities
-              </h2>
-            </div>
-
-            {/* Fixed height scrollable content */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-2 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
-              {recentActivities.map((activity, i) => {
-                const style = activityStyles[activity.type];
-                return (
-                  <div
-                    key={i}
-                    className={`flex justify-between items-start p-2 rounded-lg transition-all duration-200 hover:shadow-sm ${style.bg} border border-transparent hover:border-gray-200 dark:hover:border-gray-600`}
-                  >
-                    {/* Left: Icon + Text */}
-                    <div className="flex items-start space-x-2 flex-1 min-w-0">
-                      <div className={`p-1.5 rounded-md ${style.bg}`}>
-                        <style.icon className={`w-4 h-4 ${style.color}`} />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-gray-900 dark:text-white">
-                          {activity.title}
-                        </p>
-                        <p className="text-xs text-gray-600 dark:text-gray-400 truncate">
-                          {activity.description}
-                        </p>
-                      </div>
+          {/* Fixed height scrollable content */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-2 scrollbar-thin scrollbar-thumb-gray-300 dark:scrollbar-thumb-gray-600 scrollbar-track-transparent">
+            {recentActivities.map((activity, i) => {
+              const style = activityStyles[activity.type];
+              return (
+                <div
+                  key={i}
+                  className={`flex justify-between items-start p-2 rounded-lg transition-all duration-200 hover:shadow-sm ${style.bg} border border-transparent hover:border-gray-200 dark:hover:border-gray-600`}
+                >
+                  {/* Left: Icon + Text */}
+                  <div className="flex items-start space-x-2 flex-1 min-w-0">
+                    <div className={`p-1.5 rounded-md ${style.bg}`}>
+                      <style.icon className={`w-4 h-4 ${style.color}`} />
                     </div>
-
-                    {/* Right: Time */}
-                    <div className="flex-shrink-0 ml-2">
-                      <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">
-                        {timeAgo(activity.time)}
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">
+                        {activity.title}
+                      </p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400 truncate">
+                        {activity.description}
                       </p>
                     </div>
                   </div>
-                );
-              })}
-            </div>
+
+                  {/* Right: Time */}
+                  <div className="flex-shrink-0 ml-2">
+                    <p className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+                      {timeAgo(activity.time)}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
- 
-
+    </div>
   );
 };
 

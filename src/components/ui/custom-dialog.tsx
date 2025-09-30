@@ -105,16 +105,19 @@ const CustomDialogTitle: React.FC<CustomDialogTitleProps> = ({
     >
       <div className="flex-1">{children}</div>
       {showCloseButton && onClose && (
-      <button
-      onClick={onClose}
-      className={`
+        <button
+          onClick={onClose}
+          className={`
         p-1 rounded-full transition-colors
-        ${darkMode ? "text-gray-400 hover:bg-white/10 hover:text-white" : "text-gray-500 hover:bg-black/5 hover:text-gray-900"}
+        ${
+          darkMode
+            ? "text-gray-400 hover:bg-white/10 hover:text-white"
+            : "text-gray-500 hover:bg-black/5 hover:text-gray-900"
+        }
       `}
-    >
-      <X className="w-6 h-6" />
-    </button>
-    
+        >
+          <X className="w-6 h-6" />
+        </button>
       )}
     </MuiDialogTitle>
   );

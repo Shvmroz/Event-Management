@@ -19,21 +19,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import SearchableSelect from '@/components/ui/searchable-select';
 import CsvExportDialog from '@/components/ui/csv-export-dialog';
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  LineChart,
-  Line,
-} from 'recharts';
-import { Button } from '@/components/ui/button';
+import Button from '@/components/ui/custom-button';
 
 // Data sets
 const platformStats = {
@@ -149,7 +135,7 @@ const subscriptionsData = {
   ]
 };
 
-const COLORS = ['#0077ED', '#4A9AFF', '#8CC0FF', '#B8D4FF', '#E1EFFF'];
+// COLORS constant removed - no longer needed without charts
 
 const AnalyticsPage: React.FC = () => {
   const [selectedMonth, setSelectedMonth] = useState('2025-08');
@@ -234,8 +220,7 @@ const AnalyticsPage: React.FC = () => {
           <div className="flex items-center space-x-2">
             <Button
               onClick={() => setExportDialog(true)}
-              variant="outline"
-              className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+              variant="outlined"
             >
               <Download className="w-4 h-4 mr-2" />
               Export CSV
@@ -252,88 +237,6 @@ const AnalyticsPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Platform Overview Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-blue-600 dark:text-blue-400 text-sm font-medium">Total Organizations</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {platformStats.total_organizations}
-                </p>
-                <div className="flex items-center mt-2">
-                  {getGrowthIcon(growthMetrics.organizations_growth)}
-                  <span className={`text-sm font-medium ml-1 ${getGrowthColor(growthMetrics.organizations_growth)}`}>
-                    {growthMetrics.organizations_growth}%
-                  </span>
-                </div>
-              </div>
-              <Building2 className="w-8 h-8 text-blue-600" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-purple-600 dark:text-purple-400 text-sm font-medium">Total Events</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {platformStats.total_events}
-                </p>
-                <div className="flex items-center mt-2">
-                  {getGrowthIcon(growthMetrics.events_growth)}
-                  <span className={`text-sm font-medium ml-1 ${getGrowthColor(growthMetrics.events_growth)}`}>
-                    {growthMetrics.events_growth}%
-                  </span>
-                </div>
-              </div>
-              <Calendar className="w-8 h-8 text-purple-600" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-gradient-to-r from-green-50 to-green-100 dark:from-green-900/20 dark:to-green-800/20">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-green-600 dark:text-green-400 text-sm font-medium">Total Users</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {platformStats.total_users.toLocaleString()}
-                </p>
-                <div className="flex items-center mt-2">
-                  {getGrowthIcon(growthMetrics.users_growth)}
-                  <span className={`text-sm font-medium ml-1 ${getGrowthColor(growthMetrics.users_growth)}`}>
-                    {growthMetrics.users_growth}%
-                  </span>
-                </div>
-              </div>
-              <Users className="w-8 h-8 text-green-600" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="bg-gradient-to-r from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-orange-600 dark:text-orange-400 text-sm font-medium">Total Revenue</p>
-                <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                  {formatCurrency(platformStats.total_revenue)}
-                </p>
-                <div className="flex items-center mt-2">
-                  {getGrowthIcon(growthMetrics.revenue_growth)}
-                  <span className={`text-sm font-medium ml-1 ${getGrowthColor(growthMetrics.revenue_growth)}`}>
-                    {growthMetrics.revenue_growth}%
-                  </span>
-                </div>
-              </div>
-              <DollarSign className="w-8 h-8 text-orange-600" />
-            </div>
-          </CardContent>
-        </Card>
-      </div>
 
       {/* Analytics Tabs */}
       <Tabs defaultValue="overview" className="space-y-6">
@@ -348,180 +251,190 @@ const AnalyticsPage: React.FC = () => {
 
         {/* Overview Tab */}
         <TabsContent value="overview" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Monthly Trends Chart */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <TrendingUp className="w-5 h-5 mr-2 text-[#0077ED]" />
-                  Monthly Trends
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={monthlyData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis 
-                      dataKey="month" 
-                      tickFormatter={(value) => formatMonth(value).split(' ')[0]}
-                    />
-                    <YAxis />
-                    <Tooltip 
-                      labelFormatter={(value) => formatMonth(value)}
-                      formatter={(value: any, name: string) => [
-                        name === 'revenue' ? formatCurrency(value) : value.toLocaleString(),
-                        name.charAt(0).toUpperCase() + name.slice(1)
-                      ]}
-                    />
-                    <Line type="monotone" dataKey="organizations" stroke="#0077ED" strokeWidth={2} />
-                    <Line type="monotone" dataKey="events" stroke="#4A9AFF" strokeWidth={2} />
-                    <Line type="monotone" dataKey="users" stroke="#8CC0FF" strokeWidth={2} />
-                  </LineChart>
-                </ResponsiveContainer>
-              </CardContent>
-            </Card>
-
-            {/* Selected Month Stats */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Calendar className="w-5 h-5 mr-2 text-[#0077ED]" />
+           {/* Monthly Performance Stats */}
+           <Card className="border-0 shadow-sm">
+             <CardHeader className="pb-3">
+               <CardTitle className="flex items-center text-lg">
+                 <Calendar className="w-4 h-4 mr-2 text-[#0077ED]" />
                   {formatMonth(selectedMonth)} Performance
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <Building2 className="w-5 h-5 text-blue-600" />
-                      <span className="font-medium">Organizations</span>
+               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+                 <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800/30">
+                   <div className="flex items-center space-x-2">
+                     <Building2 className="w-4 h-4 text-blue-600" />
+                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Organizations</span>
                     </div>
-                    <span className="font-bold text-blue-600">
+                   <span className="text-lg font-bold text-blue-600">
                       {selectedMonthData.organizations || 0}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <Calendar className="w-5 h-5 text-purple-600" />
-                      <span className="font-medium">Events</span>
+                 <div className="flex items-center justify-between p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-100 dark:border-purple-800/30">
+                   <div className="flex items-center space-x-2">
+                     <Calendar className="w-4 h-4 text-purple-600" />
+                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Events</span>
                     </div>
-                    <span className="font-bold text-purple-600">
+                   <span className="text-lg font-bold text-purple-600">
                       {selectedMonthData.events || 0}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <Users className="w-5 h-5 text-green-600" />
-                      <span className="font-medium">Users</span>
+                 <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-100 dark:border-green-800/30">
+                   <div className="flex items-center space-x-2">
+                     <Users className="w-4 h-4 text-green-600" />
+                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Users</span>
                     </div>
-                    <span className="font-bold text-green-600">
+                   <span className="text-lg font-bold text-green-600">
                       {selectedMonthData.users?.toLocaleString() || 0}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <DollarSign className="w-5 h-5 text-orange-600" />
-                      <span className="font-medium">Revenue</span>
+                 <div className="flex items-center justify-between p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-100 dark:border-orange-800/30">
+                   <div className="flex items-center space-x-2">
+                     <DollarSign className="w-4 h-4 text-orange-600" />
+                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Revenue</span>
                     </div>
-                    <span className="font-bold text-orange-600">
+                   <span className="text-lg font-bold text-orange-600">
                       {formatCurrency(selectedMonthData.revenue || 0)}
                     </span>
                   </div>
                 </div>
               </CardContent>
             </Card>
+
+           {/* Growth Metrics */}
+           <Card className="border-0 shadow-sm">
+             <CardHeader className="pb-3">
+               <CardTitle className="flex items-center text-lg">
+                 <TrendingUp className="w-4 h-4 mr-2 text-[#0077ED]" />
+                 Growth Metrics
+               </CardTitle>
+             </CardHeader>
+             <CardContent>
+               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+                 <div className="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800/30">
+                   <div className="text-lg font-bold text-blue-600">
+                     {growthMetrics.organizations_growth}%
           </div>
+                   <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">Organizations Growth</div>
+                 </div>
+                 <div className="text-center p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-100 dark:border-purple-800/30">
+                   <div className="text-lg font-bold text-purple-600">
+                     {growthMetrics.events_growth}%
+                   </div>
+                   <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">Events Growth</div>
+                 </div>
+                 <div className="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-100 dark:border-green-800/30">
+                   <div className="text-lg font-bold text-green-600">
+                     {growthMetrics.users_growth}%
+                   </div>
+                   <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">Users Growth</div>
+                 </div>
+                 <div className="text-center p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-100 dark:border-orange-800/30">
+                   <div className="text-lg font-bold text-orange-600">
+                     {growthMetrics.revenue_growth}%
+                   </div>
+                   <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">Revenue Growth</div>
+                 </div>
+               </div>
+             </CardContent>
+           </Card>
         </TabsContent>
 
         {/* Revenue Tab */}
         <TabsContent value="revenue" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Revenue Breakdown */}
-            <Card className="lg:col-span-2">
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <DollarSign className="w-5 h-5 mr-2 text-[#0077ED]" />
-                  Revenue Trends
+           {/* Revenue Overview */}
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+             <Card className="border-0 shadow-sm">
+               <CardHeader className="pb-3">
+                 <CardTitle className="flex items-center text-sm">
+                   <DollarSign className="w-4 h-4 mr-2 text-green-600" />
+                   Total Revenue
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={revenueData.revenue_by_month}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis 
-                      dataKey="month" 
-                      tickFormatter={(value) => formatMonth(value).split(' ')[0]}
-                    />
-                    <YAxis tickFormatter={(value) => `$${value / 1000}k`} />
-                    <Tooltip 
-                      labelFormatter={(value) => formatMonth(value)}
-                      formatter={(value: any) => [formatCurrency(value), 'Revenue']}
-                    />
-                    <Bar dataKey="subscription_revenue" stackId="a" fill="#0077ED" />
-                    <Bar dataKey="event_fees" stackId="a" fill="#4A9AFF" />
-                  </BarChart>
-                </ResponsiveContainer>
+                 <div className="text-xl font-bold text-green-600">
+                   {formatCurrency(revenueData.total_revenue)}
+                 </div>
+                 <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                   All Time Revenue
+                 </div>
               </CardContent>
             </Card>
 
-            {/* Revenue Stats */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Revenue Breakdown</CardTitle>
+             <Card className="border-0 shadow-sm">
+               <CardHeader className="pb-3">
+                 <CardTitle className="flex items-center text-sm">
+                   <Calendar className="w-4 h-4 mr-2 text-blue-600" />
+                   Monthly Revenue
+                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                    <div className="text-lg font-bold text-green-600">
-                      {formatCurrency(selectedRevenueData.subscription_revenue || 0)}
+                 <div className="text-xl font-bold text-blue-600">
+                   {formatCurrency(revenueData.monthly_revenue)}
                     </div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                 <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                   Current Month
+                 </div>
+               </CardContent>
+             </Card>
+
+             <Card className="border-0 shadow-sm">
+               <CardHeader className="pb-3">
+                 <CardTitle className="flex items-center text-sm">
+                   <CreditCard className="w-4 h-4 mr-2 text-purple-600" />
                       Subscription Revenue
+                 </CardTitle>
+               </CardHeader>
+               <CardContent>
+                 <div className="text-xl font-bold text-purple-600">
+                   {formatCurrency(selectedRevenueData.subscription_revenue || 0)}
                     </div>
+                 <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                   {formatMonth(selectedMonth)}
                   </div>
-                  <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                    <div className="text-lg font-bold text-blue-600">
+               </CardContent>
+             </Card>
+
+             <Card className="border-0 shadow-sm">
+               <CardHeader className="pb-3">
+                 <CardTitle className="flex items-center text-sm">
+                   <Activity className="w-4 h-4 mr-2 text-orange-600" />
+                   Event Fees
+                 </CardTitle>
+               </CardHeader>
+               <CardContent>
+                 <div className="text-xl font-bold text-orange-600">
                       {formatCurrency(selectedRevenueData.event_fees || 0)}
                     </div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
-                      Event Fees
-                    </div>
-                  </div>
-                  <div className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-                    <div className="text-lg font-bold text-purple-600">
-                      {formatCurrency(selectedRevenueData.total || 0)}
-                    </div>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
-                      Total Revenue
-                    </div>
-                  </div>
+                 <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                   {formatMonth(selectedMonth)}
                 </div>
               </CardContent>
             </Card>
           </div>
 
           {/* Top Revenue Organizations */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Top Revenue Organizations</CardTitle>
+           <Card className="border-0 shadow-sm">
+             <CardHeader className="pb-3">
+               <CardTitle className="text-lg">Top Revenue Organizations</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
+               <div className="space-y-2">
                 {revenueData.top_revenue_organizations.map((org, index) => (
-                  <div key={org._id} className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                   <div key={org._id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
                     <div className="flex items-center space-x-3">
-                      <div className="w-8 h-8 bg-gradient-to-r from-[#0077ED] to-[#4A9AFF] rounded-lg flex items-center justify-center text-white font-bold text-sm">
+                       <div className="w-6 h-6 bg-gradient-to-r from-[#0077ED] to-[#4A9AFF] rounded-md flex items-center justify-center text-white font-bold text-xs">
                         {index + 1}
                       </div>
                       <div>
-                        <div className="font-medium text-gray-900 dark:text-white">{org.name}</div>
-                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                         <div className="font-medium text-sm text-gray-900 dark:text-white">{org.name}</div>
+                         <div className="text-xs text-gray-600 dark:text-gray-400">
                           Subscription: {formatCurrency(org.subscription_fees)} | 
                           Commissions: {formatCurrency(org.event_commissions)}
                         </div>
                       </div>
                     </div>
-                    <div className="font-bold text-green-600">
+                     <div className="font-bold text-sm text-green-600">
                       {formatCurrency(org.total_revenue)}
                     </div>
                   </div>
@@ -533,87 +446,130 @@ const AnalyticsPage: React.FC = () => {
 
         {/* Organizations Tab */}
         <TabsContent value="organizations" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Organizations by Plan */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Building2 className="w-5 h-5 mr-2 text-[#0077ED]" />
-                  Organizations by Plan
+           {/* Organization Overview */}
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+             <Card className="border-0 shadow-sm">
+               <CardHeader className="pb-3">
+                 <CardTitle className="flex items-center text-sm">
+                   <Building2 className="w-4 h-4 mr-2 text-blue-600" />
+                   Total Organizations
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <PieChart>
-                    <Pie
-                      data={organizationsData.organizations_by_plan}
-                      cx="50%"
-                      cy="50%"
-                      labelLine={false}
-                      label={({ plan_name, percentage }) => `${plan_name}: ${percentage}%`}
-                      outerRadius={80}
-                      fill="#8884d8"
-                      dataKey="count"
-                    >
-                      {organizationsData.organizations_by_plan.map((entry, index) => (
-                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                      ))}
-                    </Pie>
-                    <Tooltip formatter={(value: any) => [value, 'Organizations']} />
-                  </PieChart>
-                </ResponsiveContainer>
+                 <div className="text-xl font-bold text-blue-600">
+                   {organizationsData.total_organizations}
+                 </div>
+                 <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                   All Organizations
+                 </div>
               </CardContent>
             </Card>
 
-            {/* Monthly Signups */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Monthly Signups</CardTitle>
+             <Card className="border-0 shadow-sm">
+               <CardHeader className="pb-3">
+                 <CardTitle className="flex items-center text-sm">
+                   <Activity className="w-4 h-4 mr-2 text-green-600" />
+                   Active Organizations
+                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={organizationsData.monthly_signups}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis 
-                      dataKey="month" 
-                      tickFormatter={(value) => formatMonth(value).split(' ')[0]}
-                    />
-                    <YAxis />
-                    <Tooltip 
-                      labelFormatter={(value) => formatMonth(value)}
-                      formatter={(value: any) => [value, 'Signups']}
-                    />
-                    <Bar dataKey="signups" fill="#0077ED" />
-                  </BarChart>
-                </ResponsiveContainer>
+                 <div className="text-xl font-bold text-green-600">
+                   {organizationsData.active_organizations}
+                 </div>
+                 <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                   Currently Active
+                 </div>
               </CardContent>
             </Card>
+
+             <Card className="border-0 shadow-sm">
+               <CardHeader className="pb-3">
+                 <CardTitle className="flex items-center text-sm">
+                   <Calendar className="w-4 h-4 mr-2 text-purple-600" />
+                   New Signups
+                 </CardTitle>
+               </CardHeader>
+               <CardContent>
+                 <div className="text-xl font-bold text-purple-600">
+                   {selectedOrganizationsData.signups || 0}
           </div>
+                 <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                   {formatMonth(selectedMonth)}
+                 </div>
+               </CardContent>
+             </Card>
+
+             <Card className="border-0 shadow-sm">
+               <CardHeader className="pb-3">
+                 <CardTitle className="flex items-center text-sm">
+                   <Building2 className="w-4 h-4 mr-2 text-red-600" />
+                   Inactive Organizations
+                 </CardTitle>
+               </CardHeader>
+               <CardContent>
+                 <div className="text-xl font-bold text-red-600">
+                   {organizationsData.inactive_organizations}
+                 </div>
+                 <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                   Inactive
+                 </div>
+               </CardContent>
+             </Card>
+           </div>
+
+           {/* Organizations by Plan */}
+           <Card className="border-0 shadow-sm">
+             <CardHeader className="pb-3">
+               <CardTitle className="text-lg">Organizations by Plan</CardTitle>
+             </CardHeader>
+             <CardContent>
+               <div className="space-y-2">
+                 {organizationsData.organizations_by_plan.map((plan, index) => (
+                   <div key={plan.plan_name} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
+                     <div className="flex items-center space-x-3">
+                       <div className="w-6 h-6 bg-gradient-to-r from-[#0077ED] to-[#4A9AFF] rounded-md flex items-center justify-center text-white font-bold text-xs">
+                         {index + 1}
+                       </div>
+                       <div>
+                         <div className="font-medium text-sm text-gray-900 dark:text-white">{plan.plan_name}</div>
+                         <div className="text-xs text-gray-600 dark:text-gray-400">
+                           {plan.percentage}% of total
+                         </div>
+                       </div>
+                     </div>
+                     <div className="text-lg font-bold text-blue-600">
+                       {plan.count}
+                     </div>
+                   </div>
+                 ))}
+               </div>
+             </CardContent>
+           </Card>
 
           {/* Organization Stats for Selected Month */}
-          <Card>
-            <CardHeader>
-              <CardTitle>{formatMonth(selectedMonth)} Organization Stats</CardTitle>
+           <Card className="border-0 shadow-sm">
+             <CardHeader className="pb-3">
+               <CardTitle className="text-lg">{formatMonth(selectedMonth)} Organization Stats</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                  <div className="text-2xl font-bold text-blue-600">
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                 <div className="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800/30">
+                   <div className="text-lg font-bold text-blue-600">
                     {selectedOrganizationsData.signups || 0}
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">New Signups</div>
+                   <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">New Signups</div>
                 </div>
-                <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                  <div className="text-2xl font-bold text-green-600">
+                 <div className="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-100 dark:border-green-800/30">
+                   <div className="text-lg font-bold text-green-600">
                     {organizationsData.active_organizations}
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">Active Organizations</div>
+                   <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">Active Organizations</div>
                 </div>
-                <div className="text-center p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
-                  <div className="text-2xl font-bold text-red-600">
+                 <div className="text-center p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-100 dark:border-red-800/30">
+                   <div className="text-lg font-bold text-red-600">
                     {organizationsData.inactive_organizations}
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">Inactive Organizations</div>
+                   <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">Inactive Organizations</div>
                 </div>
               </div>
             </CardContent>
@@ -622,102 +578,133 @@ const AnalyticsPage: React.FC = () => {
 
         {/* Events Tab */}
         <TabsContent value="events" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Events by Month */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Calendar className="w-5 h-5 mr-2 text-[#0077ED]" />
-                  Events by Month
+           {/* Event Overview */}
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+             <Card className="border-0 shadow-sm">
+               <CardHeader className="pb-3">
+                 <CardTitle className="flex items-center text-sm">
+                   <Calendar className="w-4 h-4 mr-2 text-blue-600" />
+                   Total Events
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={eventsData.events_by_month}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis 
-                      dataKey="month" 
-                      tickFormatter={(value) => formatMonth(value).split(' ')[0]}
-                    />
-                    <YAxis />
-                    <Tooltip 
-                      labelFormatter={(value) => formatMonth(value)}
-                      formatter={(value: any, name: string) => [
-                        value.toLocaleString(),
-                        name.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())
-                      ]}
-                    />
-                    <Bar dataKey="events_created" fill="#0077ED" />
-                    <Bar dataKey="events_completed" fill="#4A9AFF" />
-                  </BarChart>
-                </ResponsiveContainer>
+                 <div className="text-xl font-bold text-blue-600">
+                   {eventsData.total_events}
+                 </div>
+                 <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                   All Events
+                 </div>
               </CardContent>
             </Card>
 
-            {/* Event Status Overview */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Event Status Overview</CardTitle>
+             <Card className="border-0 shadow-sm">
+               <CardHeader className="pb-3">
+                 <CardTitle className="flex items-center text-sm">
+                   <Activity className="w-4 h-4 mr-2 text-green-600" />
+                   Active Events
+                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <Activity className="w-5 h-5 text-green-600" />
-                      <span className="font-medium">Active Events</span>
+                 <div className="text-xl font-bold text-green-600">
+                   {eventsData.active_events}
                     </div>
-                    <span className="font-bold text-green-600">{eventsData.active_events}</span>
+                 <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                   Currently Active
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <Calendar className="w-5 h-5 text-blue-600" />
-                      <span className="font-medium">Completed Events</span>
+               </CardContent>
+             </Card>
+
+             <Card className="border-0 shadow-sm">
+               <CardHeader className="pb-3">
+                 <CardTitle className="flex items-center text-sm">
+                   <Calendar className="w-4 h-4 mr-2 text-purple-600" />
+                   Completed Events
+                 </CardTitle>
+               </CardHeader>
+               <CardContent>
+                 <div className="text-xl font-bold text-purple-600">
+                   {eventsData.completed_events}
                     </div>
-                    <span className="font-bold text-blue-600">{eventsData.completed_events}</span>
+                 <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                   Successfully Completed
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <Activity className="w-5 h-5 text-red-600" />
-                      <span className="font-medium">Cancelled Events</span>
+               </CardContent>
+             </Card>
+
+             <Card className="border-0 shadow-sm">
+               <CardHeader className="pb-3">
+                 <CardTitle className="flex items-center text-sm">
+                   <Users className="w-4 h-4 mr-2 text-orange-600" />
+                   Avg. Attendees
+                 </CardTitle>
+               </CardHeader>
+               <CardContent>
+                 <div className="text-xl font-bold text-orange-600">
+                   {eventsData.average_attendees}
                     </div>
-                    <span className="font-bold text-red-600">{eventsData.cancelled_events}</span>
+                 <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                   Per Event
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <Users className="w-5 h-5 text-purple-600" />
-                      <span className="font-medium">Avg. Attendees</span>
+               </CardContent>
+             </Card>
                     </div>
-                    <span className="font-bold text-purple-600">{eventsData.average_attendees}</span>
+
+           {/* Event Status Overview */}
+           <Card className="border-0 shadow-sm">
+             <CardHeader className="pb-3">
+               <CardTitle className="text-lg">Event Status Overview</CardTitle>
+             </CardHeader>
+             <CardContent>
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                 <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-100 dark:border-green-800/30">
+                   <div className="flex items-center space-x-2">
+                     <Activity className="w-4 h-4 text-green-600" />
+                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Active Events</span>
+                   </div>
+                   <span className="text-lg font-bold text-green-600">{eventsData.active_events}</span>
+                 </div>
+                 <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800/30">
+                   <div className="flex items-center space-x-2">
+                     <Calendar className="w-4 h-4 text-blue-600" />
+                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Completed Events</span>
+                   </div>
+                   <span className="text-lg font-bold text-blue-600">{eventsData.completed_events}</span>
+                 </div>
+                 <div className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-100 dark:border-red-800/30">
+                   <div className="flex items-center space-x-2">
+                     <Activity className="w-4 h-4 text-red-600" />
+                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Cancelled Events</span>
+                   </div>
+                   <span className="text-lg font-bold text-red-600">{eventsData.cancelled_events}</span>
                   </div>
                 </div>
               </CardContent>
             </Card>
-          </div>
 
           {/* Selected Month Event Stats */}
-          <Card>
-            <CardHeader>
-              <CardTitle>{formatMonth(selectedMonth)} Event Performance</CardTitle>
+           <Card className="border-0 shadow-sm">
+             <CardHeader className="pb-3">
+               <CardTitle className="text-lg">{formatMonth(selectedMonth)} Event Performance</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-                  <div className="text-2xl font-bold text-purple-600">
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                 <div className="text-center p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-100 dark:border-purple-800/30">
+                   <div className="text-lg font-bold text-purple-600">
                     {selectedEventsData.events_created || 0}
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">Events Created</div>
+                   <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">Events Created</div>
                 </div>
-                <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                  <div className="text-2xl font-bold text-green-600">
+                 <div className="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-100 dark:border-green-800/30">
+                   <div className="text-lg font-bold text-green-600">
                     {selectedEventsData.events_completed || 0}
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">Events Completed</div>
+                   <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">Events Completed</div>
                 </div>
-                <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                  <div className="text-2xl font-bold text-blue-600">
+                 <div className="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800/30">
+                   <div className="text-lg font-bold text-blue-600">
                     {selectedEventsData.total_attendees?.toLocaleString() || 0}
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">Total Attendees</div>
+                   <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">Total Attendees</div>
                 </div>
               </div>
             </CardContent>
@@ -726,95 +713,133 @@ const AnalyticsPage: React.FC = () => {
 
         {/* Users Tab */}
         <TabsContent value="users" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* User Growth Chart */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Users className="w-5 h-5 mr-2 text-[#0077ED]" />
-                  User Growth
+           {/* User Overview */}
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+             <Card className="border-0 shadow-sm">
+               <CardHeader className="pb-3">
+                 <CardTitle className="flex items-center text-sm">
+                   <Users className="w-4 h-4 mr-2 text-green-600" />
+                   Total Users
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={usersData.users_by_month}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis 
-                      dataKey="month" 
-                      tickFormatter={(value) => formatMonth(value).split(' ')[0]}
-                    />
-                    <YAxis />
-                    <Tooltip 
-                      labelFormatter={(value) => formatMonth(value)}
-                      formatter={(value: any, name: string) => [
-                        value.toLocaleString(),
-                        name.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())
-                      ]}
-                    />
-                    <Line type="monotone" dataKey="new_users" stroke="#0077ED" strokeWidth={2} />
-                    <Line type="monotone" dataKey="active_users" stroke="#4A9AFF" strokeWidth={2} />
-                  </LineChart>
-                </ResponsiveContainer>
+                 <div className="text-xl font-bold text-green-600">
+                   {usersData.total_users.toLocaleString()}
+                 </div>
+                 <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                   All Users
+                 </div>
               </CardContent>
             </Card>
 
-            {/* User Stats */}
-            <Card>
-              <CardHeader>
-                <CardTitle>User Statistics</CardTitle>
+             <Card className="border-0 shadow-sm">
+               <CardHeader className="pb-3">
+                 <CardTitle className="flex items-center text-sm">
+                   <Activity className="w-4 h-4 mr-2 text-blue-600" />
+                   Active Users
+                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <Users className="w-5 h-5 text-green-600" />
-                      <span className="font-medium">Total Users</span>
+                 <div className="text-xl font-bold text-blue-600">
+                   {usersData.active_users.toLocaleString()}
                     </div>
-                    <span className="font-bold text-green-600">
+                 <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                   Currently Active
+                 </div>
+               </CardContent>
+             </Card>
+
+             <Card className="border-0 shadow-sm">
+               <CardHeader className="pb-3">
+                 <CardTitle className="flex items-center text-sm">
+                   <Users className="w-4 h-4 mr-2 text-purple-600" />
+                   New Users
+                 </CardTitle>
+               </CardHeader>
+               <CardContent>
+                 <div className="text-xl font-bold text-purple-600">
+                   {selectedUsersData.new_users?.toLocaleString() || 0}
+                 </div>
+                 <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                   {formatMonth(selectedMonth)}
+                 </div>
+               </CardContent>
+             </Card>
+
+             <Card className="border-0 shadow-sm">
+               <CardHeader className="pb-3">
+                 <CardTitle className="flex items-center text-sm">
+                   <Users className="w-4 h-4 mr-2 text-red-600" />
+                   Inactive Users
+                 </CardTitle>
+               </CardHeader>
+               <CardContent>
+                 <div className="text-xl font-bold text-red-600">
+                   {usersData.inactive_users.toLocaleString()}
+                 </div>
+                 <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                   Inactive
+                 </div>
+               </CardContent>
+             </Card>
+           </div>
+
+           {/* User Statistics */}
+           <Card className="border-0 shadow-sm">
+             <CardHeader className="pb-3">
+               <CardTitle className="text-lg">User Statistics</CardTitle>
+             </CardHeader>
+             <CardContent>
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                 <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-100 dark:border-green-800/30">
+                   <div className="flex items-center space-x-2">
+                     <Users className="w-4 h-4 text-green-600" />
+                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Total Users</span>
+                   </div>
+                   <span className="text-lg font-bold text-green-600">
                       {usersData.total_users.toLocaleString()}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <Activity className="w-5 h-5 text-blue-600" />
-                      <span className="font-medium">Active Users</span>
+                 <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800/30">
+                   <div className="flex items-center space-x-2">
+                     <Activity className="w-4 h-4 text-blue-600" />
+                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Active Users</span>
                     </div>
-                    <span className="font-bold text-blue-600">
+                   <span className="text-lg font-bold text-blue-600">
                       {usersData.active_users.toLocaleString()}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <Users className="w-5 h-5 text-red-600" />
-                      <span className="font-medium">Inactive Users</span>
+                 <div className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-100 dark:border-red-800/30">
+                   <div className="flex items-center space-x-2">
+                     <Users className="w-4 h-4 text-red-600" />
+                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Inactive Users</span>
                     </div>
-                    <span className="font-bold text-red-600">
+                   <span className="text-lg font-bold text-red-600">
                       {usersData.inactive_users.toLocaleString()}
                     </span>
                   </div>
                 </div>
               </CardContent>
             </Card>
-          </div>
 
           {/* Selected Month User Stats */}
-          <Card>
-            <CardHeader>
-              <CardTitle>{formatMonth(selectedMonth)} User Activity</CardTitle>
+           <Card className="border-0 shadow-sm">
+             <CardHeader className="pb-3">
+               <CardTitle className="text-lg">{formatMonth(selectedMonth)} User Activity</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="text-center p-6 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                  <div className="text-3xl font-bold text-blue-600">
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                 <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800/30">
+                   <div className="text-xl font-bold text-blue-600">
                     {selectedUsersData.new_users?.toLocaleString() || 0}
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400 mt-2">New Users</div>
+                   <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">New Users</div>
                 </div>
-                <div className="text-center p-6 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                  <div className="text-3xl font-bold text-green-600">
+                 <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-100 dark:border-green-800/30">
+                   <div className="text-xl font-bold text-green-600">
                     {selectedUsersData.active_users?.toLocaleString() || 0}
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400 mt-2">Active Users</div>
+                   <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">Active Users</div>
                 </div>
               </div>
             </CardContent>
@@ -823,101 +848,139 @@ const AnalyticsPage: React.FC = () => {
 
         {/* Subscriptions Tab */}
         <TabsContent value="subscriptions" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Subscription Trends */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <CreditCard className="w-5 h-5 mr-2 text-[#0077ED]" />
-                  Subscription Trends
+           {/* Subscription Overview */}
+           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+             <Card className="border-0 shadow-sm">
+               <CardHeader className="pb-3">
+                 <CardTitle className="flex items-center text-sm">
+                   <CreditCard className="w-4 h-4 mr-2 text-blue-600" />
+                   Total Subscriptions
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={subscriptionsData.monthly_subscriptions}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis 
-                      dataKey="month" 
-                      tickFormatter={(value) => formatMonth(value).split(' ')[0]}
-                    />
-                    <YAxis />
-                    <Tooltip 
-                      labelFormatter={(value) => formatMonth(value)}
-                      formatter={(value: any, name: string) => [
-                        name === 'revenue' ? formatCurrency(value) : value.toLocaleString(),
-                        name.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase())
-                      ]}
-                    />
-                    <Line type="monotone" dataKey="active" stroke="#0077ED" strokeWidth={2} />
-                    <Line type="monotone" dataKey="new" stroke="#4A9AFF" strokeWidth={2} />
-                  </LineChart>
-                </ResponsiveContainer>
+                 <div className="text-xl font-bold text-blue-600">
+                   {subscriptionsData.total_subscriptions}
+                 </div>
+                 <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                   All Subscriptions
+                 </div>
               </CardContent>
             </Card>
 
-            {/* Subscription Overview */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Subscription Overview</CardTitle>
+             <Card className="border-0 shadow-sm">
+               <CardHeader className="pb-3">
+                 <CardTitle className="flex items-center text-sm">
+                   <Activity className="w-4 h-4 mr-2 text-green-600" />
+                   Active Subscriptions
+                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <CreditCard className="w-5 h-5 text-green-600" />
-                      <span className="font-medium">Active Subscriptions</span>
+                 <div className="text-xl font-bold text-green-600">
+                   {subscriptionsData.active_subscriptions}
                     </div>
-                    <span className="font-bold text-green-600">
+                 <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                   Currently Active
+                 </div>
+               </CardContent>
+             </Card>
+
+             <Card className="border-0 shadow-sm">
+               <CardHeader className="pb-3">
+                 <CardTitle className="flex items-center text-sm">
+                   <CreditCard className="w-4 h-4 mr-2 text-purple-600" />
+                   New Subscriptions
+                 </CardTitle>
+               </CardHeader>
+               <CardContent>
+                 <div className="text-xl font-bold text-purple-600">
+                   {selectedSubscriptionsData.new || 0}
+                 </div>
+                 <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                   {formatMonth(selectedMonth)}
+                 </div>
+               </CardContent>
+             </Card>
+
+             <Card className="border-0 shadow-sm">
+               <CardHeader className="pb-3">
+                 <CardTitle className="flex items-center text-sm">
+                   <DollarSign className="w-4 h-4 mr-2 text-orange-600" />
+                   Monthly Revenue
+                 </CardTitle>
+               </CardHeader>
+               <CardContent>
+                 <div className="text-xl font-bold text-orange-600">
+                   {formatCurrency(subscriptionsData.revenue)}
+                 </div>
+                 <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                   Current Month
+                 </div>
+               </CardContent>
+             </Card>
+           </div>
+
+           {/* Subscription Statistics */}
+           <Card className="border-0 shadow-sm">
+             <CardHeader className="pb-3">
+               <CardTitle className="text-lg">Subscription Statistics</CardTitle>
+             </CardHeader>
+             <CardContent>
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                 <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-100 dark:border-green-800/30">
+                   <div className="flex items-center space-x-2">
+                     <CreditCard className="w-4 h-4 text-green-600" />
+                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Active Subscriptions</span>
+                   </div>
+                   <span className="text-lg font-bold text-green-600">
                       {subscriptionsData.active_subscriptions}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <CreditCard className="w-5 h-5 text-red-600" />
-                      <span className="font-medium">Inactive Subscriptions</span>
+                 <div className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-100 dark:border-red-800/30">
+                   <div className="flex items-center space-x-2">
+                     <CreditCard className="w-4 h-4 text-red-600" />
+                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Inactive Subscriptions</span>
                     </div>
-                    <span className="font-bold text-red-600">
+                   <span className="text-lg font-bold text-red-600">
                       {subscriptionsData.inactive_subscriptions}
                     </span>
                   </div>
-                  <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                    <div className="flex items-center space-x-3">
-                      <DollarSign className="w-5 h-5 text-blue-600" />
-                      <span className="font-medium">Monthly Revenue</span>
+                 <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800/30">
+                   <div className="flex items-center space-x-2">
+                     <DollarSign className="w-4 h-4 text-blue-600" />
+                     <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Monthly Revenue</span>
                     </div>
-                    <span className="font-bold text-blue-600">
+                   <span className="text-lg font-bold text-blue-600">
                       {formatCurrency(subscriptionsData.revenue)}
                     </span>
                   </div>
                 </div>
               </CardContent>
             </Card>
-          </div>
 
           {/* Selected Month Subscription Stats */}
-          <Card>
-            <CardHeader>
-              <CardTitle>{formatMonth(selectedMonth)} Subscription Performance</CardTitle>
+           <Card className="border-0 shadow-sm">
+             <CardHeader className="pb-3">
+               <CardTitle className="text-lg">{formatMonth(selectedMonth)} Subscription Performance</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                  <div className="text-2xl font-bold text-green-600">
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                 <div className="text-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-100 dark:border-green-800/30">
+                   <div className="text-lg font-bold text-green-600">
                     {selectedSubscriptionsData.active || 0}
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">Active Subscriptions</div>
+                   <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">Active Subscriptions</div>
                 </div>
-                <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                  <div className="text-2xl font-bold text-blue-600">
+                 <div className="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800/30">
+                   <div className="text-lg font-bold text-blue-600">
                     {selectedSubscriptionsData.new || 0}
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">New Subscriptions</div>
+                   <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">New Subscriptions</div>
                 </div>
-                <div className="text-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
-                  <div className="text-2xl font-bold text-purple-600">
+                 <div className="text-center p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg border border-purple-100 dark:border-purple-800/30">
+                   <div className="text-lg font-bold text-purple-600">
                     {formatCurrency(selectedSubscriptionsData.revenue || 0)}
                   </div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">Monthly Revenue</div>
+                   <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">Monthly Revenue</div>
                 </div>
               </div>
             </CardContent>

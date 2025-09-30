@@ -19,7 +19,6 @@ import CustomTable, {
 import ConfirmDeleteDialog from "@/components/ui/confirm-delete-dialog";
 import CustomDrawer from "@/components/ui/custom-drawer";
 import SoftDeleteTable from "@/components/ui/soft-delete-table";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import CsvExportDialog from "@/components/ui/csv-export-dialog";
 import { Badge } from "@/components/ui/badge";
@@ -34,7 +33,8 @@ import {
 import OrganizationAddEditDialog from "./components/OrganizationAddEditDialog";
 import OrganizationDetailView from "./components/OrganizationDetailView";
 import OrganizationFilters from "./components/OrganizationFilters";
-import { formatDate } from "@/utils/dateUtils.js";
+import { formatDateTime } from "@/utils/dateUtils.js";
+import Button from "@/components/ui/custom-button";
 
 interface Organization {
   _id: string;
@@ -188,7 +188,7 @@ const OrganizationsPage: React.FC = () => {
       key: "industry",
       label: "Industry",
       renderData: (organization) => (
-        <span className="text-sm text-gray-900 dark:text-white">
+        <span className="text-sm text-gray-900 dark:text-white capitalize">
           {organization.bio?.industry || "N/A"}
         </span>
       ),
@@ -260,7 +260,7 @@ const OrganizationsPage: React.FC = () => {
       label: "Created At",
       renderData: (organization) => (
         <span className="text-sm text-gray-700 dark:text-gray-300">
-          {formatDate(organization.createdAt)}
+          {formatDateTime(organization.createdAt)}
         </span>
       ),
     },
@@ -658,15 +658,15 @@ const OrganizationsPage: React.FC = () => {
         <div className="flex items-center space-x-3">
           <Button
             onClick={() => setExportDialog(true)}
-            variant="outline"
-            className="border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+            variant="outlined"
           >
             <Download className="w-4 h-4 mr-2" />
             Export CSV
           </Button>
           <Button
             onClick={() => setCreateDialog(true)}
-            className="bg-[#0077ED] hover:bg-[#0066CC] text-white"
+            variant="contained"
+            color="primary"
           >
             <Plus className="w-4 h-4 mr-2" />
             Add Organization
@@ -689,35 +689,21 @@ const OrganizationsPage: React.FC = () => {
                 />
               </div>
 
-              {filtersApplied?.search && filtersApplied.search !== "" ? (
-                <Button
-                  onClick={() => {
-                    setSearchQuery("");
-                    setCurrentPage(1);
-                    getListOrganizations(""); // reset to no search
-                  }}
-                  variant="outline"
-                  className="absolute right-0 top-1/2 transform -translate-y-1/2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  Clear
-                </Button>
-              ) : (
-                <Button
+              <Button
                   onClick={handleSearch}
-                  variant="outline"
+                  variant="outlined"
                   disabled={searchQuery === ""}
-                  className="absolute right-0 top-1/2 transform -translate-y-1/2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+                  className="absolute right-0 top-1/2 transform -translate-y-1/2"
                 >
                   Search
                 </Button>
-              )}
             </div>
           </div>
           <div className="flex items-center space-x-3">
             <Button
               onClick={() => setFilterDrawerOpen(true)}
-              variant="outline"
-              className="relative border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
+              variant="outlined"
+              className="relative"
             >
               <Filter className="w-4 h-4 mr-2" />
               Filters

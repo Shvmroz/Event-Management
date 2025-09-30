@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock, Calendar } from "lucide-react";
 import { useAppContext } from "@/contexts/AppContext";
 import { Input } from "@/components/ui/input";
+import Button from "@/components/ui/custom-button";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -140,24 +141,25 @@ export default function LoginPage() {
                       className="block w-full pl-10 pr-12 py-3"
                       placeholder="Enter your password"
                     />
-                    <button
-                      type="button"
+                    <span
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center cursor-pointer"
                     >
                       {showPassword ? (
                         <EyeOff className="h-5 w-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" />
                       ) : (
                         <Eye className="h-5 w-5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300" />
                       )}
-                    </button>
+                    </span>
                   </div>
                 </div>
 
-                <button
+                <Button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-gradient-to-r from-[#0077ED] to-[#4A9AFF] hover:from-[#0066CC] hover:to-[#3A8AEF] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0077ED] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105 disabled:hover:scale-100"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
                 >
                   {isLoading ? (
                     <div className="flex items-center">
@@ -167,7 +169,7 @@ export default function LoginPage() {
                   ) : (
                     "Sign in"
                   )}
-                </button>
+                </Button>
               </form>
             </div>
           </div>

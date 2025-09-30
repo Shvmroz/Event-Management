@@ -2,7 +2,7 @@
 import {  AlertTriangle } from "lucide-react";
 export default function NotFoundPage() {
   return (
-    <div className="mt-10 flex items-center justify-center">
+    <div className="flex items-center justify-center h-[80vh]">
       <div className="max-w-sm w-full text-center">
         {/* 404 Icon */}
         <div className="mb-6">

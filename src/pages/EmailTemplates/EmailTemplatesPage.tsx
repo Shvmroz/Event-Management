@@ -11,7 +11,6 @@ import CustomTable, {
   MenuOption,
 } from "@/components/ui/custom-table";
 import CustomDrawer from "@/components/ui/custom-drawer";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import TableSkeleton from "@/components/ui/skeleton/table-skeleton";
@@ -20,7 +19,8 @@ import EmailTemplateEditDialog from "./components/EmailTemplateEditDialog";
 import EmailTemplateViewDetailDialog from "./components/EmailTemplateViewDetailDialog";
 import EmailTemplateFilters from "./components/EmailTemplateFilters";
 import { _email_templates_list_api } from "@/DAL/emailTemplatesAPI";
-import { formatDate } from "@/utils/dateUtils.js";
+import { formatDateTime } from "@/utils/dateUtils.js";
+import Button from "@/components/ui/custom-button";
 
 interface EmailTemplate {
   _id: string;
@@ -154,7 +154,7 @@ const EmailTemplatesPage: React.FC = () => {
       label: "Created",
       renderData: (template) => (
         <span className="text-gray-600 dark:text-gray-400">
-          {formatDate(template.createdAt)}
+          {formatDateTime(template.createdAt)}
         </span>
       ),
     },
@@ -351,36 +351,22 @@ const EmailTemplatesPage: React.FC = () => {
                   className="pl-10 pr-24"
                 />
               </div>
-              {filtersApplied?.search && filtersApplied.search !== "" ? (
-                <Button
-                  onClick={() => {
-                    setSearchQuery("");
-                    setCurrentPage(1);
-                    getListEmailTemplates("");
-                  }}
-                  variant="outline"
-                  className="absolute right-0 top-1/2 transform -translate-y-1/2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  Clear
-                </Button>
-              ) : (
-                <Button
-                  onClick={handleSearch}
-                  disabled={searchQuery === ""}
-                  variant="outline"
-                  className="absolute right-0 top-1/2 transform -translate-y-1/2 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-                >
-                  Search
-                </Button>
-              )}
+              <Button
+                onClick={handleSearch}
+                disabled={searchQuery === ""}
+                variant="outlined"
+                className="absolute right-0 top-1/2 transform -translate-y-1/2"
+              >
+                Search
+              </Button>
             </div>
           </div>
           <div className="flex items-center space-x-3">
             <Button
               onClick={() => setFilterDrawerOpen(true)}
-              variant="outline"
-              className="relative border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
-            >
+               variant="outlined"
+              className="relative"
+              >
               <Filter className="w-4 h-4 mr-2" />
               Filters
               {getAppliedFiltersCount() > 0 && (

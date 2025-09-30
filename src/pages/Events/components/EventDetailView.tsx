@@ -10,7 +10,6 @@ import {
   Info,
   AlertTriangle,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -23,6 +22,7 @@ import { useAppContext } from "@/contexts/AppContext";
 import { useSnackbar } from "notistack";
 import { _event_detail_view_api } from "@/DAL/eventAPI";
 import { formatDateTime } from "@/utils/dateUtils.js";
+import Button from "@/components/ui/custom-button";
 
 interface EventDetailViewProps {
   open: boolean;
@@ -330,7 +330,10 @@ const EventDetailView: React.FC<EventDetailViewProps> = ({
       </CustomDialogContent>
 
       <CustomDialogActions>
-        <Button onClick={onClose} className="text-sm">
+        <Button
+          onClick={onClose}
+          variant="outlined"
+        >
           Close
         </Button>
       </CustomDialogActions>

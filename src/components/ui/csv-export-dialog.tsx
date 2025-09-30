@@ -6,9 +6,9 @@ import {
   CustomDialogContent,
   CustomDialogActions,
 } from "@/components/ui/custom-dialog";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Download, FileText, X, AlertTriangle } from "lucide-react";
+import Button from "./custom-button";
 
 interface CsvExportDialogProps {
   open: boolean;
@@ -154,20 +154,15 @@ const CsvExportDialog: React.FC<CsvExportDialogProps> = ({
 
       <CustomDialogActions>
         <Button
-          type="button"
-          variant="outline"
+          variant="outlined"
           onClick={() => onOpenChange(false)}
           disabled={isExporting}
-          style={{
-            backgroundColor: darkMode ? "#374151" : "#f9fafb",
-            color: darkMode ? "#f3f4f6" : "#374151",
-            borderColor: darkMode ? "#4b5563" : "#d1d5db",
-          }}
         >
-          <X className="w-4 h-4 mr-2" />
           Cancel
         </Button>
         <Button
+          variant="contained"
+          color="primary"
           onClick={handleExport}
           disabled={
             isExporting ||
@@ -175,7 +170,6 @@ const CsvExportDialog: React.FC<CsvExportDialogProps> = ({
             !dateRange.end_date ||
             isDateRangeInvalid
           }
-          className="bg-[#0077ED] hover:bg-[#0066CC] text-white dark:text-white"
         >
           {isExporting ? (
             <div className="flex items-center">

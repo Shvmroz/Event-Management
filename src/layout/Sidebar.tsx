@@ -15,6 +15,8 @@ import {
   Wrench,
   Calendar,
   Users,
+  Network,
+  MonitorCog,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -33,82 +35,90 @@ const menuItems = [
   },
   {
     text: "My Team",
-    icon: Users,
+    icon: Network,
     path: "/team",
-    color: "text-cyan-600",
-    bgColor: "bg-cyan-50",
+    color: "text-blue-500",
+    bgColor: "bg-blue-50",
   },
   {
     text: "Payment Plans",
     icon: Receipt,
     path: "/payment-plans",
-    color: "text-green-600",
-    bgColor: "bg-green-50",
+    color: "text-blue-500",
+    bgColor: "bg-blue-50",
   },
   {
     text: "Organizations",
     icon: Building2,
     path: "/organizations",
-    color: "text-rose-600",
-    bgColor: "bg-rose-50",
+    color: "text-blue-500",
+    bgColor: "bg-blue-50",
   },
   {
     text: "Companies",
     icon: Building,
     path: "/companies",
-    color: "text-purple-600",
-    bgColor: "bg-purple-50",
+    color: "text-blue-500",
+    bgColor: "bg-blue-50",
   },
   {
     text: "Events",
     icon: Calendar,
     path: "/events",
-    color: "text-yellow-600",
-    bgColor: "bg-yelllow-50",
+    color: "text-blue-500",
+    bgColor: "bg-blue-50",
+  },
+  {
+    text: "Users",
+    icon: Users,
+    path: "/users",
+    color: "text-blue-500",
+    bgColor: "bg-blue-50",
   },
   {
     text: "Email Templates",
     icon: Mail,
     path: "/email-templates",
-    color: "text-indigo-500",
-    bgColor: "bg-indigo-50",
+    color: "text-blue-500",
+    bgColor: "bg-blue-50",
   },
   {
     text: "Analytics",
     icon: BarChart3,
     path: "/analytics",
-    color: "text-orange-800",
-    bgColor: "bg-orange-50",
+    color: "text-blue-500",
+    bgColor: "bg-blue-50",
   },
   {
     text: "General Configuration",
     icon: Settings,
     path: "/configuration",
-    color: "text-orange-500",
-    bgColor: "bg-orange-50",
+    color: "text-blue-500",
+    bgColor: "bg-blue-50",
   },
   {
     text: "Stripe Configuration",
     icon: CreditCard,
     path: "/configuration/stripe",
-    color: "text-green-500",
-    bgColor: "bg-green-50",
+    color: "text-blue-500",
+    bgColor: "bg-blue-50",
   },
   {
     text: "Email Configuration",
-    icon: Mail,
+    icon: MonitorCog,
     path: "/configuration/email",
-    color: "text-pink-700",
-    bgColor: "bg-pink-50",
+    color: "text-blue-500",
+    bgColor: "bg-blue-50",
   },
   {
     text: "Settings",
     icon: Wrench,
     path: "/settings",
-    color: "text-gray-400",
-    bgColor: "bg-gray-100",
+    color: "text-blue-500",
+    bgColor: "bg-blue-50",
   },
 ];
+
 
 const Sidebar: React.FC<SidebarProps> = ({
   open,
@@ -124,7 +134,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       <Link to="/dashboard">
         <div className="cursor-pointer h-16 pl-8 border-b border-gray-200 dark:border-gray-700 flex items-center space-x-3">
           <img 
-            src="/assets/logo.png" 
+            src="/assets/exiby_logo.png" 
             alt="ExiBy Logo" 
             className="w-8 h-8 object-contain"
           />

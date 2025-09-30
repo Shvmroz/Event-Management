@@ -5,10 +5,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
 import { MoreHorizontal, ChevronLeft, ChevronRight } from "lucide-react";
 import SearchableSelect from "@/components/ui/searchable-select";
 import { cn } from "@/lib/utils";
+import Button from "./custom-button";
 
 // ---------------- Table Primitives ----------------
 const Table = React.forwardRef<
@@ -213,7 +213,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                               <Button
-                                variant="ghost"
+                                variant="text"
                                 size="sm"
                                 className="h-8 w-8 p-0"
                               >
@@ -287,11 +287,10 @@ const CustomTable: React.FC<CustomTableProps> = ({
 
             <div className="flex items-center space-x-2">
               <Button
-                variant="outline"
+                variant="outlined"
                 size="sm"
                 onClick={() => handleChangePage(page - 1)}
                 disabled={page <= 1}
-                className="text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <ChevronLeft className="h-4 w-4" />
               </Button>
@@ -301,11 +300,10 @@ const CustomTable: React.FC<CustomTableProps> = ({
               </span>
 
               <Button
-                variant="outline"
+                variant="outlined"
                 size="sm"
                 onClick={() => handleChangePage(page + 1)}
                 disabled={page >= totalPages}
-                className="text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-gray-700"
               >
                 <ChevronRight className="h-4 w-4" />
               </Button>

@@ -1,20 +1,10 @@
-import React, { useState } from 'react';
-import ConfigurationSkeleton from '@/components/ui/skeleton/configuration-skeleton';
-import {
-  Settings,
-  Save,
-  Edit,
-  Globe,
-  Mail,
-  Clock,
-  Image,
-  Calendar,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import SearchableSelect from '@/components/ui/searchable-select';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { formatDate } from '@/utils/dateUtils.js';
+import React, { useState } from "react";
+import ConfigurationSkeleton from "@/components/ui/skeleton/configuration-skeleton";
+import { Settings, Save, Edit, Globe, Mail, Clock, Image } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import SearchableSelect from "@/components/ui/searchable-select";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Button from "@/components/ui/custom-button";
 
 interface GeneralSettings {
   site_name: string;
@@ -29,14 +19,15 @@ const ConfigurationPage: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [loading, setLoading] = useState(true);
-  
+
   const [originalData] = useState<GeneralSettings>({
     site_name: "Event Management Platform",
-    site_logo: "https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg?auto=compress&cs=tinysrgb&w=200&h=200&dpr=1",
+    site_logo:
+      "https://images.pexels.com/photos/1181467/pexels-photo-1181467.jpeg?auto=compress&cs=tinysrgb&w=200&h=200&dpr=1",
     contact_email: "support@platform.com",
     // admin_settings: {},
     time_zone: "Europe/Dublin",
-    updated_at: "2025-08-20T09:45:12.000Z"
+    updated_at: "2025-08-20T09:45:12.000Z",
   });
 
   const [formData, setFormData] = useState<GeneralSettings>(originalData);
@@ -52,19 +43,19 @@ const ConfigurationPage: React.FC = () => {
   }
 
   const timeZones = [
-    'Europe/Dublin',
-    'Europe/London',
-    'America/New_York',
-    'America/Los_Angeles',
-    'Asia/Tokyo',
-    'Australia/Sydney',
-    'UTC'
+    "Europe/Dublin",
+    "Europe/London",
+    "America/New_York",
+    "America/Los_Angeles",
+    "Asia/Tokyo",
+    "Australia/Sydney",
+    "UTC",
   ];
 
   // Convert to SearchableSelect format
-  const timeZoneOptions = timeZones.map(tz => ({
+  const timeZoneOptions = timeZones.map((tz) => ({
     value: tz,
-    label: tz
+    label: tz,
   }));
 
   const handleEdit = () => {
@@ -80,23 +71,22 @@ const ConfigurationPage: React.FC = () => {
     setIsSaving(true);
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+
       // Update the updated_at timestamp
       const updatedData = {
         ...formData,
-        updated_at: new Date().toISOString()
+        updated_at: new Date().toISOString(),
       };
-      
+
       setFormData(updatedData);
       setIsEditing(false);
     } catch (error) {
-      console.error('Error saving configuration:', error);
+      console.error("Error saving configuration:", error);
     } finally {
       setIsSaving(false);
     }
   };
-
 
   return (
     <div className="space-y-6">
@@ -112,17 +102,14 @@ const ConfigurationPage: React.FC = () => {
         </div>
         <div className="flex items-center space-x-3">
           {!isEditing ? (
-            <Button
-              onClick={handleEdit}
-              className="bg-[#0077ED] hover:bg-[#0066CC] text-white"
-            >
+            <Button onClick={handleEdit} variant="contained" color="primary">
               <Edit className="w-4 h-4 mr-2" />
               Edit Settings
             </Button>
           ) : (
             <div className="flex space-x-2">
               <Button
-                variant="outline"
+                variant="outlined"
                 onClick={handleCancel}
                 disabled={isSaving}
               >
@@ -131,7 +118,8 @@ const ConfigurationPage: React.FC = () => {
               <Button
                 onClick={handleSave}
                 disabled={isSaving}
-                className="bg-[#0077ED] hover:bg-[#0066CC] text-white"
+                variant="contained"
+                color="primary"
               >
                 {isSaving ? (
                   <div className="flex items-center">
@@ -169,7 +157,9 @@ const ConfigurationPage: React.FC = () => {
                 <Globe className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                 <Input
                   value={formData.site_name}
-                  onChange={(e) => setFormData({ ...formData, site_name: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, site_name: e.target.value })
+                  }
                   disabled={!isEditing}
                   className="pl-10"
                   placeholder="Enter site name"
@@ -187,7 +177,9 @@ const ConfigurationPage: React.FC = () => {
                 <Input
                   type="email"
                   value={formData.contact_email}
-                  onChange={(e) => setFormData({ ...formData, contact_email: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, contact_email: e.target.value })
+                  }
                   disabled={!isEditing}
                   className="pl-10"
                   placeholder="Enter contact email"
@@ -205,7 +197,9 @@ const ConfigurationPage: React.FC = () => {
                 <Input
                   type="url"
                   value={formData.site_logo}
-                  onChange={(e) => setFormData({ ...formData, site_logo: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, site_logo: e.target.value })
+                  }
                   disabled={!isEditing}
                   className="pl-10"
                   placeholder="Enter logo URL"
@@ -218,7 +212,7 @@ const ConfigurationPage: React.FC = () => {
                     alt="Site Logo"
                     className="w-16 h-16 object-cover rounded-lg border border-gray-200 dark:border-gray-700"
                     onError={(e) => {
-                      e.currentTarget.style.display = 'none';
+                      e.currentTarget.style.display = "none";
                     }}
                   />
                 </div>
@@ -235,29 +229,15 @@ const ConfigurationPage: React.FC = () => {
                 <SearchableSelect
                   options={timeZoneOptions}
                   value={formData.time_zone}
-                  onChange={(value) => setFormData({ ...formData, time_zone: value })}
+                  onChange={(value) =>
+                    setFormData({ ...formData, time_zone: value })
+                  }
                   disabled={!isEditing}
                   placeholder="Select time zone"
                   className="pl-10"
                   search={true}
                 />
               </div>
-            </div>
-          </div>
-
-
-          {/* Updated At (Read-only) */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              Last Updated
-            </label>
-            <div className="relative">
-              <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <Input
-                value={formatDate(formData.updated_at)}
-                disabled
-                className="pl-10 bg-gray-50 dark:bg-gray-700"
-              />
             </div>
           </div>
         </CardContent>

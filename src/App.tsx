@@ -1,7 +1,7 @@
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { AppProvider, useAppContext } from "./contexts/AppContext";
-import { SnackbarProvider } from "notistack";
+import { CustomSnackbarProvider } from "./components/ui/custom-snackbar";
 import AppRoutes from "./routes/Routes";
 import MainLayout from "./layout/MainLayout";
 import { Navigate, useLocation } from "react-router-dom";
@@ -67,19 +67,12 @@ const AppInner: React.FC = () => {
 export default function App() {
   return (
     <ThemeProvider theme={theme}>
-      <SnackbarProvider
-        maxSnack={3}
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "right",
-        }}
-        autoHideDuration={3000}
-      >
+      <CustomSnackbarProvider>
         <CssBaseline />
         <AppProvider>
           <AppInner />
         </AppProvider>
-      </SnackbarProvider>
+      </CustomSnackbarProvider>
     </ThemeProvider>
   );
 }

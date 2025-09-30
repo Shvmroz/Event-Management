@@ -7,7 +7,6 @@ import {
   CustomDialogContent,
   CustomDialogActions,
 } from "@/components/ui/custom-dialog";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import QuillEditor from "@/components/ui/quillEditor/quillEditor";
 import { Save, X, Building2, Eye, EyeOff } from "lucide-react";
@@ -15,6 +14,7 @@ import { Badge } from "../../../components/ui/badge";
 import SearchableSelect from "@/components/ui/searchable-select";
 import { years, industries } from "@/utils/lists";
 import StatusSwitch from "@/components/ui/status-switch";
+import Button from "@/components/ui/custom-button";
 
 interface CompanyAddEditDialogProps {
   open: boolean;
@@ -248,13 +248,12 @@ const CompanyAddEditDialog: React.FC<CompanyAddEditDialogProps> = ({
                     placeholder="Enter password"
                     required
                   />
-                  <button
-                    type="button"
-                    className="absolute inset-y-0 right-3 flex items-center text-gray-500"
+                  <span
+                    className="absolute inset-y-0 right-3 flex items-center text-gray-500 cursor-pointer"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                  </button>
+                  </span>
                 </div>
               </div>
             </div>
@@ -430,33 +429,31 @@ const CompanyAddEditDialog: React.FC<CompanyAddEditDialogProps> = ({
             <label className="block text-sm font-medium mb-2">
               Description
             </label>
-            <Suspense fallback={<div>Loading editor...</div>}>
-              <QuillEditor
-                value={formData.description}
-                onChange={(value) =>
-                  setFormData({ ...formData, description: value })
-                }
-                placeholder="Enter company description"
-                rows={4}
-              />
-            </Suspense>
+            <QuillEditor
+              value={formData.description}
+              onChange={(value) =>
+                setFormData({ ...formData, description: value })
+              }
+              placeholder="Enter company description"
+              rows={4}
+            />
           </div>
         </form>
       </CustomDialogContent>
 
       <CustomDialogActions>
         <Button
-          type="button"
-          variant="outline"
+          variant="outlined"
           onClick={() => onOpenChange(false)}
           disabled={loading}
         >
-          <X className="w-4 h-4 mr-2" />
           Cancel
         </Button>
         <Button
           form="company-form"
           type="submit"
+          variant="contained"
+          color="primary"
           disabled={
             loading ||
             !formData.name ||
@@ -464,7 +461,6 @@ const CompanyAddEditDialog: React.FC<CompanyAddEditDialogProps> = ({
             !formData.description ||
             (!isEdit && (!formData.email || !formData.password))
           }
-          className="bg-[#0077ED] hover:bg-[#0066CC] text-white"
         >
           {loading ? (
             isEdit ? (
