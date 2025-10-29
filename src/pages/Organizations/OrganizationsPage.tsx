@@ -138,7 +138,7 @@ const OrganizationsPage: React.FC = () => {
       label: "Organization",
       renderData: (organization) => (
         <div className="flex items-start space-x-3">
-          <div className="w-10 h-10 bg-gradient-to-r from-[#0077ED] to-[#4A9AFF] rounded-lg flex items-center justify-center flex-shrink-0">
+          <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-[#4A9AFF] rounded-lg flex items-center justify-center flex-shrink-0">
             <Building2 className="w-5 h-5 text-white" />
           </div>
           <div className="min-w-0 flex-1">
@@ -174,7 +174,7 @@ const OrganizationsPage: React.FC = () => {
             href={organization.bio.website}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center text-xs text-[#0077ED] dark:text-[#4A9AFF] hover:text-[#0066CC] dark:hover:text-[#6BB6FF] mt-1"
+            className="inline-flex items-center text-xs text-orange-500 dark:text-[#4A9AFF] hover:text-[#0066CC] dark:hover:text-[#6BB6FF] mt-1"
             onClick={(e) => e.stopPropagation()}
           >
             <ExternalLink className="w-3 h-3 mr-1" />
@@ -210,7 +210,7 @@ const OrganizationsPage: React.FC = () => {
       label: "Companies",
       renderData: (organization) => (
         <div className="flex items-center space-x-2">
-          <Building className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+          <Building className="w-4 h-4 text-orange-600 dark:text-orange-400" />
           <span className="font-medium text-gray-900 dark:text-white">
             {organization.total_companies || 0}
           </span>

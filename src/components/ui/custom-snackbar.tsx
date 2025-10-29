@@ -16,7 +16,7 @@ const CustomSnackbarContent = React.forwardRef<HTMLDivElement, any>((props, ref)
       case 'warning':
         return 'bg-yellow-600 text-white';
       case 'info':
-        return 'bg-blue-600 text-white';
+        return 'bg-orange-600 text-white';
       default:
         return 'bg-gray-600 text-white';
     }

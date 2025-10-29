@@ -326,7 +326,7 @@ const EventsPage: React.FC = () => {
       completed: {
         label: "Completed",
         className:
-          "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400",
+          "bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400",
       },
     };
 
@@ -341,7 +341,7 @@ const EventsPage: React.FC = () => {
       physical: {
         label: "Physical",
         className:
-          "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400",
+          "bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400",
         icon: <MapPin className="w-3 h-3 mr-1" />,
       },
       virtual: {
@@ -419,7 +419,7 @@ const EventsPage: React.FC = () => {
       label: "Organization",
       renderData: (event) => (
         <div className="flex items-center space-x-2 mt-1">
-          <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400 text-xs">
+          <Badge className="bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400 text-xs">
             {event.orgn_user?.name || "Unknown Org"}
           </Badge>
         </div>
@@ -430,7 +430,7 @@ const EventsPage: React.FC = () => {
       label: "Attendees",
       renderData: (event) => (
         <div className="flex items-center space-x-2">
-          <Users className="w-4 h-4 text-blue-500" />
+          <Users className="w-4 h-4 text-orange-500" />
           <span className="font-medium text-gray-900 dark:text-white">
             {event.current_attendees}/{event.max_attendees}
           </span>

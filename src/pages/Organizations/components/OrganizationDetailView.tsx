@@ -89,7 +89,7 @@ const OrganizationDetailView = ({
     >
       <CustomDialogTitle onClose={onClose}>
         <div className="flex items-center space-x-4">
-          <div className="w-12 h-12 bg-gradient-to-r from-[#0077ED] to-[#4A9AFF] rounded-xl flex items-center justify-center">
+          <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-[#4A9AFF] rounded-xl flex items-center justify-center">
             <Building2 className="w-6 h-6 text-white" />
           </div>
           <h1 className="text-2xl font-bold">
@@ -189,7 +189,7 @@ const OrganizationDetailView = ({
                       href={organization.bio.website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center text-blue-600 dark:text-blue-400"
+                      className="inline-flex items-center text-orange-600 dark:text-orange-400"
                     >
                       <Globe className="w-4 h-4 mr-1" />
                       {organization.bio.website}
@@ -209,7 +209,7 @@ const OrganizationDetailView = ({
                       href={organization.social_links.facebook}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center text-blue-600 dark:text-blue-400"
+                      className="inline-flex items-center text-orange-600 dark:text-orange-400"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -263,7 +263,7 @@ const OrganizationDetailView = ({
                       href={organization.social_links.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center text-blue-700"
+                      className="inline-flex items-center text-orange-700"
                     >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"

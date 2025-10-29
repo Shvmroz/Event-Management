@@ -133,7 +133,7 @@ const CompanyDetailView = ({
                 </div>
               </div>
               <div className="text-center p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
-                <Calendar className="w-6 h-6 mx-auto mb-2 text-blue-500" />
+                <Calendar className="w-6 h-6 mx-auto mb-2 text-orange-500" />
                 <div className="font-bold text-gray-900 dark:text-gray-100">
                   {company.bio?.founded_year ?? "N/A"}
                 </div>
@@ -221,7 +221,7 @@ const CompanyDetailView = ({
                     href={company.social_links.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 dark:text-blue-400 hover:underline"
+                    className="text-orange-600 dark:text-orange-400 hover:underline"
                   >
                     {company.social_links.website}
                   </a>
@@ -229,12 +229,12 @@ const CompanyDetailView = ({
               )}
               {company.social_links?.linkedin && (
                 <p className="text-sm flex items-center space-x-2">
-                  <Linkedin className="w-4 h-4 text-blue-700 dark:text-blue-400" />
+                  <Linkedin className="w-4 h-4 text-orange-700 dark:text-orange-400" />
                   <a
                     href={company.social_links.linkedin}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-700 dark:text-blue-400 hover:underline"
+                    className="text-orange-700 dark:text-orange-400 hover:underline"
                   >
                     {company.social_links.linkedin}
                   </a>
@@ -255,12 +255,12 @@ const CompanyDetailView = ({
               )}
               {company.social_links?.facebook && (
                 <p className="text-sm flex items-center space-x-2">
-                  <Facebook className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                  <Facebook className="w-4 h-4 text-orange-600 dark:text-orange-400" />
                   <a
                     href={company.social_links.facebook}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-600 dark:text-blue-400 hover:underline"
+                    className="text-orange-600 dark:text-orange-400 hover:underline"
                   >
                     {company.social_links.facebook}
                   </a>

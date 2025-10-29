@@ -169,7 +169,7 @@ const EmailConfigurationPage: React.FC = () => {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center text-lg">
-            <Mail className="w-5 h-5 mr-2 text-[#0077ED]" />
+            <Mail className="w-5 h-5 mr-2 text-orange-500" />
             Email Service Settings
           </CardTitle>
         </CardHeader>
@@ -290,7 +290,7 @@ const EmailConfigurationPage: React.FC = () => {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center text-lg">
-            <Link className="w-5 h-5 mr-2 text-[#0077ED]" />
+            <Link className="w-5 h-5 mr-2 text-orange-500" />
             Social Media Links
           </CardTitle>
         </CardHeader>

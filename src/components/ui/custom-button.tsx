@@ -11,7 +11,7 @@ export interface CustomButtonProps
 }
 
 const baseStyles =
-  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
+  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
 
 const sizes: Record<string, string> = {
   default: "h-10 px-4 py-2",
@@ -22,10 +22,10 @@ const sizes: Record<string, string> = {
 const colorVariants = {
   primary: {
     contained:
-      "bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500 shadow-sm dark:bg-blue-600 dark:hover:bg-blue-700",
+      "bg-orange-600 text-white hover:bg-orange-700 focus:ring-orange-500 shadow-sm dark:bg-orange-600 dark:hover:bg-orange-700",
     outlined:
-      "border border-blue-600 bg-transparent text-blue-600 hover:bg-blue-50 focus:ring-blue-500 dark:border-blue-600 dark:text-blue-600 dark:hover:bg-blue-700/40",
-    text: "bg-transparent text-blue-600 hover:bg-blue-50 focus:ring-blue-500 dark:text-blue-600 dark:hover:bg-blue-700/40",
+      "border border-orange-600 bg-transparent text-orange-600 hover:bg-orange-50 focus:ring-orange-500 dark:border-orange-600 dark:text-orange-600 dark:hover:bg-orange-700/40",
+    text: "bg-transparent text-orange-600 hover:bg-orange-50 focus:ring-orange-500 dark:text-orange-600 dark:hover:bg-orange-700/40",
   },
   success: {
     contained:

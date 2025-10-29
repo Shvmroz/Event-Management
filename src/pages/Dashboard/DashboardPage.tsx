@@ -130,7 +130,7 @@ const OrganizationRow: React.FC<{
     </td>
     <td className="px-6 py-3">
       <div className="flex items-center space-x-1 text-gray-600 dark:text-gray-400 text-sm">
-        <Calendar className="w-3.5 h-3.5 text-blue-500" />
+        <Calendar className="w-3.5 h-3.5 text-orange-500" />
         <span>{organization.total_events}</span>
       </div>
     </td>
@@ -198,8 +198,8 @@ const DashboardPage: React.FC = () => {
   > = {
     organization: {
       icon: Building2,
-      color: "text-blue-600",
-      bg: "bg-blue-50 dark:bg-blue-900/30",
+      color: "text-orange-600",
+      bg: "bg-orange-50 dark:bg-orange-900/30",
     },
     event: {
       icon: Calendar,
@@ -322,7 +322,7 @@ const DashboardPage: React.FC = () => {
             </h2>
             <span
               onClick={() => navigate("/organizations")}
-              className="flex items-center space-x-1 text-blue-500 hover:text-blue-600 text-sm font-medium cursor-pointer"
+              className="flex items-center space-x-1 text-orange-500 hover:text-orange-600 text-sm font-medium cursor-pointer"
             >
               <span>View All</span>
               <ChevronRight className="w-4 h-4" />

@@ -56,7 +56,7 @@ const EventFilters: React.FC<EventFiltersProps> = ({
 
       <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
         <div className="flex items-center space-x-2">
-          <Globe className="w-4 h-4 text-blue-500" />
+          <Globe className="w-4 h-4 text-orange-500" />
           <span className="text-sm font-medium text-gray-900 dark:text-white">
             Public Events Only
           </span>

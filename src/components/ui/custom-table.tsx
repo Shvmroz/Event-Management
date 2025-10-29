@@ -154,7 +154,7 @@ const CustomTable: React.FC<CustomTableProps> = ({
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
         <div className="p-8 text-center">
           <div className="flex justify-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-200 dark:border-gray-700 border-t-2 border-t-[#0077ED]"></div>
+            <div className="animate-spin rounded-full h-8 w-8 border-2 border-gray-200 dark:border-gray-700 border-t-2 border-t-orange-500"></div>
           </div>
           <p className="text-gray-500 dark:text-gray-400 mt-4">Loading...</p>
         </div>

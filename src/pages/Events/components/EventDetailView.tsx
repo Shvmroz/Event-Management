@@ -79,7 +79,7 @@ const EventDetailView: React.FC<EventDetailViewProps> = ({
       completed: {
         label: "Completed",
         className:
-          "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400",
+          "bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400",
       },
     };
 
@@ -94,7 +94,7 @@ const EventDetailView: React.FC<EventDetailViewProps> = ({
       physical: {
         label: "Physical",
         className:
-          "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400",
+          "bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400",
         icon: <MapPin className="w-3 h-3 mr-1" />,
       },
       virtual: {
@@ -158,7 +158,7 @@ const EventDetailView: React.FC<EventDetailViewProps> = ({
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center text-base font-medium">
-              <Info className="w-4 h-4 mr-2 text-[#0077ED]" />
+              <Info className="w-4 h-4 mr-2 text-orange-500" />
               Event Information
             </CardTitle>
           </CardHeader>
@@ -192,7 +192,7 @@ const EventDetailView: React.FC<EventDetailViewProps> = ({
             <div className="mt-2 bg-gray-100 dark:bg-gray-800 rounded-lg p-3">
               <div className="grid grid-cols-3 gap-3 text-sm">
                 <div className="text-center">
-                  <Users className="w-5 h-5 text-blue-600 mx-auto mb-1" />
+                  <Users className="w-5 h-5 text-orange-600 mx-auto mb-1" />
                   <div className="font-semibold text-sm">
                     {event?.max_attendees || "-"}
                   </div>
@@ -262,7 +262,7 @@ const EventDetailView: React.FC<EventDetailViewProps> = ({
                     <a
                       href={event.venue.virtual_link}
                       target="_blank"
-                      className="inline-flex items-center text-blue-600 text-sm"
+                      className="inline-flex items-center text-orange-600 text-sm"
                     >
                       <Globe className="w-3 h-3 mr-1" />
                       {event.venue.virtual_link}
@@ -279,16 +279,16 @@ const EventDetailView: React.FC<EventDetailViewProps> = ({
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center text-base font-medium">
-              <Clock className="w-4 h-4 mr-2 text-[#0077ED]" />
+              <Clock className="w-4 h-4 mr-2 text-orange-500" />
               Schedule
             </CardTitle>
           </CardHeader>
           <CardContent className="text-sm">
             <div className="relative flex flex-col items-start pl-6">
-              <div className="absolute top-0 bottom-0 left-3 w-0.5 bg-blue-300 dark:bg-gray-600"></div>
+              <div className="absolute top-0 bottom-0 left-3 w-0.5 bg-orange-300 dark:bg-gray-600"></div>
 
               <div className="flex items-center mb-6">
-                <div className="pe-3 ps-2 py-1 rounded-md bg-blue-100 flex items-center gap-2">
+                <div className="pe-3 ps-2 py-1 rounded-md bg-orange-100 flex items-center gap-2">
                   <Clock className="w-4 h-4 text-sky-600" />
                   <span className="text-xs font-medium text-sky-800">
                     Start:

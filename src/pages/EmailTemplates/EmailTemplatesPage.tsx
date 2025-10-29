@@ -132,7 +132,7 @@ const EmailTemplatesPage: React.FC = () => {
       key: "template_for",
       label: "Template For",
       renderData: (template) => (
-        <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400 capitalize">
+        <Badge className="bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400 capitalize">
           {template.template_for || "N/A"}
         </Badge>
       ),

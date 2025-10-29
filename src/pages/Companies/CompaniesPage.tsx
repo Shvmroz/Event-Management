@@ -200,7 +200,7 @@ const CompaniesPage: React.FC = () => {
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="text-blue-500 hover:text-blue-700"
+              className="text-orange-500 hover:text-orange-700"
             >
               <Linkedin className="w-4 h-4" />
             </a>
@@ -222,7 +222,7 @@ const CompaniesPage: React.FC = () => {
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="text-blue-600 hover:text-blue-800"
+              className="text-orange-600 hover:text-orange-800"
             >
               <Facebook className="w-4 h-4" />
             </a>

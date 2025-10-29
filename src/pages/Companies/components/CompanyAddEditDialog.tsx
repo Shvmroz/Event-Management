@@ -195,7 +195,7 @@ const CompanyAddEditDialog: React.FC<CompanyAddEditDialogProps> = ({
     >
       <CustomDialogTitle onClose={() => onOpenChange(false)}>
         <div className="flex items-center">
-          <Building2 className="w-5 h-5 mr-2 text-[#0077ED]" />
+          <Building2 className="w-5 h-5 mr-2 text-orange-500" />
           {isEdit ? "Edit Company" : "Create Company"}
         </div>
       </CustomDialogTitle>

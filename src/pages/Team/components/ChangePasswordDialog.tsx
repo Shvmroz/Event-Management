@@ -83,8 +83,8 @@ const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({
 
       <CustomDialogContent>
         <div className="space-y-4">
-          <div className="flex items-center space-x-3 p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-            <Lock className="w-4 h-4 text-blue-600" />
+          <div className="flex items-center space-x-3 p-2 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
+            <Lock className="w-4 h-4 text-orange-600" />
             <div>
               <p className="text-sm text-gray-900 dark:text-white">
                 You are changing the password for

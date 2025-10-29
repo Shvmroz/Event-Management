@@ -6,7 +6,7 @@ export default function NotFoundPage() {
       <div className="max-w-sm w-full text-center">
         {/* 404 Icon */}
         <div className="mb-6">
-          <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto bg-gradient-to-r from-sky-500 to-blue-500 rounded-full flex items-center justify-center shadow-lg">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 mx-auto bg-gradient-to-r from-sky-500 to-orange-500 rounded-full flex items-center justify-center shadow-lg">
             <AlertTriangle className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
           </div>
         </div>

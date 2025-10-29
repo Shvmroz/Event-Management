@@ -42,7 +42,7 @@ const getNotificationColor = (type: string) => {
     case "user":
       return "text-green-600";
     case "organization":
-      return "text-blue-600";
+      return "text-orange-600";
     case "payment":
       return "text-emerald-600";
     case "alert":
@@ -62,7 +62,7 @@ const getNotificationBgColor = (type: string) => {
     case "user":
       return "bg-green-50 dark:bg-green-900/20";
     case "organization":
-      return "bg-blue-50 dark:bg-blue-900/20";
+      return "bg-orange-50 dark:bg-orange-900/20";
     case "payment":
       return "bg-emerald-50 dark:bg-emerald-900/20";
     case "alert":
@@ -93,7 +93,7 @@ const NotificationsList: React.FC<NotificationsListProps> = ({ onClose }) => {
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
         <div className="flex items-center space-x-2">
-          <Bell className="w-5 h-5 text-[#0077ED]" />
+          <Bell className="w-5 h-5 text-orange-500" />
           <h3 className="font-semibold text-gray-900 dark:text-white">
             Notifications
           </h3>
@@ -107,7 +107,7 @@ const NotificationsList: React.FC<NotificationsListProps> = ({ onClose }) => {
           {unreadNotificationsCount > 0 && (
             <span
               onClick={markAllNotificationsAsRead}
-              className="text-xs text-[#0077ED] hover:text-[#0066CC] font-medium cursor-pointer"
+              className="text-xs text-orange-500 hover:text-[#0066CC] font-medium cursor-pointer"
             >
               Mark all read
             </span>
@@ -136,7 +136,7 @@ const NotificationsList: React.FC<NotificationsListProps> = ({ onClose }) => {
               <div
                 key={notification.id}
                 className={`p-4 hover:bg-gray-100 dark:hover:bg-gray-700/50 transition-colors ${
-                  !notification.read ? "bg-blue-100/30 dark:bg-blue-700/10" : ""
+                  !notification.read ? "bg-orange-100/30 dark:bg-orange-700/10" : ""
                 }`}
               >
                 <div className="flex items-start space-x-3">

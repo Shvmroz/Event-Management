@@ -215,7 +215,7 @@ const EmailTemplateEditDialog: React.FC<EmailTemplateEditDialogProps> = ({
                 {formData.variables.map((variable, index) => (
                   <span
                     key={index}
-                    className="px-2 py-1 bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400 rounded text-sm font-mono"
+                    className="px-2 py-1 bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400 rounded text-sm font-mono"
                   >
                     {`${variable}`}
                   </span>

@@ -176,7 +176,7 @@ const PaymentPlansPage: React.FC = () => {
         <Badge
           className={
             rowData.plan_type === "recurring"
-              ? "bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400"
+              ? "bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400"
               : "bg-purple-100 text-purple-800 dark:bg-purple-900/20 dark:text-purple-400"
           }
         >
@@ -204,7 +204,7 @@ const PaymentPlansPage: React.FC = () => {
       label: "Max Attendees",
       renderData: (rowData) => (
         <div className="flex items-center space-x-2">
-          <Users className="w-4 h-4 text-blue-500" />
+          <Users className="w-4 h-4 text-orange-500" />
           <span className="font-medium text-gray-900 dark:text-white">
             {rowData.max_attendees.toLocaleString()}
           </span>
@@ -234,7 +234,7 @@ const PaymentPlansPage: React.FC = () => {
       label: "Trial",
       renderData: (rowData) => (
         <div className="flex items-center space-x-2">
-          <Clock className="w-4 h-4 text-blue-500" />
+          <Clock className="w-4 h-4 text-orange-500" />
           <span className="font-medium text-gray-900 dark:text-white">
             {rowData.trial_days && rowData.trial_days > 0
               ? `${rowData.trial_days} Days`

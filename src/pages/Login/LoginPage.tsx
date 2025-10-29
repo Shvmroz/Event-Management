@@ -20,27 +20,24 @@ export default function LoginPage() {
     const result = await login(email, password);
     if (result.success) {
       navigate("/dashboard");
-    } else {
-      // do nothing
     }
-
     setIsLoading(false);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 to-indigo-50 dark:from-gray-900 dark:to-gray-800">
+    <div className="min-h-screen bg-gradient-to-br from-orange-100 to-orange-50 dark:from-gray-900 dark:to-gray-800">
       <div className="min-h-screen grid grid-cols-1 lg:grid-cols-12">
         {/* Left Column - Slogan */}
         <div className="hidden lg:flex lg:col-span-6 items-center justify-center p-8 lg:p-16">
           <div className="max-w-lg text-center lg:text-left">
             <div className="flex justify-center lg:justify-start mb-8">
-              <div className="w-20 h-20 bg-gradient-to-r from-[#0077ED] to-[#4A9AFF] rounded-3xl flex items-center justify-center shadow-2xl">
+              <div className="w-20 h-20 bg-gradient-to-r from-orange-500 to-orange-400 rounded-3xl flex items-center justify-center shadow-2xl">
                 <Calendar className="w-10 h-10 text-white" />
               </div>
             </div>
 
             <h1 className="text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-              <span className="bg-gradient-to-r from-[#0077ED] via-[#4A9AFF] to-[#0077ED] bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-orange-500 via-orange-400 to-orange-500 bg-clip-text text-transparent">
                 ExiBy
               </span>
             </h1>
@@ -58,19 +55,19 @@ export default function LoginPage() {
 
             <div className="space-y-4">
               <div className="flex items-center justify-center lg:justify-start space-x-3">
-                <div className="w-2 h-2 bg-gradient-to-r from-[#0077ED] to-[#4A9AFF] rounded-full"></div>
+                <div className="w-2 h-2 bg-gradient-to-r from-orange-500 to-orange-400 rounded-full"></div>
                 <span className="text-gray-600 dark:text-gray-400">
                   Seamless Event Creation
                 </span>
               </div>
               <div className="flex items-center justify-center lg:justify-start space-x-3">
-                <div className="w-2 h-2 bg-gradient-to-r from-[#0077ED] to-[#4A9AFF] rounded-full"></div>
+                <div className="w-2 h-2 bg-gradient-to-r from-orange-500 to-orange-400 rounded-full"></div>
                 <span className="text-gray-600 dark:text-gray-400">
                   Organization Management
                 </span>
               </div>
               <div className="flex items-center justify-center lg:justify-start space-x-3">
-                <div className="w-2 h-2 bg-gradient-to-r from-[#0077ED] to-[#4A9AFF] rounded-full"></div>
+                <div className="w-2 h-2 bg-gradient-to-r from-orange-500 to-orange-400 rounded-full"></div>
                 <span className="text-gray-600 dark:text-gray-400">
                   Real-time Analytics
                 </span>
@@ -160,6 +157,7 @@ export default function LoginPage() {
                   fullWidth
                   variant="contained"
                   color="primary"
+                  className="bg-gradient-to-r from-orange-500 to-orange-400 hover:from-orange-600 hover:to-orange-500 text-white"
                 >
                   {isLoading ? (
                     <div className="flex items-center">

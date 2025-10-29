@@ -255,18 +255,18 @@ const AnalyticsPage: React.FC = () => {
            <Card className="border-0 shadow-sm">
              <CardHeader className="pb-3">
                <CardTitle className="flex items-center text-lg">
-                 <Calendar className="w-4 h-4 mr-2 text-[#0077ED]" />
+                 <Calendar className="w-4 h-4 mr-2 text-orange-500" />
                   {formatMonth(selectedMonth)} Performance
                 </CardTitle>
               </CardHeader>
               <CardContent>
                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-                 <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800/30">
+                 <div className="flex items-center justify-between p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-100 dark:border-orange-800/30">
                    <div className="flex items-center space-x-2">
-                     <Building2 className="w-4 h-4 text-blue-600" />
+                     <Building2 className="w-4 h-4 text-orange-600" />
                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Organizations</span>
                     </div>
-                   <span className="text-lg font-bold text-blue-600">
+                   <span className="text-lg font-bold text-orange-600">
                       {selectedMonthData.organizations || 0}
                     </span>
                   </div>
@@ -305,14 +305,14 @@ const AnalyticsPage: React.FC = () => {
            <Card className="border-0 shadow-sm">
              <CardHeader className="pb-3">
                <CardTitle className="flex items-center text-lg">
-                 <TrendingUp className="w-4 h-4 mr-2 text-[#0077ED]" />
+                 <TrendingUp className="w-4 h-4 mr-2 text-orange-500" />
                  Growth Metrics
                </CardTitle>
              </CardHeader>
              <CardContent>
                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-                 <div className="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800/30">
-                   <div className="text-lg font-bold text-blue-600">
+                 <div className="text-center p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-100 dark:border-orange-800/30">
+                   <div className="text-lg font-bold text-orange-600">
                      {growthMetrics.organizations_growth}%
           </div>
                    <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">Organizations Growth</div>
@@ -364,12 +364,12 @@ const AnalyticsPage: React.FC = () => {
              <Card className="border-0 shadow-sm">
                <CardHeader className="pb-3">
                  <CardTitle className="flex items-center text-sm">
-                   <Calendar className="w-4 h-4 mr-2 text-blue-600" />
+                   <Calendar className="w-4 h-4 mr-2 text-orange-600" />
                    Monthly Revenue
                  </CardTitle>
               </CardHeader>
               <CardContent>
-                 <div className="text-xl font-bold text-blue-600">
+                 <div className="text-xl font-bold text-orange-600">
                    {formatCurrency(revenueData.monthly_revenue)}
                     </div>
                  <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
@@ -423,7 +423,7 @@ const AnalyticsPage: React.FC = () => {
                 {revenueData.top_revenue_organizations.map((org, index) => (
                    <div key={org._id} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
                     <div className="flex items-center space-x-3">
-                       <div className="w-6 h-6 bg-gradient-to-r from-[#0077ED] to-[#4A9AFF] rounded-md flex items-center justify-center text-white font-bold text-xs">
+                       <div className="w-6 h-6 bg-gradient-to-r from-orange-500 to-[#4A9AFF] rounded-md flex items-center justify-center text-white font-bold text-xs">
                         {index + 1}
                       </div>
                       <div>
@@ -451,12 +451,12 @@ const AnalyticsPage: React.FC = () => {
              <Card className="border-0 shadow-sm">
                <CardHeader className="pb-3">
                  <CardTitle className="flex items-center text-sm">
-                   <Building2 className="w-4 h-4 mr-2 text-blue-600" />
+                   <Building2 className="w-4 h-4 mr-2 text-orange-600" />
                    Total Organizations
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                 <div className="text-xl font-bold text-blue-600">
+                 <div className="text-xl font-bold text-orange-600">
                    {organizationsData.total_organizations}
                  </div>
                  <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
@@ -527,7 +527,7 @@ const AnalyticsPage: React.FC = () => {
                  {organizationsData.organizations_by_plan.map((plan, index) => (
                    <div key={plan.plan_name} className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600">
                      <div className="flex items-center space-x-3">
-                       <div className="w-6 h-6 bg-gradient-to-r from-[#0077ED] to-[#4A9AFF] rounded-md flex items-center justify-center text-white font-bold text-xs">
+                       <div className="w-6 h-6 bg-gradient-to-r from-orange-500 to-[#4A9AFF] rounded-md flex items-center justify-center text-white font-bold text-xs">
                          {index + 1}
                        </div>
                        <div>
@@ -537,7 +537,7 @@ const AnalyticsPage: React.FC = () => {
                          </div>
                        </div>
                      </div>
-                     <div className="text-lg font-bold text-blue-600">
+                     <div className="text-lg font-bold text-orange-600">
                        {plan.count}
                      </div>
                    </div>
@@ -553,8 +553,8 @@ const AnalyticsPage: React.FC = () => {
             </CardHeader>
             <CardContent>
                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                 <div className="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800/30">
-                   <div className="text-lg font-bold text-blue-600">
+                 <div className="text-center p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-100 dark:border-orange-800/30">
+                   <div className="text-lg font-bold text-orange-600">
                     {selectedOrganizationsData.signups || 0}
                   </div>
                    <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">New Signups</div>
@@ -583,12 +583,12 @@ const AnalyticsPage: React.FC = () => {
              <Card className="border-0 shadow-sm">
                <CardHeader className="pb-3">
                  <CardTitle className="flex items-center text-sm">
-                   <Calendar className="w-4 h-4 mr-2 text-blue-600" />
+                   <Calendar className="w-4 h-4 mr-2 text-orange-600" />
                    Total Events
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                 <div className="text-xl font-bold text-blue-600">
+                 <div className="text-xl font-bold text-orange-600">
                    {eventsData.total_events}
                  </div>
                  <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
@@ -663,12 +663,12 @@ const AnalyticsPage: React.FC = () => {
                    </div>
                    <span className="text-lg font-bold text-green-600">{eventsData.active_events}</span>
                  </div>
-                 <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800/30">
+                 <div className="flex items-center justify-between p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-100 dark:border-orange-800/30">
                    <div className="flex items-center space-x-2">
-                     <Calendar className="w-4 h-4 text-blue-600" />
+                     <Calendar className="w-4 h-4 text-orange-600" />
                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Completed Events</span>
                    </div>
-                   <span className="text-lg font-bold text-blue-600">{eventsData.completed_events}</span>
+                   <span className="text-lg font-bold text-orange-600">{eventsData.completed_events}</span>
                  </div>
                  <div className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-100 dark:border-red-800/30">
                    <div className="flex items-center space-x-2">
@@ -700,8 +700,8 @@ const AnalyticsPage: React.FC = () => {
                   </div>
                    <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">Events Completed</div>
                 </div>
-                 <div className="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800/30">
-                   <div className="text-lg font-bold text-blue-600">
+                 <div className="text-center p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-100 dark:border-orange-800/30">
+                   <div className="text-lg font-bold text-orange-600">
                     {selectedEventsData.total_attendees?.toLocaleString() || 0}
                   </div>
                    <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">Total Attendees</div>
@@ -735,12 +735,12 @@ const AnalyticsPage: React.FC = () => {
              <Card className="border-0 shadow-sm">
                <CardHeader className="pb-3">
                  <CardTitle className="flex items-center text-sm">
-                   <Activity className="w-4 h-4 mr-2 text-blue-600" />
+                   <Activity className="w-4 h-4 mr-2 text-orange-600" />
                    Active Users
                  </CardTitle>
               </CardHeader>
               <CardContent>
-                 <div className="text-xl font-bold text-blue-600">
+                 <div className="text-xl font-bold text-orange-600">
                    {usersData.active_users.toLocaleString()}
                     </div>
                  <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
@@ -800,12 +800,12 @@ const AnalyticsPage: React.FC = () => {
                       {usersData.total_users.toLocaleString()}
                     </span>
                   </div>
-                 <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800/30">
+                 <div className="flex items-center justify-between p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-100 dark:border-orange-800/30">
                    <div className="flex items-center space-x-2">
-                     <Activity className="w-4 h-4 text-blue-600" />
+                     <Activity className="w-4 h-4 text-orange-600" />
                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Active Users</span>
                     </div>
-                   <span className="text-lg font-bold text-blue-600">
+                   <span className="text-lg font-bold text-orange-600">
                       {usersData.active_users.toLocaleString()}
                     </span>
                   </div>
@@ -829,8 +829,8 @@ const AnalyticsPage: React.FC = () => {
             </CardHeader>
             <CardContent>
                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                 <div className="text-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800/30">
-                   <div className="text-xl font-bold text-blue-600">
+                 <div className="text-center p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-100 dark:border-orange-800/30">
+                   <div className="text-xl font-bold text-orange-600">
                     {selectedUsersData.new_users?.toLocaleString() || 0}
                   </div>
                    <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">New Users</div>
@@ -853,12 +853,12 @@ const AnalyticsPage: React.FC = () => {
              <Card className="border-0 shadow-sm">
                <CardHeader className="pb-3">
                  <CardTitle className="flex items-center text-sm">
-                   <CreditCard className="w-4 h-4 mr-2 text-blue-600" />
+                   <CreditCard className="w-4 h-4 mr-2 text-orange-600" />
                    Total Subscriptions
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                 <div className="text-xl font-bold text-blue-600">
+                 <div className="text-xl font-bold text-orange-600">
                    {subscriptionsData.total_subscriptions}
                  </div>
                  <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
@@ -944,12 +944,12 @@ const AnalyticsPage: React.FC = () => {
                       {subscriptionsData.inactive_subscriptions}
                     </span>
                   </div>
-                 <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800/30">
+                 <div className="flex items-center justify-between p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-100 dark:border-orange-800/30">
                    <div className="flex items-center space-x-2">
-                     <DollarSign className="w-4 h-4 text-blue-600" />
+                     <DollarSign className="w-4 h-4 text-orange-600" />
                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Monthly Revenue</span>
                     </div>
-                   <span className="text-lg font-bold text-blue-600">
+                   <span className="text-lg font-bold text-orange-600">
                       {formatCurrency(subscriptionsData.revenue)}
                     </span>
                   </div>
@@ -970,8 +970,8 @@ const AnalyticsPage: React.FC = () => {
                   </div>
                    <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">Active Subscriptions</div>
                 </div>
-                 <div className="text-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-100 dark:border-blue-800/30">
-                   <div className="text-lg font-bold text-blue-600">
+                 <div className="text-center p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-100 dark:border-orange-800/30">
+                   <div className="text-lg font-bold text-orange-600">
                     {selectedSubscriptionsData.new || 0}
                   </div>
                    <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">New Subscriptions</div>

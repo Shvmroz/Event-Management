@@ -10,7 +10,7 @@ interface SpinnerProps {
 const Spinner: React.FC<SpinnerProps> = ({
   size = 'lg',
   className,
-  color = 'border-blue-500',
+  color = 'border-orange-500',
 }) => {
   const sizeClasses: Record<string, string> = {
     sm: 'w-4 h-4 border-2',
@@ -22,7 +22,7 @@ const Spinner: React.FC<SpinnerProps> = ({
   return (
     <div
       className={cn(
-        'rounded-full border-4 border-blue-500 border-t-gray-200 animate-spin',
+        'rounded-full border-4 border-orange-500 border-t-gray-200 animate-spin',
         sizeClasses[size],
         className
       )}

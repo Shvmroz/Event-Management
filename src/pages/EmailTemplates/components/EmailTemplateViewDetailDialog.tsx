@@ -75,7 +75,7 @@ const EmailTemplateViewDetailDialog: React.FC<
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center text-base font-medium">
-                  <Info className="w-4 h-4 mr-2 text-[#0077ED]" />
+                  <Info className="w-4 h-4 mr-2 text-orange-500" />
                   Template Information
                 </CardTitle>
               </CardHeader>
@@ -90,7 +90,7 @@ const EmailTemplateViewDetailDialog: React.FC<
                     <label className="block font-medium mb-1">
                       Template Type
                     </label>
-                    <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400">
+                    <Badge className="bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400">
                       {templateDetail?.template_type?.replace(/_/g, " ") || "-"}
                     </Badge>
                   </div>
@@ -139,7 +139,7 @@ const EmailTemplateViewDetailDialog: React.FC<
                   <div>
                     <label className="block font-medium mb-1">Created At</label>
                     <div className="flex items-center space-x-1">
-                      <Calendar className="w-4 h-4 text-blue-500" />
+                      <Calendar className="w-4 h-4 text-orange-500" />
                       <span>
                         {templateDetail?.createdAt
                           ? formatDate(templateDetail.createdAt)
@@ -180,7 +180,7 @@ const EmailTemplateViewDetailDialog: React.FC<
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center text-base font-medium">
-                  <Code className="w-4 h-4 mr-2 text-blue-600" />
+                  <Code className="w-4 h-4 mr-2 text-orange-600" />
                   Variables Used ({templateDetail?.variables?.length || 0})
                 </CardTitle>
               </CardHeader>
@@ -208,7 +208,7 @@ const EmailTemplateViewDetailDialog: React.FC<
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center text-base font-medium">
-                  <Mail className="w-4 h-4 mr-2 text-blue-600" />
+                  <Mail className="w-4 h-4 mr-2 text-orange-600" />
                   Email Content
                 </CardTitle>
               </CardHeader>

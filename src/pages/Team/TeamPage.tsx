@@ -391,7 +391,7 @@ const TeamPage: React.FC = () => {
         {access.slice(0, 3).map((module, i) => (
           <Badge
             key={i}
-            className="bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400 text-xs"
+            className="bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400 text-xs"
           >
             {moduleLabels[module] || module}
           </Badge>

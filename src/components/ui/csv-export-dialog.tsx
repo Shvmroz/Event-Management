@@ -89,15 +89,15 @@ const CsvExportDialog: React.FC<CsvExportDialogProps> = ({
     >
       <CustomDialogTitle onClose={() => onOpenChange(false)}>
         <div className="flex items-center">
-          <Download className="w-5 h-5 mr-2 text-[#0077ED]" />
+          <Download className="w-5 h-5 mr-2 text-orange-500" />
           Export {title}
         </div>
       </CustomDialogTitle>
 
       <CustomDialogContent>
         <div className="space-y-6">
-          <div className="flex items-center space-x-3 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-            <FileText className="w-5 h-5 text-blue-600" />
+          <div className="flex items-center space-x-3 p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
+            <FileText className="w-5 h-5 text-orange-600" />
             <div>
               <p className="text-sm font-medium text-gray-900 dark:text-white">
                 Export Format: Excel (.xlsx)

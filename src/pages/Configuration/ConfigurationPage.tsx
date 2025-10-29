@@ -142,7 +142,7 @@ const ConfigurationPage: React.FC = () => {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center text-lg">
-            <Settings className="w-5 h-5 mr-2 text-[#0077ED]" />
+            <Settings className="w-5 h-5 mr-2 text-orange-500" />
             Platform Configuration
           </CardTitle>
         </CardHeader>

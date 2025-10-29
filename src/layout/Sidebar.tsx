@@ -30,92 +30,92 @@ const menuItems = [
     text: "Dashboard",
     icon: Home,
     path: "/dashboard",
-    color: "text-blue-500",
-    bgColor: "bg-blue-50",
+    color: "text-orange-500",
+    bgColor: "bg-orange-100",
   },
   {
     text: "My Team",
     icon: Network,
     path: "/team",
-    color: "text-blue-500",
-    bgColor: "bg-blue-50",
+    color: "text-orange-500",
+    bgColor: "bg-orange-100",
   },
   {
     text: "Payment Plans",
     icon: Receipt,
     path: "/payment-plans",
-    color: "text-blue-500",
-    bgColor: "bg-blue-50",
+    color: "text-orange-500",
+    bgColor: "bg-orange-100",
   },
   {
     text: "Organizations",
     icon: Building2,
     path: "/organizations",
-    color: "text-blue-500",
-    bgColor: "bg-blue-50",
+    color: "text-orange-500",
+    bgColor: "bg-orange-100",
   },
   {
     text: "Companies",
     icon: Building,
     path: "/companies",
-    color: "text-blue-500",
-    bgColor: "bg-blue-50",
+    color: "text-orange-500",
+    bgColor: "bg-orange-100",
   },
   {
     text: "Events",
     icon: Calendar,
     path: "/events",
-    color: "text-blue-500",
-    bgColor: "bg-blue-50",
+    color: "text-orange-500",
+    bgColor: "bg-orange-100",
   },
   {
     text: "Users",
     icon: Users,
     path: "/users",
-    color: "text-blue-500",
-    bgColor: "bg-blue-50",
+    color: "text-orange-500",
+    bgColor: "bg-orange-100",
   },
   {
     text: "Email Templates",
     icon: Mail,
     path: "/email-templates",
-    color: "text-blue-500",
-    bgColor: "bg-blue-50",
+    color: "text-orange-500",
+    bgColor: "bg-orange-100",
   },
   {
     text: "Analytics",
     icon: BarChart3,
     path: "/analytics",
-    color: "text-blue-500",
-    bgColor: "bg-blue-50",
+    color: "text-orange-500",
+    bgColor: "bg-orange-100",
   },
   {
     text: "General Configuration",
     icon: Settings,
     path: "/configuration",
-    color: "text-blue-500",
-    bgColor: "bg-blue-50",
+    color: "text-orange-500",
+    bgColor: "bg-orange-100",
   },
   {
     text: "Stripe Configuration",
     icon: CreditCard,
     path: "/configuration/stripe",
-    color: "text-blue-500",
-    bgColor: "bg-blue-50",
+    color: "text-orange-500",
+    bgColor: "bg-orange-100",
   },
   {
     text: "Email Configuration",
     icon: MonitorCog,
     path: "/configuration/email",
-    color: "text-blue-500",
-    bgColor: "bg-blue-50",
+    color: "text-orange-500",
+    bgColor: "bg-orange-100",
   },
   {
     text: "Settings",
     icon: Wrench,
     path: "/settings",
-    color: "text-blue-500",
-    bgColor: "bg-blue-50",
+    color: "text-orange-500",
+    bgColor: "bg-orange-100",
   },
 ];
 
@@ -133,13 +133,13 @@ const Sidebar: React.FC<SidebarProps> = ({
       {/* Header */}
       <Link to="/dashboard">
         <div className="cursor-pointer h-16 pl-8 border-b border-gray-200 dark:border-gray-700 flex items-center space-x-3">
-          <img 
-            src="/assets/exiby_logo.png" 
-            alt="ExiBy Logo" 
+          {/* <img 
+            src="/assets/logo.png" 
+            alt="Logo" 
             className="w-8 h-8 object-contain"
-          />
+          /> */}
           <h1 className=" text-gray-900 dark:text-white text-2xl font-extrabold leading-tight mt-1">
-            EXIBY
+            Event Managament
           </h1>
         </div>
       </Link>
@@ -158,7 +158,7 @@ const Sidebar: React.FC<SidebarProps> = ({
               className={cn(
                 "flex items-center space-x-3 px-4 py-2 rounded-lg transition-all duration-200 group",
                 isActive
-                  ? "bg-blue-100 dark:bg-gray-800 text-sky-900 dark:text-sky-200 shadow-sm"
+                  ? "bg-orange-50 dark:bg-gray-800 text-orange-950 dark:text-orange-200 shadow-sm"
                   : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300 hover:scale-102"
               )}
             >

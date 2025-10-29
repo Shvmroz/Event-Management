@@ -21,7 +21,7 @@ const Switch = React.forwardRef<HTMLInputElement, SwitchProps>(
       <div
         className={cn(
           "h-6 w-11 rounded-full transition-colors relative",
-          "bg-gray-300 dark:bg-gray-600 peer-checked:bg-[#0077ED]",
+          "bg-gray-300 dark:bg-gray-600 peer-checked:bg-orange-500",
           "after:content-[''] after:absolute after:top-[2px] after:left-[2px]",
           "after:h-5 after:w-5 after:rounded-full after:bg-white dark:after:bg-gray-200",
           "after:transition-transform after:shadow-lg",

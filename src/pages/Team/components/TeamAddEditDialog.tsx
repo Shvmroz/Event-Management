@@ -229,7 +229,7 @@ const TeamAddEditDialog: React.FC<TeamAddEditDialogProps> = ({
     <CustomDialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
       <CustomDialogTitle onClose={handleClose}>
         <div className="flex items-center">
-          <Users className="w-5 h-5 mr-2 text-[#0077ED]" />
+          <Users className="w-5 h-5 mr-2 text-orange-500" />
           {isAddMode ? "Add Team Member" : "Edit Team Member"}
         </div>
       </CustomDialogTitle>
@@ -414,7 +414,7 @@ const TeamAddEditDialog: React.FC<TeamAddEditDialogProps> = ({
                   className="flex items-center justify-between bg-gray-50 dark:bg-gray-700 p-3 rounded-md h-10"
                 >
                   <div className="flex items-center space-x-2">
-                    <Shield className="w-4 h-4 text-blue-600" />
+                    <Shield className="w-4 h-4 text-orange-600" />
                     <span className="text-sm font-medium text-gray-900 dark:text-white">
                       {moduleLabels[module as keyof typeof moduleLabels]}
                     </span>

@@ -20,7 +20,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         onKeyDown={handleKeyDown}
         className={cn(
           // base styles
-          'w-full h-10 px-3 rounded-md border text-sm focus:outline-none focus:ring-1 focus:ring-blue-200 dark:focus:ring-sky-800',
+          'w-full h-10 px-3 rounded-md border text-sm focus:outline-none focus:ring-1 focus:ring-orange-200 dark:focus:ring-sky-800',
           // light mode
           'bg-white text-black placeholder-gray-400 border-gray-300',
           // dark mode

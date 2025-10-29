@@ -73,8 +73,8 @@ const ChangePasswordPage: React.FC = () => {
         }}
       >
         <div className="flex items-center space-x-3 mb-6">
-          <div className="p-2 bg-blue-500/10 rounded-lg">
-            <Lock className="w-5 h-5 text-blue-600" />
+          <div className="p-2 bg-orange-500/10 rounded-lg">
+            <Lock className="w-5 h-5 text-orange-600" />
           </div>
           <div>
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">

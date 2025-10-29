@@ -227,7 +227,7 @@ const EventsAddEditDialog: React.FC<EventsAddEditDialogProps> = ({
     >
       <CustomDialogTitle onClose={() => onOpenChange(false)}>
         <div className="flex items-center">
-          <Calendar className="w-5 h-5 mr-2 text-[#0077ED]" />
+          <Calendar className="w-5 h-5 mr-2 text-orange-500" />
           {isEdit ? "Edit Event" : "Create Event"}
         </div>
       </CustomDialogTitle>
@@ -512,9 +512,9 @@ const EventsAddEditDialog: React.FC<EventsAddEditDialogProps> = ({
 
             {/* Show only if Paid Event is true */}
             {formData.isPaidEvent && (
-              <div className="mt-6 p-4 bg-gray-50 dark:bg-blue-900/20 rounded-lg border border-gray-200 dark:border-gray-800">
-                <h4 className="text-sm font-semibold text-gray-800 dark:text-blue-200 mb-4 flex items-center">
-                  <span className="w-2 h-2 bg-blue-500 rounded-full mr-2"></span>
+              <div className="mt-6 p-4 bg-gray-50 dark:bg-orange-900/20 rounded-lg border border-gray-200 dark:border-gray-800">
+                <h4 className="text-sm font-semibold text-gray-800 dark:text-orange-200 mb-4 flex items-center">
+                  <span className="w-2 h-2 bg-orange-500 rounded-full mr-2"></span>
                   Payment Settings
                 </h4>
                 <div className="grid grid-cols-1 gap-4">

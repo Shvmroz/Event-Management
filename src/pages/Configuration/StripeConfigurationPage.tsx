@@ -410,7 +410,7 @@ const StripeConfigurationPage: React.FC = () => {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center text-lg">
-            <DollarSign className="w-5 h-5 mr-2 text-[#0077ED]" />
+            <DollarSign className="w-5 h-5 mr-2 text-orange-500" />
             Supported Currencies
           </CardTitle>
         </CardHeader>
@@ -419,7 +419,7 @@ const StripeConfigurationPage: React.FC = () => {
             {formData.supportedCurrencies.map((currency, index) => (
               <Badge
                 key={index}
-                className="bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400"
+                className="bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-400"
               >
                 {currency}
               </Badge>
